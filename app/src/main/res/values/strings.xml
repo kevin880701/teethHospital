@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">口腔衛教</string>
+    <string name="information">基本資料</string>
+    <string name="teach">衛教導引</string>
+    <string name="camera">圖片檢測</string>
+    <string name="hospital_information">診所資訊</string>
+    <string name="history">歷史紀錄</string>
+    <string name="hospital_name">診所名稱</string>
+    <string name="patient_information">患者資料</string>
+    <string name="patient_name">學生名稱</string>
+    <string name="patient_number">病歷號</string>
+    <string name="patient_number_input">病歷號：</string>
+    <string name="hospital_name_input">診所名稱：</string>
+    <string name="gender_input">性別：</string>
+    <string name="birthday_input">生日：</string>
+    <string name="save_information">儲存資料</string>
+    <string name="setting">設定</string>
+    <string name="clean_record">潔牙紀錄</string>
+    <string name="ranking">集點排名</string>
+    <string name="take">拍攝</string>
+    <string name="scanning">掃描</string>
+    <string name="choose_button">選擇圖片</string>
+    <string name="detect_result">檢測結果</string>
+    <string name="before">塗上顯示劑前</string>
+    <string name="after">塗上顯示劑後</string>
+    <string name="original_image">原圖</string>
+    <string name="detect_image">不乾淨的量</string>
+    <string name="clean_before">清潔前</string>
+    <string name="clean_after">清潔後</string>
+    <string name="save_record">儲存紀錄</string>
+    <string name="clean_Image">清除圖片</string>
+    <string name="import_more">大量匯入</string>
+    <string name="import_single">單筆匯入</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="intro_message">
+        <![CDATA[
+
+
+            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
+            you can display camera preview and take pictures.
+
+
+        ]]>
+    </string>
+
+    <string-array name="tab_commodity_title">
+        <item>基本資料</item>
+        <item>衛教導引</item>
+        <item>拍照檢測</item>
+        <item>歷史紀錄</item>
+        <item>設定</item>
+    </string-array>
+
+    <string-array name="tab_picture">
+        <item>拍攝</item>
+        <item>掃描</item>
+    </string-array>
+    <string-array name="clean">
+        <item>清潔前</item>
+        <item>清潔後</item>
+    </string-array>
+</resources>
