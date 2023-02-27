@@ -1,5 +1,6 @@
 package com.lhr.teethHospital.Room
 
+import android.database.Cursor
 import androidx.room.*
 import com.android.notesk.SQLite.SqlModel
 import com.android.notesk.SQLite.SqlModel.Companion.HOSPITAL_TABLE_NAME
@@ -14,7 +15,7 @@ interface HospitalDao {
             " VALUES (:hospitalName, :number, :gender, :birthday)")
     fun importPatientInformation(hospitalName: String, number: String, gender: String, birthday: String)
 
-    @Query("SELECT * FROM " + HOSPITAL_TABLE_NAME)
+    @Query("SELECT * FROM $HOSPITAL_TABLE_NAME")
     fun getAll(): List<HospitalEntity>
 
     @Query("DELETE FROM " + HOSPITAL_TABLE_NAME + " WHERE " + SqlModel.hospitalName + " = :hospitalName")
@@ -34,9 +35,6 @@ interface HospitalDao {
             " WHERE " + SqlModel.hospitalName + " = :oldHospitalName AND "+ SqlModel.number +" = :oldNumber")
     fun updatePatientInformation(oldHospitalName: String, oldNumber: String, hospitalName: String, number: String, gender: String, birthday: String)
 
-//    @Query("UPDATE " + TABLE_NAME + " SET " + recyclerPosition + " = :newId WHERE " + recyclerPosition + " = :oldId")
-//    fun delUpdateId(oldId: Int, newId: Int)
-//
-//    @Delete
-//    fun delete(item: ClassEntity)
+    @Query("SELECT * FROM $HOSPITAL_TABLE_NAME")
+    fun getCursor(): Cursor
 }

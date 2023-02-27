@@ -3,6 +3,9 @@ package com.lhr.teethHospital.util.Main
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -21,6 +24,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var tabIconList: ArrayList<Int>
     lateinit var presenter: MainPresenter
+    lateinit var progressBar: ProgressBar
+    lateinit var imageViewBlack: ImageView
     lateinit var viewPager: ViewPager2
     lateinit var tabLayoutCommodity: TabLayout
     lateinit var pageAdapter: MainViewPageAdapter
@@ -34,6 +39,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         viewPager = findViewById(R.id.viewPager)
         tabLayoutCommodity = findViewById(R.id.tabLayoutCommodity)
+        progressBar = findViewById(R.id.progressBar)
+        imageViewBlack = findViewById(R.id.imageViewBlack)
 
         personalManagerFragment = PersonalManagerFragment()
         settingFragment = SettingFragment()

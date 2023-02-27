@@ -11,7 +11,7 @@ import com.lhr.teethHospital.Model.Model.Companion.CLEAN_AFTER_DETECT
 import com.lhr.teethHospital.Model.Model.Companion.CLEAN_AFTER_ORIGINAL
 import com.lhr.teethHospital.Model.Model.Companion.CLEAN_BEFORE_DETECT
 import com.lhr.teethHospital.Model.Model.Companion.CLEAN_BEFORE_ORIGINAL
-import com.lhr.teethHospital.Model.Model.Companion.PICTURE_DIR
+import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.Room.RecordEntity
 import com.lhr.teethHospital.ViewPager.HistoryPageAdapter
@@ -55,8 +55,8 @@ class DetectResultActivity : AppCompatActivity(), View.OnClickListener {
         tabTitleList =
             resources.getStringArray(R.array.clean).toCollection(ArrayList())
 
-        var beforeDetectHistoryFragment = DetectHistoryFragment(PICTURE_DIR + recordEntity.fileName + "/" + CLEAN_BEFORE_ORIGINAL, PICTURE_DIR + recordEntity.fileName + "/" + CLEAN_BEFORE_DETECT, recordEntity.beforePercent.toFloat())
-        var afterDetectHistoryFragment = DetectHistoryFragment(PICTURE_DIR + recordEntity.fileName + "/" + CLEAN_AFTER_ORIGINAL, PICTURE_DIR + recordEntity.fileName + "/" + CLEAN_AFTER_DETECT, recordEntity.afterPercent.toFloat())
+        var beforeDetectHistoryFragment = DetectHistoryFragment(TEETH_DIR + recordEntity.fileName + "/" + CLEAN_BEFORE_ORIGINAL, TEETH_DIR + recordEntity.fileName + "/" + CLEAN_BEFORE_DETECT, recordEntity.beforePercent.toFloat())
+        var afterDetectHistoryFragment = DetectHistoryFragment(TEETH_DIR + recordEntity.fileName + "/" + CLEAN_AFTER_ORIGINAL, TEETH_DIR + recordEntity.fileName + "/" + CLEAN_AFTER_DETECT, recordEntity.afterPercent.toFloat())
         pageAdapter = HistoryPageAdapter(this.supportFragmentManager, lifecycle, beforeDetectHistoryFragment, afterDetectHistoryFragment)
         viewPager.adapter = pageAdapter
         TabLayoutMediator(tabLayoutPicture, viewPager) { tab, position ->
@@ -73,7 +73,7 @@ class DetectResultActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }
             R.id.imageDelete -> {
-                presenter.deleteDirectory(PICTURE_DIR + recordEntity.fileName + "/", recordEntity)
+                presenter.deleteDirectory(TEETH_DIR + recordEntity.fileName + "/", recordEntity)
 
                 //更新歷史資訊資料
 //                val dcimDir = File(PICTURE_DIR)

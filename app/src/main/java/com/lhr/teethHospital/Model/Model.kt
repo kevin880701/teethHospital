@@ -25,7 +25,12 @@ class Model {
         val PERCENT_RECORD = "percent.txt"
         var CLEAN_BEFORE_EXIST = false
         var CLEAN_AFTER_EXIST = false
-        var PICTURE_DIR = "" // /storage/emulated/0/Android/data/com.lhr.teethHospital/files/teeth/
+        var APP_FILES_PATH : String = "" // /storage/emulated/0/Android/data/com.lhr.teethHospital/files
+        var DATABASES_PATH : String = "" // /data/user/0/com.lhr.teethHospital/databases
+        var TEETH_DIR = "" // /storage/emulated/0/Android/data/com.lhr.teethHospital/files/teeth/
+        val BACKUP_NAME : String = "teethHospitalBackup.rar"
+        val HOSPITAL_CSV = "hospitalBackUp.csv"
+        val RECORD_CSV = "recordBackUp.csv"
         lateinit var allFileList: Array<File>
         var hospitalInfoList : ArrayList<HospitalInfo> = ArrayList()
         var hospitalEntityList : ArrayList<HospitalEntity> = ArrayList()

@@ -21,12 +21,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lhr.teethHospital.File.CsvToSql
 import com.lhr.teethHospital.Model.Model.Companion.IMPORT_CSV
 import com.lhr.teethHospital.Model.Model.Companion.mainActivity
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.RecyclerViewAdapter.HospitalInfoAdapter
 import com.lhr.teethHospital.Room.SqlDatabase
-import com.lhr.teethHospital.Room.CsvToSql
 import com.lhr.teethHospital.util.Camera.ChooseImagePopupWindow
 import com.lhr.teethHospital.util.PersonalManager.Import.ImportPopupWindow
 
@@ -120,7 +120,7 @@ class PersonalManagerFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             val myData: Intent? = result.data
             if (myData != null) {
-                CsvToSql(mainActivity, myData.data!!)
+                CsvToSql().csvToHospitalSql(mainActivity, myData.data!!)
                 presenter.updateRecyclerInfo()
             }else{
                 Log.v("PPPPPPPPPPPP","LLLLLLLLLLLLLLLLLLL")

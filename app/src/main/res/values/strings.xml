@@ -7,12 +7,15 @@
     <string name="history">歷史紀錄</string>
     <string name="hospital_name">診所名稱</string>
     <string name="patient_information">患者資料</string>
-    <string name="patient_name">學生名稱</string>
+    <string name="patient_name">病人名稱</string>
     <string name="patient_number">病歷號</string>
     <string name="patient_number_input">病歷號：</string>
     <string name="hospital_name_input">診所名稱：</string>
     <string name="gender_input">性別：</string>
     <string name="birthday_input">生日：</string>
+    <string name="hospital">診所</string>
+    <string name="gender">性別</string>
+    <string name="birthday">生日</string>
     <string name="save_information">儲存資料</string>
     <string name="setting">設定</string>
     <string name="clean_record">潔牙紀錄</string>

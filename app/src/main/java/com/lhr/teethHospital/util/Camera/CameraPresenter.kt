@@ -10,7 +10,7 @@ import com.lhr.teethHospital.Model.Model.Companion.CLEAN_AFTER_EXIST
 import com.lhr.teethHospital.Model.Model.Companion.CLEAN_BEFORE_EXIST
 import com.lhr.teethHospital.Model.Model.Companion.CleanRecordFilter
 import com.lhr.teethHospital.Model.Model.Companion.PERCENT_RECORD
-import com.lhr.teethHospital.Model.Model.Companion.PICTURE_DIR
+import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.Model.Model.Companion.UPDATE_CLEAN_RECORD
 import com.lhr.teethHospital.Model.Model.Companion.allFileList
 import com.lhr.teethHospital.Room.HospitalEntity
@@ -33,7 +33,7 @@ class CameraPresenter(cameraActivity: CameraActivity) {
         val recordDate = SimpleDateFormat("-yyyy-MM-dd-hh-mm-ss")
 //        val recordDate = SimpleDateFormat("yyyy年MM月dd日 hh:mm:ss")
         val time: String = recordDate.format(Date())
-        var savePath = PICTURE_DIR + classEntity.hospitalName + classEntity.number + time + "/"
+        var savePath = TEETH_DIR + classEntity.hospitalName + classEntity.number + time + "/"
         val file = File(savePath)
         if (!file.exists()) {
             file.mkdir()
@@ -51,7 +51,7 @@ class CameraPresenter(cameraActivity: CameraActivity) {
         }
 
         //更新歷史資訊資料
-        val dcimDir = File(PICTURE_DIR)
+        val dcimDir = File(TEETH_DIR)
         allFileList = dcimDir.listFiles()
 
         runBlocking {     // 阻塞主執行緒

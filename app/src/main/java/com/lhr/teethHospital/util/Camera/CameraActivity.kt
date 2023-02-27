@@ -122,7 +122,6 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
     val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
     { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
-            Log.v("PPPPPPPPPPPP","：" + result.resultCode)
             val myData: Intent? = result.data
             if (myData != null) {
                 // 選擇圖片後變更圖片

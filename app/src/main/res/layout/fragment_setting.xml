@@ -8,7 +8,7 @@
     android:background="@drawable/underline">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constrainClass"
+        android:id="@+id/constrainTitle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.08"
@@ -33,5 +33,27 @@
             android:textStyle="bold"
             android:textSize="25dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textUploadBackup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constrainTitle"
+        android:gravity="center_vertical"
+        android:text="備份到雲端" />
+
+    <TextView
+        android:id="@+id/textDownloadBackup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textUploadBackup"
+        android:gravity="center_vertical"
+        android:text="下載備份" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@ package com.lhr.teethHospital.util.PersonalManager
 import android.view.View
 import com.lhr.teethHospital.Model.HospitalInfo
 import com.lhr.teethHospital.Model.FileManager
-import com.lhr.teethHospital.Model.Model.Companion.PICTURE_DIR
+import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.Model.Model.Companion.hospitalInfoList
 import com.lhr.teethHospital.Model.Model.Companion.hospitalEntityMap
 import com.lhr.teethHospital.Model.Model.Companion.hospitalEntityList
@@ -121,7 +121,7 @@ class PersonalManagerPresenter(personalManagerFragment: PersonalManagerFragment)
                             dataBase.getHospitalDao().deleteRecordByClassName(classInfo.className)
                             var patientRecordList = dataBase.getRecordDao().getPatientRecordByHospitalName(classInfo.className) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach{ recordEntity ->
-                                fileManager.deleteDirectory(PICTURE_DIR + recordEntity.fileName + "/", recordEntity)
+                                fileManager.deleteDirectory(TEETH_DIR + recordEntity.fileName + "/", recordEntity)
                             }
                         }
                     }
@@ -139,7 +139,7 @@ class PersonalManagerPresenter(personalManagerFragment: PersonalManagerFragment)
                             dataBase.getHospitalDao().deleteRecord(classEntity.hospitalName, classEntity.number)
                             var patientRecordList = dataBase.getRecordDao().getPatientRecord(classEntity.hospitalName, classEntity.number) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach{ recordEntity ->
-                                    fileManager.deleteDirectory(PICTURE_DIR + recordEntity.fileName + "/", recordEntity)
+                                    fileManager.deleteDirectory(TEETH_DIR + recordEntity.fileName + "/", recordEntity)
                             }
                         }
                     }

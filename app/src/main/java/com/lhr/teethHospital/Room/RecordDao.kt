@@ -1,5 +1,6 @@
 package com.lhr.teethHospital.Room
 
+import android.database.Cursor
 import androidx.room.*
 import com.android.notesk.SQLite.SqlModel
 import com.android.notesk.SQLite.SqlModel.Companion.RECORD_TABLE_NAME
@@ -35,4 +36,12 @@ interface RecordDao {
             " WHERE " + SqlModel.fileName + " = :oldFileName")
     fun updateFileName(oldFileName: String, newFileName: String)
 
+    @Query("SELECT * FROM ${RECORD_TABLE_NAME}")
+    fun getCursor(): Cursor
+
+    @Query("INSERT OR IGNORE INTO ${RECORD_TABLE_NAME}(${SqlModel.hospitalName}, ${SqlModel.number}, ${SqlModel.gender}," +
+            " ${SqlModel.birthday}, ${SqlModel.fileName}, ${SqlModel.recordDate}, ${SqlModel.beforePercent}, ${SqlModel.afterPercent}) " +
+            "VALUES (:hospitalName, :number, :gender, :birthday, :fileName, :recordDate, :beforePercent, :afterPercent)")
+    fun importPatientRecord(hospitalName: String, number: String, gender: String, birthday: String,
+                            fileName: String, recordDate: String, beforePercent: String, afterPercent: String)
 }

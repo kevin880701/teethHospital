@@ -1,7 +1,6 @@
 package com.lhr.teethHospital.Model
 
-import android.util.Log
-import com.lhr.teethHospital.Model.Model.Companion.PICTURE_DIR
+import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.Model.Model.Companion.mainActivity
 import com.lhr.teethHospital.Room.RecordEntity
 import com.lhr.teethHospital.Room.SqlDatabase
@@ -81,7 +80,7 @@ class FileManager {
             launch(Dispatchers.IO) {
                 var recordEntityList = dataBase.getRecordDao().selectUpdateFileName(oldHospitalName, oldNumber) as ArrayList<RecordEntity>
                 for (recordEntity in recordEntityList) {
-                    File(PICTURE_DIR + recordEntity.fileName).renameTo(File(PICTURE_DIR + newHospitalName + newNumber + recordEntity.recordDate))
+                    File(TEETH_DIR + recordEntity.fileName).renameTo(File(TEETH_DIR + newHospitalName + newNumber + recordEntity.recordDate))
                     dataBase.getRecordDao().updateFileName(recordEntity.fileName, newHospitalName + newNumber + recordEntity.recordDate)
                 }
             }

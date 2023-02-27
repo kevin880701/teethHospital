@@ -15,9 +15,10 @@ import android.view.animation.Animation
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.lhr.teethHospital.Model.FileManager
 import com.lhr.teethHospital.Model.Model
-import com.lhr.teethHospital.Model.Model.Companion.PICTURE_DIR
+import com.lhr.teethHospital.Model.Model.Companion.APP_FILES_PATH
+import com.lhr.teethHospital.Model.Model.Companion.DATABASES_PATH
+import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.Model.Model.Companion.allFileList
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.util.Main.MainActivity
@@ -86,9 +87,11 @@ class CoverActivity : AppCompatActivity() {
         // 創建Model
         Model
 
-        PICTURE_DIR = getExternalFilesDir(null)!!.absolutePath.toString() + "/teeth/"
+        APP_FILES_PATH = getExternalFilesDir(null)!!.absolutePath
+        DATABASES_PATH = this.getCacheDir().parent + "/databases"
+        TEETH_DIR = getExternalFilesDir(null)!!.absolutePath.toString() + "/teeth/"
         // 在DCIM中創建存圖資料夾
-        val dcimDir = File(PICTURE_DIR)
+        val dcimDir = File(TEETH_DIR)
         if (!dcimDir.exists()) {
             dcimDir.mkdir()
         }

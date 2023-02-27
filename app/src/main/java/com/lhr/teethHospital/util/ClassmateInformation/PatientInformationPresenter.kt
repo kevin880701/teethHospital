@@ -2,7 +2,7 @@ package com.lhr.teethHospital.util
 
 import android.view.View
 import com.lhr.teethHospital.Model.FileManager
-import com.lhr.teethHospital.Model.Model.Companion.PICTURE_DIR
+import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.RecyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.Room.RecordEntity
 import com.lhr.teethHospital.Room.SqlDatabase
@@ -43,7 +43,7 @@ class PatientInformationPresenter(classmateInformationActivity: PatientInformati
         classmateInformationActivity.patientRecordAdapter.arrayList.removeAll(classmateInformationActivity.patientRecordAdapter.deleteList.toSet())
         classmateInformationActivity.patientRecordAdapter.notifyDataSetChanged()
         classmateInformationActivity.patientRecordAdapter.deleteList.stream().forEach { recordEntity ->
-            fileManager.deleteDirectory(PICTURE_DIR + recordEntity.fileName + "/", recordEntity)
+            fileManager.deleteDirectory(TEETH_DIR + recordEntity.fileName + "/", recordEntity)
         }
         classmateInformationActivity.patientRecordAdapter.deleteList.clear()
         back()
