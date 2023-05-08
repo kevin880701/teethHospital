@@ -10,216 +10,232 @@ import android.content.Context
 import android.graphics.*
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
+import android.media.Image
 import android.media.ImageReader
 import android.os.Handler
 import android.util.Log
 import android.util.Size
 import android.view.Surface
+import android.view.View
+import androidx.core.content.ContextCompat
+import com.example.android.camera2basic.ImageSaver
+import com.lhr.teethHospital.Model.Model
 import com.lhr.teethHospital.Model.Model.Companion.mainActivity
+import com.lhr.teethHospital.R
+import com.lhr.teethHospital.util.Camera.CameraActivity
 import com.lhr.teethHospital.util.Camera.CompareSizesByArea
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.*
+
 
 class TakePicturePresenter(takePictureActivity: TakePictureActivity) {
     var takePicture2Activity = takePictureActivity
     var textTureCapture = takePictureActivity.textTureCapture
 
-    private val FRAGMENT_DIALOG = "dialog"
-    private val REQUEST_CAMERA_PERMISSION = 1
-    private var backgroundHandler: Handler? = null
+    fun imageSaver(image: Image, file: File,takePictureActivity: TakePictureActivity){
+        var detectFile = File(mainActivity!!.getExternalFilesDir(null), Model.RESULT_FILE_NAME)
+        val buffer = image.planes[0].buffer
+        val bytes = ByteArray(buffer.remaining())
 
-    private val MAX_PREVIEW_WIDTH = 1920
-    private val MAX_PREVIEW_HEIGHT = 1080
-    private var sensorOrientation = 0
-    var mCameraId: String? = null
+        buffer.get(bytes)
 
-//    fun requestCameraPermission() {
-//        if (PermissionUtils.shouldShowRequestPermissionRationale(mainActivity, Manifest.permission.CAMERA)) {
-//            ConfirmationDialog().show(takePictureFragment.childFragmentManager, FRAGMENT_DIALOG)
-//        } else {
-//            ActivityCompat.requestPermissions(
-//                mainActivity,
-//                arrayOf(Manifest.permission.CAMERA),
-//                REQUEST_CAMERA_PERMISSION
-//            )
-//        }
-//    }
-
-    var mPreviewSize: Size? = null
-    fun setUpCameraOutputs(width: Int, height: Int) {
-        val manager = mainActivity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        var output: FileOutputStream? = null
         try {
-            for (cameraId in manager.cameraIdList) {
-                val characteristics = manager.getCameraCharacteristics(cameraId)
-
-                // We don't use a front facing camera in this sample.
-                val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (cameraDirection != null &&
-                    cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
-                ) {
-                    continue
-                }
-
-                val map = characteristics.get(
-                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-                ) ?: continue
-
-                // For still image captures, we use the largest available size.
-                val largest = Collections.max(
-                    listOf(*map.getOutputSizes(ImageFormat.JPEG)),
-                    CompareSizesByArea()
-                )
-                takePicture2Activity.imageReader = ImageReader.newInstance(
-                    largest.width, largest.height,
-                    ImageFormat.JPEG, /*maxImages*/ 2
-                ).apply {
-                    setOnImageAvailableListener(takePicture2Activity.onImageAvailableListener, backgroundHandler)
-                }
-
-                // Find out if we need to swap dimension to get the preview size relative to sensor
-                // coordinate.
-                val displayRotation = mainActivity.windowManager.defaultDisplay.rotation
-
-                sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
-                var swappedDimensions = areDimensionsSwapped(displayRotation)
-                val displaySize = Point()
-                mainActivity.windowManager.defaultDisplay.getSize(displaySize)
-                val rotatedPreviewWidth = if (swappedDimensions) height else width
-                val rotatedPreviewHeight = if (swappedDimensions) width else height
-                var maxPreviewWidth = if (swappedDimensions) displaySize.y else displaySize.x
-                var maxPreviewHeight = if (swappedDimensions) displaySize.x else displaySize.y
-
-                if (maxPreviewWidth > MAX_PREVIEW_WIDTH) maxPreviewWidth = MAX_PREVIEW_WIDTH
-                if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) maxPreviewHeight = MAX_PREVIEW_HEIGHT
-
-                // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
-                // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
-                // garbage capture data.
-                mPreviewSize = chooseOptimalSize(
-                    map.getOutputSizes(SurfaceTexture::class.java),
-                    rotatedPreviewWidth, rotatedPreviewHeight,
-                    maxPreviewWidth, maxPreviewHeight,
-                    largest
-                )
-
-                // We fit the aspect ratio of TextureView to the size of preview we picked.
-//                if (mainActivity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-////                    text.setAspectRatio(rotatedPreviewWidth, rotatedPreviewHeight)
-//                    textTureCapture.rotationX = (rotatedPreviewWidth.toFloat())
-//                    textTureCapture.rotationY = (rotatedPreviewHeight.toFloat())
-//                } else {
-////                    textureView.setAspectRatio(previewSize.height, previewSize.width)
-//                    textTureCapture.rotationX = (rotatedPreviewHeight.toFloat())
-//                    textTureCapture.rotationY = (rotatedPreviewWidth.toFloat())
-//                }
-
-                // Check if the flash is supported.
-                takePicture2Activity.flashSupported =
-                    characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-                mCameraId = cameraId
-
-                // We've found a viable camera and finished setting up member variables,
-                // so we don't need to iterate through other available cameras.
-                return
+            output = FileOutputStream(file).apply {
+                write(bytes)
             }
-        } catch (e: CameraAccessException) {
-            Log.e(ContentValues.TAG, e.toString())
-        } catch (e: NullPointerException) {
-            // Currently an NPE is thrown when the Camera2API is used but not supported on the
-            // device this code runs.
-//            ErrorDialog.newInstance(getString(R.string.camera_error))
-//                .show(childFragmentManager, FRAGMENT_DIALOG)
+        } catch (e: IOException) {
+            Log.e("ImageSaver", e.toString())
+        } finally {
+            image.close()
+            output?.let {
+                try {
+                    it.close()
+                } catch (e: IOException) {
+                    Log.e("ImageSaver", e.toString())
+                }
+            }
         }
+        //轉90度
+        val bytes2 = File(mainActivity.getExternalFilesDir(null), Model.PIC_FILE_NAME).readBytes()
+        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes2.size)
+        var mask = getBitmapFromView(takePictureActivity.imageViewBlack)
+        var mask2 = getBitmapFromView(takePictureActivity.imageViewLine)
+
+        var vMatrix = Matrix()
+        if (takePictureActivity.currentCameraId == CameraCharacteristics.LENS_FACING_FRONT){
+            vMatrix.setRotate(90f)
+        }else if(takePictureActivity.currentCameraId == CameraCharacteristics.LENS_FACING_BACK){
+            vMatrix.setRotate(270f)
+            vMatrix.postScale(-1f, 1f)
+        }
+
+        var vB2 = Bitmap.createBitmap(
+            bitmap, 0, 0, bitmap.width // 寬度
+            , bitmap.height // 高度
+            , vMatrix, true
+        )
+
+        val scaleWidth = (mask.height.toFloat() / bitmap.width.toFloat())
+        val scaleHeight = (mask.width.toFloat() / bitmap.height.toFloat())
+        vMatrix = Matrix()
+        vMatrix.postScale(scaleHeight, scaleWidth)// 使用后乘
+
+        var vB3 = Bitmap.createBitmap(
+            vB2, 0, 0, vB2.width // 寬度
+            , vB2.height // 高度
+            , vMatrix, true
+        )
+
+        //提取嘴巴
+        val width = mask.width
+        val height = mask.height
+        val originalBitmap = IntArray(width * height)
+        val maskPixels = IntArray(width * height)
+        val convPixels = IntArray(width * height)
+        mask.getPixels(maskPixels, 0, width, 0, 0, width, height)
+        vB3.getPixels(originalBitmap, 0, width, 0, 0, width, height)
+        //取材切高寬
+        var widthMin = 9999
+        var widthMax = 0
+        var heightMin = 9999
+        var heightMax = 0
+        for (i in 0 until width) {
+            for (j in 0 until height) {
+                val maskColor = mask.getPixel(i, j)
+                val maskRed = Color.red(maskColor)
+                val maskGreen = Color.green(maskColor)
+                val maskBlue = Color.blue(maskColor)
+                if (maskRed == 50 && maskGreen == 50 && maskBlue == 50) {
+                    if (i < widthMin) {
+                        widthMin = i
+                    } else if (i > widthMax) {
+                        widthMax = i
+                    }
+                    if (j < heightMin) {
+                        heightMin = j
+                    } else if (j > heightMax) {
+                        heightMax = j
+                    }
+                }
+            }
+        }
+
+        //遮罩裁切
+        for (i in maskPixels.indices) {
+            var clr = maskPixels[i]
+            val maskRed: Int = Color.red(clr)
+            val maskGreen: Int = Color.green(clr)
+            val maskBlue: Int = Color.blue(clr)
+
+            var clr2 = originalBitmap[i]
+            val RR: Int = clr2 and 0xff0000 shr 16
+            val GG: Int = clr2 and 0x00ff00 shr 8
+            val BB: Int = clr2 and 0x0000ff shr 0
+
+            val color: Int = Color.rgb(RR, GG, BB)
+
+            if (maskRed == 50 && maskGreen == 50 && maskBlue == 50) {
+                convPixels[i] = color
+            } else {
+                convPixels[i] = Color.TRANSPARENT
+            }
+        }
+        var convBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        convBitmap.setPixels(convPixels, 0, width, 0, 0, width, height)
+        //裁切
+        convBitmap = Bitmap.createBitmap(convBitmap, widthMin, heightMin, widthMax - widthMin, heightMax - heightMin)
+//        var detectBitmap = getDetectPicture(convBitmap,mask2)
+        var (detectBitmap, percent) = getDetectPicture(convBitmap,mask2)
+        when (CameraActivity.cameraActivity.viewPager.currentItem) {
+            0 -> {
+                CameraActivity.cameraActivity.beforeDetectFragment.presenter.setTakePicture(CameraActivity.cameraActivity.beforeDetectFragment, convBitmap, detectBitmap)
+                Model.CLEAN_BEFORE_EXIST = true
+                if (percent>0.2){
+                    CameraActivity.cameraActivity.beforeDetectFragment.imageLight.visibility = View.VISIBLE
+                    CameraActivity.cameraActivity.beforeDetectFragment.imageLight.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            CameraActivity.cameraActivity, R.drawable.red_light))
+                }else{
+                    CameraActivity.cameraActivity.beforeDetectFragment.imageLight.visibility = View.VISIBLE
+                    CameraActivity.cameraActivity.beforeDetectFragment.imageLight.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            CameraActivity.cameraActivity, R.drawable.green_light))
+                }
+                CameraActivity.cameraActivity.beforeDetectFragment.percent = percent
+            }
+            1 -> {
+                CameraActivity.cameraActivity.afterDetectFragment.presenter.setTakePicture(CameraActivity.cameraActivity.afterDetectFragment, convBitmap, detectBitmap)
+                Model.CLEAN_AFTER_EXIST = true
+                if (percent>0.2){
+                    CameraActivity.cameraActivity.afterDetectFragment.imageLight.visibility = View.VISIBLE
+                    CameraActivity.cameraActivity.afterDetectFragment.imageLight.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            CameraActivity.cameraActivity, R.drawable.red_light))
+                }else{
+                    CameraActivity.cameraActivity.afterDetectFragment.imageLight.visibility = View.VISIBLE
+                    CameraActivity.cameraActivity.afterDetectFragment.imageLight.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            CameraActivity.cameraActivity, R.drawable.green_light))
+                }
+                CameraActivity.cameraActivity.afterDetectFragment.percent = percent
+            }
+        }
+        takePictureActivity.finish()
     }
 
-    fun chooseOptimalSize(
-        choices: Array<Size>,
-        textureViewWidth: Int,
-        textureViewHeight: Int,
-        maxWidth: Int,
-        maxHeight: Int,
-        aspectRatio: Size
-    ): Size {
-
-        // Collect the supported resolutions that are at least as big as the preview Surface
-        val bigEnough = ArrayList<Size>()
-        // Collect the supported resolutions that are smaller than the preview Surface
-        val notBigEnough = ArrayList<Size>()
-        val w = aspectRatio.width
-        val h = aspectRatio.height
-        for (option in choices) {
-            if (option.width <= maxWidth && option.height <= maxHeight &&
-                option.height == option.width * h / w) {
-                if (option.width >= textureViewWidth && option.height >= textureViewHeight) {
-                    bigEnough.add(option)
-                } else {
-                    notBigEnough.add(option)
-                }
-            }
-        }
-
-        // Pick the smallest of those big enough. If there is no one big enough, pick the
-        // largest of those not big enough.
-        if (bigEnough.size > 0) {
-            return Collections.min(bigEnough, CompareSizesByArea())
-        } else if (notBigEnough.size > 0) {
-            return Collections.max(notBigEnough, CompareSizesByArea())
-        } else {
-            Log.e(TAG, "Couldn't find any suitable preview size")
-            return choices[0]
-        }
+    fun getBitmapFromView(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            view.width, view.height, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
     }
 
-    private fun areDimensionsSwapped(displayRotation: Int): Boolean {
-        var swappedDimensions = false
-        when (displayRotation) {
-            Surface.ROTATION_0, Surface.ROTATION_180 -> {
-                if (sensorOrientation == 90 || sensorOrientation == 270) {
-                    swappedDimensions = true
-                }
+    fun getDetectPicture(bitmap: Bitmap,mask2: Bitmap): Pair<Bitmap,Float> {
+        val width = bitmap.width
+        val height = bitmap.height
+        var count = 0.0F
+
+        // 保存所有的像素的数组，图片宽×高
+        val pixels = IntArray(width * height)
+        val convPixels = IntArray(width * height)
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+        for (i in pixels.indices) {
+            val clr = pixels[i]
+            val R: Int = clr and 0xff0000 shr 16
+            val G: Int = clr and 0x00ff00 shr 8
+            val B: Int = clr and 0x0000ff shr 0
+
+            if (clr == Color.TRANSPARENT) {
+                convPixels[i] = Color.TRANSPARENT
+//                count--
+            } else if ((R in 94..227 && G in 32..141 && B in 47..191)) {
+                convPixels[i] = Color.rgb(232, 119, 175)
+                count++
+            } else {
+                convPixels[i] = Color.rgb(247, 247, 247)
             }
-            Surface.ROTATION_90, Surface.ROTATION_270 -> {
-                if (sensorOrientation == 0 || sensorOrientation == 180) {
-                    swappedDimensions = true
-                }
-            }
-            else -> {
-                Log.e(ContentValues.TAG, "Display rotation is invalid: $displayRotation")
+            if ((R in 109..187 && G in 50..130 && B in 57..148)) {
+                convPixels[i] = Color.rgb(247, 247, 247)
+                count--
             }
         }
-        return swappedDimensions
-    }
-
-    fun configureTransform(viewWidth: Int, viewHeight: Int) {
-        val rotation = mainActivity.windowManager.defaultDisplay.rotation
-        val matrix = Matrix()
-        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
-        val bufferRect = RectF(0f, 0f, mPreviewSize!!.height.toFloat(), mPreviewSize!!.width.toFloat())
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
-            val scale: Float = Math.max(
-                viewHeight.toFloat() / mPreviewSize!!.height,
-                viewWidth.toFloat() / mPreviewSize!!.width
-            )
-            matrix.postScale(scale, scale, centerX, centerY)
-            matrix.postRotate((90 * (rotation - 2)).toFloat(), centerX, centerY)
-        } else if (Surface.ROTATION_180 == rotation) {
-            matrix.postRotate(180f, centerX, centerY)
-        }
-        textTureCapture.setTransform(matrix)
-    }
+        var mask2 = mask2
+        val maskPixels = IntArray(width * height)
+        mask2.getPixels(maskPixels, 0, width, 0, 0, width, height)
 
 
-    fun toDetectResultActivity(){
-        takePicture2Activity.finish()
-//        val intent = Intent(mainActivity, DetectResultActivity::class.java)
-//        intent.putExtra("originalImage", File(mainActivity.getExternalFilesDir(null), Model.PIC_FILE_NAME).toUri())
-//        intent.putExtra("detectImage", File(mainActivity.getExternalFilesDir(null), Model.RESULT_FILE_NAME).toUri())
-////        mainActivity.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//        mainActivity.progressBar.visibility = View.INVISIBLE
-//        mainActivity.startActivity(intent)
+        val convBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        convBitmap.setPixels(convPixels, 0, width, 0, 0, width, height)
+
+        var percent = (count)/(width * height)
+
+        return Pair(convBitmap, percent)
     }
 }

@@ -1,18 +1,24 @@
 package com.lhr.teethHospital.util.Camera.TakePicture
+//https://github.com/q1113225201/Camera
 
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
+import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
+import android.hardware.camera2.CameraCaptureSession.CaptureCallback
+import android.media.Image
 import android.media.ImageReader
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
+import android.util.Size
 import android.view.Surface
+import android.view.SurfaceHolder
 import android.view.TextureView
 import android.view.View
 import android.widget.ImageButton
@@ -28,7 +34,7 @@ import com.lhr.teethHospital.Model.Model.Companion.mainActivity
 import com.lhr.teethHospital.R
 import java.io.File
 import java.util.concurrent.Semaphore
-import java.util.concurrent.TimeUnit
+
 
 class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListener, View.OnClickListener {
 
@@ -36,67 +42,128 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
     lateinit var textTureCapture: TextureView
     lateinit var imageViewBlack: ImageView
     lateinit var imageViewLine: ImageView
+    lateinit var imageSwitch: ImageView
     lateinit var progressBar: ProgressBar
     lateinit var presenter: TakePicturePresenter
-    lateinit var mCameraDevice: CameraDevice
+    var cameraDevice: CameraDevice? = null
     private val mCameraOpenCloseLock = Semaphore(1)
     private val mBackgroundHandler: Handler? = null
-    private lateinit var previewRequestBuilder: CaptureRequest.Builder
-    private lateinit var previewRequest: CaptureRequest
+    private lateinit var previewBuilder: CaptureRequest.Builder
+    private var captureBuilder: CaptureRequest.Builder? = null
     var imageReader: ImageReader? = null
     private lateinit var file: File
-    private var backgroundHandler: Handler? = null
-    private var captureSession: CameraCaptureSession? = null
-
-    private val STATE_PREVIEW = 0
-
-    /**
-     * Camera state: Waiting for the focus to be locked.
-     */
-    private val STATE_WAITING_LOCK = 1
-
-    /**
-     * Camera state: Waiting for the exposure to be precapture state.
-     */
-    private val STATE_WAITING_PRECAPTURE = 2
-
-    /**
-     * Camera state: Waiting for the exposure state to be something other than precapture.
-     */
-    private val STATE_WAITING_NON_PRECAPTURE = 3
-
-    /**
-     * Camera state: Picture was taken.
-     */
-    private val STATE_PICTURE_TAKEN = 4
-    private var state = STATE_PREVIEW
+    private var cameraCaptureSession: CameraCaptureSession? = null
+    var currentCameraId = CameraCharacteristics.LENS_FACING_FRONT
+    private var previewSize: Size? = null
+    private var cameraManager: CameraManager? = null
+    private var handlerThread: HandlerThread? = null
+    private var handler: Handler? = null
 
     val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-        backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file, this))
+        handler?.post(
+            ImageSaver(it.acquireNextImage(), file, this)
+        )
     }
     private val mStateCallback: CameraDevice.StateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(@NonNull cameraDevice: CameraDevice) {
             // This method is called when the camera is opened.  We start camera preview here.
             mCameraOpenCloseLock.release()
-            mCameraDevice = cameraDevice
+            this@TakePictureActivity.cameraDevice = cameraDevice
             createCameraPreviewSession()
         }
 
         override fun onDisconnected(@NonNull cameraDevice: CameraDevice) {
             mCameraOpenCloseLock.release()
             cameraDevice.close()
-//            mCameraDevice = null
+            this@TakePictureActivity.cameraDevice = null
         }
 
         override fun onError(@NonNull cameraDevice: CameraDevice, error: Int) {
             mCameraOpenCloseLock.release()
             cameraDevice.close()
-//            mCameraDevice = null
+            this@TakePictureActivity.cameraDevice = null
             val activity: Activity? = mainActivity
             activity?.finish()
         }
     }
 
+
+    //创建session回调
+    private val sessionStateCallback: CameraCaptureSession.StateCallback =
+        object : CameraCaptureSession.StateCallback() {
+            override fun onConfigured(session: CameraCaptureSession) {
+                try {
+                    cameraCaptureSession = session
+                    //自动对焦
+                    previewBuilder.set(
+                        CaptureRequest.CONTROL_AF_MODE,
+                        CameraMetadata.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+                    )
+                    cameraCaptureSession!!.setRepeatingRequest(previewBuilder.build(), null, handler)
+                } catch (e: CameraAccessException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onConfigureFailed(session: CameraCaptureSession) {
+                session.close()
+                cameraCaptureSession = null
+                cameraDevice!!.close()
+                cameraDevice = null
+            }
+        }
+
+    //拍完照回调
+    private val captureCallback: CaptureCallback = object : CaptureCallback() {
+        override fun onCaptureProgressed(
+            session: CameraCaptureSession,
+            request: CaptureRequest,
+            partialResult: CaptureResult
+        ) {
+            super.onCaptureProgressed(session, request, partialResult)
+        }
+
+        override fun onCaptureCompleted(
+            session: CameraCaptureSession,
+            request: CaptureRequest,
+            result: TotalCaptureResult
+        ) {
+            super.onCaptureCompleted(session, request, result)
+            try {
+                //自动对焦
+                captureBuilder!!.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_CANCEL)
+                //重新打开预览
+                session.setRepeatingRequest(previewBuilder.build(), null, handler)
+            } catch (e: CameraAccessException) {
+                e.printStackTrace()
+            }
+        }
+
+        override fun onCaptureFailed(session: CameraCaptureSession, request: CaptureRequest, failure: CaptureFailure) {
+            super.onCaptureFailed(session, request, failure)
+            cameraCaptureSession!!.close()
+            cameraCaptureSession = null
+            cameraDevice!!.close()
+            cameraDevice = null
+        }
+    }
+
+    private fun initImageReader() {
+        imageReader = ImageReader.newInstance(previewSize!!.width, previewSize!!.height, ImageFormat.JPEG, 1)
+        //监听ImageReader时间，有图像数据可用时回调，参数就是帧数据
+        imageReader!!.setOnImageAvailableListener({ reader ->
+            val image: Image = reader.acquireLatestImage()
+            presenter.imageSaver(image, file, this)
+            image.close()
+        }, handler)
+    }
+    private fun initData() {
+        cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        //Camera2全程异步
+        handlerThread = HandlerThread("Camera2")
+        handlerThread!!.start()
+        handler = Handler(handlerThread!!.getLooper())
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_picture)
@@ -104,43 +171,45 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
 
         imageCaptureButton = findViewById(R.id.imageCaptureButton)
         textTureCapture = findViewById(R.id.textTureCapture)
-        textTureCapture = findViewById(R.id.textTureCapture)
         imageViewBlack = findViewById(R.id.imageViewBlack)
         imageViewLine = findViewById(R.id.imageViewLine)
+        imageSwitch = findViewById(R.id.imageSwitch)
         progressBar = findViewById(R.id.progressBar)
 
         file = File(getExternalFilesDir(null), Model.PIC_FILE_NAME)
 
         presenter = TakePicturePresenter(this)
+        initData()
 
         imageCaptureButton.setOnClickListener(this)
+        imageSwitch.setOnClickListener(this)
         textTureCapture.surfaceTextureListener = this
     }
-    private fun openCamera(width: Int, height: Int) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            !== PackageManager.PERMISSION_GRANTED
-        ) {
-//            requestCameraPermission()
-            return
-        }
-        presenter.setUpCameraOutputs(width, height)
-        presenter.configureTransform(width, height)
-        val manager = getSystemService(CAMERA_SERVICE) as CameraManager
+
+    private fun openCamera() {
         try {
-            if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
-                throw RuntimeException("Time out waiting to lock camera opening.")
+            //获取属性CameraDevice属性描述
+            val cameraCharacteristics: CameraCharacteristics =
+                cameraManager!!.getCameraCharacteristics(CameraCharacteristics.LENS_FACING_FRONT.toString())
+            //获取摄像头支持的配置属性
+            val map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            previewSize = getMaxSize(map!!.getOutputSizes(SurfaceHolder::class.java))
+            //第一个参数指定哪个摄像头，第二个参数打开摄像头的状态回调，第三个参数是运行在哪个线程(null是当前线程)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                !== PackageManager.PERMISSION_GRANTED
+            ) {
+                return
             }
-            manager.openCamera(presenter.mCameraId!!, mStateCallback, mBackgroundHandler)
+            initImageReader()
+            cameraManager!!.openCamera(currentCameraId.toString(), mStateCallback, mBackgroundHandler)
         } catch (e: CameraAccessException) {
             e.printStackTrace()
-        } catch (e: InterruptedException) {
-            throw RuntimeException("Interrupted while trying to lock camera opening.", e)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
-        openCamera(width, height)
+        openCamera()
     }
 
     override fun onSurfaceTextureSizeChanged(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
@@ -156,123 +225,34 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
             val texture = textTureCapture.surfaceTexture
 
             // We configure the size of default buffer to be the size of camera preview we want.
-            texture!!.setDefaultBufferSize(presenter.mPreviewSize!!.width, presenter.mPreviewSize!!.height)
+            texture!!.setDefaultBufferSize(previewSize!!.width, previewSize!!.height)
 
             // This is the output Surface we need to start preview.
             val surface = Surface(texture)
 
             // We set up a CaptureRequest.Builder with the output Surface.
-            previewRequestBuilder = mCameraDevice!!.createCaptureRequest(
-                CameraDevice.TEMPLATE_PREVIEW
-            )
-            previewRequestBuilder.addTarget(surface)
+            previewBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            previewBuilder.addTarget(surface)
 
             // Here, we create a CameraCaptureSession for camera preview.
-            mCameraDevice.createCaptureSession(
-                listOf(surface, imageReader?.surface),
-                object : CameraCaptureSession.StateCallback() {
-                    override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
-                        // The camera is already closed
-                        if (mCameraDevice == null) return
-
-                        // When the session is ready, we start displaying the preview.
-                        captureSession = cameraCaptureSession
-                        try {
-                            // Auto focus should be continuous for camera preview.
-                            previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
-                            // Finally, we start displaying the camera preview.
-                            previewRequest = previewRequestBuilder.build()
-                            captureSession?.setRepeatingRequest(previewRequest,
-                                captureCallback, backgroundHandler)
-                        } catch (e: CameraAccessException) {
-                            Log.e(TAG, e.toString())
-                        }
-                    }
-
-                    override fun onConfigureFailed(session: CameraCaptureSession) {
-                    }
-                }, null)
+            cameraDevice!!.createCaptureSession(listOf(surface, imageReader?.surface), sessionStateCallback, handler)
         } catch (e: CameraAccessException) {
             Log.e(TAG, e.toString())
         }
-
     }
 
-    private val captureCallback = object : CameraCaptureSession.CaptureCallback() {
-        private fun process(result: CaptureResult) {
-            when (state) {
-                STATE_PREVIEW -> Unit // Do nothing when the camera preview is working normally.
-                STATE_WAITING_LOCK -> {capturePicture(result)}
-                STATE_WAITING_PRECAPTURE -> {
-                    // CONTROL_AE_STATE can be null on some devices
-                    val aeState = result.get(CaptureResult.CONTROL_AE_STATE)
-                    if (aeState == null ||
-                        aeState == CaptureResult.CONTROL_AE_STATE_PRECAPTURE ||
-                        aeState == CaptureRequest.CONTROL_AE_STATE_FLASH_REQUIRED) {
-                        state = STATE_WAITING_NON_PRECAPTURE
-                    }
-                }
-                STATE_WAITING_NON_PRECAPTURE -> {
-                    // CONTROL_AE_STATE can be null on some devices
-                    val aeState = result.get(CaptureResult.CONTROL_AE_STATE)
-                    if (aeState == null || aeState != CaptureResult.CONTROL_AE_STATE_PRECAPTURE) {
-                        state = STATE_PICTURE_TAKEN
-                        captureStillPicture()
-                    }
-                }
-            }
+    private fun takePhoto() {
+        try {
+            captureBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+            captureBuilder!!.addTarget(imageReader!!.surface)
+            //自动对焦
+            captureBuilder!!.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+            cameraCaptureSession!!.stopRepeating()
+            //拍照
+            cameraCaptureSession!!.capture(captureBuilder!!.build(), captureCallback, handler)
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
         }
-
-        private fun capturePicture(result: CaptureResult) {
-            val afState = result.get(CaptureResult.CONTROL_AF_STATE)
-            if (afState == null) {
-                captureStillPicture()
-            } else if (afState == CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED
-                || afState == CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED) {
-                // CONTROL_AE_STATE can be null on some devices
-                val aeState = result.get(CaptureResult.CONTROL_AE_STATE)
-                if (aeState == null || aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
-                    state = STATE_PICTURE_TAKEN
-                    captureStillPicture()
-                } else {
-                    runPrecaptureSequence()
-                }
-            }
-        }
-
-        override fun onCaptureProgressed(session: CameraCaptureSession,
-                                         request: CaptureRequest,
-                                         partialResult: CaptureResult) {
-            process(partialResult)
-        }
-
-        override fun onCaptureCompleted(session: CameraCaptureSession,
-                                        request: CaptureRequest,
-                                        result: TotalCaptureResult) {
-            process(result)
-        }
-    }
-
-
-    private var backgroundThread: HandlerThread? = null
-    private fun startBackgroundThread() {
-        backgroundThread = HandlerThread("CameraBackground").also { it.start() }
-        backgroundHandler = Handler(backgroundThread?.looper!!)
-    }
-    override fun onResume() {
-        super.onResume()
-        startBackgroundThread()
-
-        // When the screen is turned off and turned back on, the SurfaceTexture is already
-        // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
-        // a camera and start preview from here (otherwise, we wait until the surface is ready in
-        // the SurfaceTextureListener).
-//        if (textureView.isAvailable) {
-//            openCamera(textureView.width, textureView.height)
-//        } else {
-//            textureView.surfaceTextureListener = surfaceTextureListener
-//        }
     }
 
     var flashSupported = false
@@ -283,90 +263,50 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
         }
     }
 
-    private fun captureStillPicture() {
+    private fun switchCamera() {
         try {
-            if (this == null || mCameraDevice == null) return
-            val rotation = windowManager.defaultDisplay.rotation
-
-            val captureBuilder = mCameraDevice?.createCaptureRequest(
-                CameraDevice.TEMPLATE_STILL_CAPTURE)?.apply {
-                addTarget(imageReader?.surface!!)
-
-                // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
-                // We have to take that into account and rotate JPEG properly.
-                // For devices with orientation of 90, we return our mapping from ORIENTATIONS.
-                // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-//                set(CaptureRequest.JPEG_ORIENTATION,
-//                    (ORIENTATIONS.get(rotation) + sensorOrientation + 180) % 360)
-
-                // Use the same AE and AF modes as the preview.
-                set(CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
-            }?.also { setAutoFlash(it) }
-
-            val captureCallback = object : CameraCaptureSession.CaptureCallback() {
-                override fun onCaptureCompleted(session: CameraCaptureSession,
-                                                request: CaptureRequest,
-                                                result: TotalCaptureResult) {
-                    Log.d(TAG, file.toString())
-//                    unlockFocus()
+            for (cameraId in cameraManager!!.cameraIdList) {
+                val characteristics: CameraCharacteristics = cameraManager!!.getCameraCharacteristics(cameraId)
+                val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                val maxSize: Size = getMaxSize(map!!.getOutputSizes(SurfaceHolder::class.java))!!
+                if ((currentCameraId == CameraCharacteristics.LENS_FACING_BACK) && (characteristics.get(
+                        CameraCharacteristics.LENS_FACING
+                    ) == CameraCharacteristics.LENS_FACING_FRONT)
+                ) {
+                    //前置转后置
+                    previewSize = maxSize
+                    currentCameraId = CameraCharacteristics.LENS_FACING_FRONT
+                    cameraDevice!!.close()
+                    openCamera()
+                    break
+                } else if ((currentCameraId == CameraCharacteristics.LENS_FACING_FRONT) && characteristics.get(
+                        CameraCharacteristics.LENS_FACING
+                    ) == CameraCharacteristics.LENS_FACING_BACK
+                ) {
+                    //后置转前置
+                    previewSize = maxSize
+                    currentCameraId = CameraCharacteristics.LENS_FACING_BACK
+                    cameraDevice!!.close()
+                    openCamera()
+                    break
                 }
             }
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
 
-            captureSession?.apply {
-                stopRepeating()
-//                abortCaptures()
-                capture(captureBuilder?.build(), captureCallback, null)
+    private fun getMaxSize(outputSizes: Array<Size>?): Size? {
+        var sizeMax: Size? = null
+        if (outputSizes != null) {
+            sizeMax = outputSizes[0]
+            for (size in outputSizes) {
+                if (size.width * size.height > sizeMax!!.width * sizeMax.height) {
+                    sizeMax = size
+                }
             }
-        } catch (e: CameraAccessException) {
-            Log.e(TAG, e.toString())
         }
-    }
-
-    fun unlockFocus() {
-        try {
-            // Reset the auto-focus trigger
-            previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-                CameraMetadata.CONTROL_AF_TRIGGER_CANCEL)
-//            setAutoFlash(previewRequestBuilder)
-            captureSession?.capture(previewRequestBuilder.build(), captureCallback,
-                backgroundHandler)
-            // After this, the camera will go back to the normal state of preview.
-            state = STATE_PREVIEW
-            captureSession?.setRepeatingRequest(previewRequest, captureCallback,
-                backgroundHandler)
-        } catch (e: CameraAccessException) {
-            Log.e(TAG, e.toString())
-        }
-    }
-
-    private fun runPrecaptureSequence() {
-        try {
-            // This is how to tell the camera to trigger.
-            previewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
-                CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START)
-            // Tell #captureCallback to wait for the precapture sequence to be set.
-            state = STATE_WAITING_PRECAPTURE
-            captureSession?.capture(previewRequestBuilder.build(), captureCallback,
-                backgroundHandler)
-        } catch (e: CameraAccessException) {
-            Log.e(TAG, e.toString())
-        }
-    }
-
-    private fun lockFocus() {
-        try {
-            // This is how to tell the camera to lock focus.
-            previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-                CameraMetadata.CONTROL_AF_TRIGGER_START)
-            // Tell #captureCallback to wait for the lock.
-            state = STATE_WAITING_LOCK
-            captureSession?.capture(previewRequestBuilder.build(), captureCallback,
-                backgroundHandler)
-        } catch (e: CameraAccessException) {
-            Log.e(TAG, e.toString())
-        }
-
+        return sizeMax
     }
 
     override fun onClick(v: View?) {
@@ -375,7 +315,11 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
                 progressBar.visibility = View.VISIBLE
 //                mainActivity.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
 //                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                lockFocus()
+//                lockFocus()
+                takePhoto()
+            }
+            R.id.imageSwitch -> {
+                switchCamera()
             }
         }
     }
