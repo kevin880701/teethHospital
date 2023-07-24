@@ -97,8 +97,9 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
             }
+            // 圖片儲存
             R.id.buttonSaveRecord -> {
-                if(!CLEAN_BEFORE_EXIST || !CLEAN_AFTER_EXIST){
+                if(!(CLEAN_BEFORE_EXIST || CLEAN_AFTER_EXIST)){
                     Toast.makeText(mainActivity, "圖片未選擇", Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(mainActivity, "儲存紀錄", Toast.LENGTH_SHORT).show()

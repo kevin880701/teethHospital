@@ -16,7 +16,7 @@ class DetectFragment: Fragment() {
     lateinit var imageLight: ImageView
     lateinit var textPercent: TextView
     lateinit var presenter: DetectPresenter
-    var percent = 0.0F
+    var percent = -1.0F
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {

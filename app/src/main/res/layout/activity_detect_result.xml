@@ -40,7 +40,6 @@
                 android:textStyle="bold"
                 android:textSize="25dp"/>
 
-
         <ImageView
             android:id="@+id/imageDelete"
             android:layout_width="35dp"

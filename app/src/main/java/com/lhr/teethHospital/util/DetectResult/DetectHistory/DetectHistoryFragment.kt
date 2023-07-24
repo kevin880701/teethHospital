@@ -36,26 +36,29 @@ class DetectHistoryFragment(originalUri: String, afterUri: String, percent: Floa
         imageAfter = view.findViewById(R.id.imageAfter)
         imageLight = view.findViewById(R.id.imageLight)
         textPercent = view.findViewById(R.id.textPercent)
+        // 如果小於等於0代表沒有拍攝照片(percent預設-1.0)
+        if(percent.toFloat() >=0){
+            val originalBitmapFile = File(originalUri)
+            val originalBitmap: Bitmap =
+                BitmapFactory.decodeStream(detectResultActivity.contentResolver.openInputStream(originalBitmapFile.toUri()))
+            imageOriginal.setImageBitmap(originalBitmap)
 
-        val originalBitmapFile = File(originalUri)
-        val originalBitmap: Bitmap = BitmapFactory.decodeStream(detectResultActivity.contentResolver.openInputStream(originalBitmapFile.toUri()))
-        imageOriginal.setImageBitmap(originalBitmap)
+            val afterBitmapFile = File(afterUri)
+            val afterBitmap: Bitmap =
+                BitmapFactory.decodeStream(detectResultActivity.contentResolver.openInputStream(afterBitmapFile.toUri()))
+            imageAfter.setImageBitmap(afterBitmap)
 
-        val afterBitmapFile = File(afterUri)
-        val afterBitmap: Bitmap = BitmapFactory.decodeStream(detectResultActivity.contentResolver.openInputStream(afterBitmapFile.toUri()))
-        imageAfter.setImageBitmap(afterBitmap)
+            if (percent > 0.2) {
+                imageLight.visibility = View.VISIBLE
+                imageLight.setImageDrawable(ContextCompat.getDrawable(mainActivity, R.drawable.red_light))
+            } else {
+                imageLight.visibility = View.VISIBLE
+                imageLight.setImageDrawable(ContextCompat.getDrawable(mainActivity, R.drawable.green_light))
+            }
 
-        if (percent>0.2){
-            imageLight.visibility = View.VISIBLE
-            imageLight.setImageDrawable(ContextCompat.getDrawable(mainActivity, R.drawable.red_light))
-        }else{
-            imageLight.visibility = View.VISIBLE
-            imageLight.setImageDrawable(ContextCompat.getDrawable(mainActivity, R.drawable.green_light))
+            val df = DecimalFormat("00%")
+            textPercent.text = "殘留量：" + df.format(percent)
         }
-
-        val df = DecimalFormat("00%")
-        textPercent.text = "殘留量：" + df.format(percent)
-
         return view
     }
 }

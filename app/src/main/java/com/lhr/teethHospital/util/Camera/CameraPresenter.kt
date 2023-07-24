@@ -28,6 +28,7 @@ import java.util.*
 class CameraPresenter(cameraActivity: CameraActivity) {
     var cameraActivity = cameraActivity
     var dataBase = SqlDatabase(cameraActivity)
+    var writePercentRecord = ""
 
     fun saveRecord(classEntity: HospitalEntity){
         val recordDate = SimpleDateFormat("-yyyy-MM-dd-hh-mm-ss")
@@ -38,11 +39,18 @@ class CameraPresenter(cameraActivity: CameraActivity) {
         if (!file.exists()) {
             file.mkdir()
         }
-        convertViewToBitmap(cameraActivity.beforeDetectFragment.imageOriginal,savePath, Model.CLEAN_BEFORE_ORIGINAL)
-        convertViewToBitmap(cameraActivity.beforeDetectFragment.imageAfter,savePath, Model.CLEAN_BEFORE_DETECT)
-        convertViewToBitmap(cameraActivity.afterDetectFragment.imageOriginal,savePath, Model.CLEAN_AFTER_ORIGINAL)
-        convertViewToBitmap(cameraActivity.afterDetectFragment.imageAfter,savePath, Model.CLEAN_AFTER_DETECT)
 
+        // 如果清潔前有照片
+        if(CLEAN_BEFORE_EXIST){
+            convertViewToBitmap(cameraActivity.beforeDetectFragment.imageOriginal,savePath, Model.CLEAN_BEFORE_ORIGINAL)
+            convertViewToBitmap(cameraActivity.beforeDetectFragment.imageAfter,savePath, Model.CLEAN_BEFORE_DETECT)
+        }
+        // 如果清潔後有照片
+        if(CLEAN_AFTER_EXIST){
+            convertViewToBitmap(cameraActivity.afterDetectFragment.imageOriginal,savePath, Model.CLEAN_AFTER_ORIGINAL)
+            convertViewToBitmap(cameraActivity.afterDetectFragment.imageAfter,savePath, Model.CLEAN_AFTER_DETECT)
+        }
+        // 將偵測出的牙菌斑占比寫入txt
         val fileName = savePath + PERCENT_RECORD
         val myfile = File(fileName)
         myfile.bufferedWriter().use { out ->
