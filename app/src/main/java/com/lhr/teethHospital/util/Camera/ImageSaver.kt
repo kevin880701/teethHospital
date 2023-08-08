@@ -214,10 +214,10 @@ internal class ImageSaver(
                 convPixels[i] = Color.rgb(232, 119, 175)
                 count++
             } else {
-                convPixels[i] = Color.rgb(247, 247, 247)
+                convPixels[i] = Color.rgb(255, 255, 255)
             }
             if ((R in 109..187 && G in 50..130 && B in 57..148)) {
-                convPixels[i] = Color.rgb(247, 247, 247)
+                convPixels[i] = Color.rgb(255, 255, 255)
                 count--
             }
         }

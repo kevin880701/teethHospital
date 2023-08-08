@@ -17,7 +17,6 @@ import com.lhr.teethHospital.util.DetectResult.DetectResultActivity.Companion.de
 import java.io.File
 import java.text.DecimalFormat
 
-
 class DetectHistoryFragment(originalUri: String, afterUri: String, percent: Float): Fragment() {
 
     lateinit var imageOriginal: ImageView
