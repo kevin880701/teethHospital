@@ -8,13 +8,17 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.lhr.teethHospital.Model.Model
 import com.lhr.teethHospital.Model.Model.Companion.APP_FILES_PATH
 import com.lhr.teethHospital.Model.Model.Companion.DATABASES_PATH
@@ -22,6 +26,9 @@ import com.lhr.teethHospital.Model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.Model.Model.Companion.allFileList
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.util.Main.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnShowRationale
 import permissions.dispatcher.PermissionRequest
@@ -50,15 +57,14 @@ class CoverActivity : AppCompatActivity() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
-
     )
     fun showRationale(request: PermissionRequest) {
         AlertDialog.Builder(this)
             .setMessage("使用此功能需要WRITE_EXTERNAL_STORAGE和RECORD_AUDIO权限，下一步将继续请求权限")
             .setPositiveButton("下一步", DialogInterface.OnClickListener { dialog, which ->
-                request.proceed() //继续执行请求
+                request.proceed() // 要求權限
             }).setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which ->
-                request.cancel() //取消执行请求
+                request.cancel() //取消要求權限
             })
             .show()
     }
@@ -72,11 +78,6 @@ class CoverActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_cover)
         supportActionBar!!.hide()
-
-//        constrain = findViewById(R.id.constrain)
-//        constrain.setBackgroundColor(R.drawable.cover_back)
-
-        getMultiWithPermissionCheck()
 
         mActivity = this
 
@@ -102,7 +103,7 @@ class CoverActivity : AppCompatActivity() {
         val animation = AlphaAnimation(0.0f, 1.0f)
         animation.fillAfter = true
 //        animation.duration = 3500
-        animation.duration = 100
+        animation.duration = 1000
         layout.startAnimation(animation)
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
@@ -111,9 +112,14 @@ class CoverActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animation) {
                 println("動畫結束")
+                if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    mActivity.startActivity(intent)
+                    mActivity.finish()
+                }else{
+                    getMultiWithPermissionCheck()
+                }
 
-                mActivity.startActivity(intent)
-                mActivity.finish()
+
             }
 
             override fun onAnimationRepeat(animation: Animation) {
