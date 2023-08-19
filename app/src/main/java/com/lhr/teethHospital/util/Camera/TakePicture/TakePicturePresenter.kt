@@ -37,7 +37,7 @@ class TakePicturePresenter(takePictureActivity: TakePictureActivity) {
     var textTureCapture = takePictureActivity.textTureCapture
 
     fun imageSaver(image: Image, file: File,takePictureActivity: TakePictureActivity){
-        var detectFile = File(mainActivity!!.getExternalFilesDir(null), Model.RESULT_FILE_NAME)
+//        var detectFile = File(mainActivity!!.getExternalFilesDir(null), Model.RESULT_FILE_NAME)
         val buffer = image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining())
 

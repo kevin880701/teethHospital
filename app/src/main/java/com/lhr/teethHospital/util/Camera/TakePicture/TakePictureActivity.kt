@@ -59,11 +59,6 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
     private var handlerThread: HandlerThread? = null
     private var handler: Handler? = null
 
-    val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-        handler?.post(
-            ImageSaver(it.acquireNextImage(), file, this)
-        )
-    }
     private val mStateCallback: CameraDevice.StateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(@NonNull cameraDevice: CameraDevice) {
             // This method is called when the camera is opened.  We start camera preview here.
@@ -88,13 +83,13 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
     }
 
 
-    //创建session回调
+    //創建session回调
     private val sessionStateCallback: CameraCaptureSession.StateCallback =
         object : CameraCaptureSession.StateCallback() {
             override fun onConfigured(session: CameraCaptureSession) {
                 try {
                     cameraCaptureSession = session
-                    //自动对焦
+                    //自動對焦
                     previewBuilder.set(
                         CaptureRequest.CONTROL_AF_MODE,
                         CameraMetadata.CONTROL_AF_MODE_CONTINUOUS_PICTURE
@@ -113,7 +108,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
             }
         }
 
-    //拍完照回调
+    //拍完照回傳
     private val captureCallback: CaptureCallback = object : CaptureCallback() {
         override fun onCaptureProgressed(
             session: CameraCaptureSession,
@@ -130,9 +125,9 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
         ) {
             super.onCaptureCompleted(session, request, result)
             try {
-                //自动对焦
+                //自動對焦
                 captureBuilder!!.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_CANCEL)
-                //重新打开预览
+                //重新打開預覽
                 session.setRepeatingRequest(previewBuilder.build(), null, handler)
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
@@ -150,7 +145,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
 
     private fun initImageReader() {
         imageReader = ImageReader.newInstance(previewSize!!.width, previewSize!!.height, ImageFormat.JPEG, 1)
-        //监听ImageReader时间，有图像数据可用时回调，参数就是帧数据
+        //監聽ImageReader
         imageReader!!.setOnImageAvailableListener({ reader ->
             val image: Image = reader.acquireLatestImage()
             presenter.imageSaver(image, file, this)
@@ -162,7 +157,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
         //Camera2全程异步
         handlerThread = HandlerThread("Camera2")
         handlerThread!!.start()
-        handler = Handler(handlerThread!!.getLooper())
+        handler = Handler(handlerThread!!.looper)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,13 +183,13 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
 
     private fun openCamera() {
         try {
-            //获取属性CameraDevice属性描述
+            //獲取CameraDevice屬性
             val cameraCharacteristics: CameraCharacteristics =
                 cameraManager!!.getCameraCharacteristics(CameraCharacteristics.LENS_FACING_FRONT.toString())
-            //获取摄像头支持的配置属性
+            //獲取相機的配置
             val map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
             previewSize = getMaxSize(map!!.getOutputSizes(SurfaceHolder::class.java))
-            //第一个参数指定哪个摄像头，第二个参数打开摄像头的状态回调，第三个参数是运行在哪个线程(null是当前线程)
+            //權限判斷
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 !== PackageManager.PERMISSION_GRANTED
             ) {
@@ -202,6 +197,8 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
             }
             initImageReader()
             cameraManager!!.openCamera(currentCameraId.toString(), mStateCallback, mBackgroundHandler)
+            // 切換鏡頭按鈕恢復可點擊狀態
+            imageSwitch.isEnabled = true
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
@@ -245,7 +242,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
         try {
             captureBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
             captureBuilder!!.addTarget(imageReader!!.surface)
-            //自动对焦
+            //自動對焦
             captureBuilder!!.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
             cameraCaptureSession!!.stopRepeating()
             //拍照
@@ -273,7 +270,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
                         CameraCharacteristics.LENS_FACING
                     ) == CameraCharacteristics.LENS_FACING_FRONT)
                 ) {
-                    //前置转后置
+                    //前鏡頭轉後鏡頭
                     previewSize = maxSize
                     currentCameraId = CameraCharacteristics.LENS_FACING_FRONT
                     cameraDevice!!.close()
@@ -283,7 +280,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
                         CameraCharacteristics.LENS_FACING
                     ) == CameraCharacteristics.LENS_FACING_BACK
                 ) {
-                    //后置转前置
+                    //後鏡頭轉前鏡頭
                     previewSize = maxSize
                     currentCameraId = CameraCharacteristics.LENS_FACING_BACK
                     cameraDevice!!.close()
@@ -319,6 +316,8 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
                 takePhoto()
             }
             R.id.imageSwitch -> {
+                // 切換鏡頭按鈕不可點擊狀態
+                imageSwitch.isEnabled = false
                 switchCamera()
             }
         }
