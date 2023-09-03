@@ -1,59 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/underline">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.lhr.teethHospital.ui.setting.SettingViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constrainTitle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:layout_height="match_parent"
         android:background="@drawable/underline">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrainTitle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.08"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@null"
-            android:gravity="center_vertical|left"
-            android:layout_marginLeft="5dp"
-            android:text="@string/setting"
-            android:textColor="@color/brown"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:background="@drawable/underline">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@null"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="5dp"
+                android:text="@string/setting"
+                android:textColor="@color/seed"
+                android:textStyle="bold"
+                android:textSize="25dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textUploadBackup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constrainTitle"
+            android:paddingLeft="15dp"
+            android:gravity="center_vertical"
             android:textStyle="bold"
-            android:textSize="25dp"/>
+            android:textColor="@color/seed"
+            android:text="備份到雲端" />
+
+        <TextView
+            android:id="@+id/textDownloadBackup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textUploadBackup"
+            android:paddingLeft="15dp"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textColor="@color/seed"
+            android:text="匯入備份" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/textUploadBackup"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constrainTitle"
-        android:gravity="center_vertical"
-        android:text="備份到雲端" />
-
-    <TextView
-        android:id="@+id/textDownloadBackup"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUploadBackup"
-        android:gravity="center_vertical"
-        android:text="下載備份" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

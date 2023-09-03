@@ -1,45 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/underline">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constrainClass"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
-        app:layout_constraintRight_toRightOf="parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
         android:background="@drawable/underline">
 
-        <TextView
-            android:id="@+id/textClassInfo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@null"
-            android:gravity="center_vertical|left"
-            android:text="@string/hospital_information"
-            android:textColor="@color/brown"
-            android:textStyle="bold"
-            android:textSize="25dp"/>
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constrainClassmate"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/imageAdd"
-            android:visibility="invisible">
+            android:id="@+id/constrainTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/underline">
+
             <ImageView
                 android:id="@+id/imageBack"
                 android:layout_width="35dp"
@@ -47,11 +32,11 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/OptionsTint"
-                android:src="@drawable/left_arrow"/>
+                android:src="@drawable/left_arrow"
+                app:tint="@color/seed" />
 
             <TextView
-                android:id="@+id/textClassName"
+                android:id="@+id/textTitleBar"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintLeft_toRightOf="@+id/imageBack"
@@ -61,40 +46,40 @@
                 android:background="@null"
                 android:gravity="center_vertical|left"
                 android:text="@string/hospital_information"
-                android:textColor="@color/brown"
+                android:textColor="@color/seed"
                 android:textStyle="bold"
-                android:textSize="25dp"/>
+                android:textSize="25dp" />
 
+
+            <ImageView
+                android:id="@+id/imageAdd"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/seed"
+                android:src="@drawable/add" />
+
+            <ImageView
+                android:id="@+id/imageDelete"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="invisible"
+                android:src="@drawable/delete"
+                app:tint="@color/md_theme_light_error" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/imageAdd"
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/OptionsTint"
-            android:src="@drawable/add"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerInfo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constrainTitleBar"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageDelete"
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="invisible"
-            style="@style/OptionsTint"
-            android:src="@drawable/delete"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerInfo"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constrainClass"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

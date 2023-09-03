@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -16,10 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/Theme.teethHospital">
+        android:theme="@style/AppTheme">
         <activity
             android:allowBackup="true"
-            android:name=".util.Cover.CoverActivity"
+            android:name=".ui.cover.CoverActivity"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -28,36 +29,32 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.lhr.teethHospital.util.Main.MainActivity"
+        <activity android:name="com.lhr.teethHospital.ui.main.MainActivity"
                   android:launchMode="singleTask"
                   android:requestLegacyExternalStorage = "true"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.util.Teach.TeachActivity"
+        <activity android:name="com.lhr.teethHospital.ui.Teach.TeachActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.util.Camera.CameraActivity"
+        <activity android:name="com.lhr.teethHospital.ui.camera.CameraActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.util.Camera.TakePicture.TakePictureActivity"
+        <activity android:name="com.lhr.teethHospital.ui.camera.takePicture.TakePictureActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.util.History.HistoryActivity"
+        <activity android:name="com.lhr.teethHospital.ui.detectResult.DetectResultActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.util.DetectResult.DetectResultActivity"
+        <activity android:name="com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.util.ClassmateInformation.PatientInformationActivity"
-                  android:launchMode="singleTask"
-                  android:theme="@style/AppTheme"></activity>
-
-        <activity android:name="com.lhr.teethHospital.util.EditPatientInformation.EditPatientInformationActivity"
+        <activity android:name="com.lhr.teethHospital.ui.editPatientInformation.EditPatientInformationActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
     </application>

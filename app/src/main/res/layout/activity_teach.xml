@@ -8,7 +8,7 @@
     android:background="@drawable/underline">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constrainClass"
+        android:id="@+id/constrainTitleBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.08"
@@ -36,7 +36,7 @@
             android:background="@null"
             android:gravity="center_vertical|left"
             android:text="@string/teach"
-            android:textColor = "@color/brown"
+            android:textColor = "@color/seed"
             android:textStyle="bold"
             android:textSize="25dp"/>
 
@@ -48,6 +48,6 @@
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constrainClass"
+        app:layout_constraintTop_toBottomOf="@+id/constrainTitleBar"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
