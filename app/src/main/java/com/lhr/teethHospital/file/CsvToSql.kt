@@ -45,7 +45,6 @@ class CsvToSql {
                         }
                     }
                 }
-                Log.v("OOOOOO","" + hospitalNameIndex + "&" + numberIndex)
                 if (linePosition > 0) {
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
@@ -86,17 +85,18 @@ class CsvToSql {
                     for (index in str.indices) {
                         println(str[index])
                         when (str[index]) {
-                            hospitalName -> hospitalNameIndex = index
-                            number -> numberIndex = index
-                            gender -> genderIndex = index
-                            birthday -> birthdayIndex = index
-                            fileName -> fileNameIndex = index
-                            recordDate -> recordDateIndex = index
-                            beforePercent -> beforePercentIndex = index
-                            afterPercent -> afterPercentIndex = index
+                            mContext.getString(R.string.hospital) -> hospitalNameIndex = index
+                            mContext.getString(R.string.patient_number) -> numberIndex = index
+                            mContext.getString(R.string.gender) -> genderIndex = index
+                            mContext.getString(R.string.birthday) -> birthdayIndex = index
+                            mContext.getString(R.string.file_name) -> fileNameIndex = index
+                            mContext.getString(R.string.record_date) -> recordDateIndex = index
+                            mContext.getString(R.string.before_percent) -> beforePercentIndex = index
+                            mContext.getString(R.string.after_percent) -> afterPercentIndex = index
                         }
                     }
                 }
+                println("$hospitalNameIndex,$numberIndex")
                 if (linePosition > 0) {
                     var recordEntity = RecordEntity()
                     recordEntity.hospitalName = str[hospitalNameIndex]

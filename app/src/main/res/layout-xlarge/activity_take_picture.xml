@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.lhr.teethHospital.ui.camera.takePicture.TakePictureViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrainImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.65"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageViewBlack"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingTop="250dp"
+                android:paddingRight="200dp"
+                android:paddingLeft="200dp"
+                android:visibility="invisible"
+                android:src="@drawable/mask2" />
+
+            <ImageView
+                android:id="@+id/imageViewLine"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingTop="250dp"
+                android:paddingRight="200dp"
+                android:paddingLeft="200dp"
+                android:visibility="invisible"
+                android:src="@drawable/mask3" />
+
+            <TextureView
+                android:id="@+id/textTureCapture"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageViewCapture"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingTop="250dp"
+                android:paddingRight="200dp"
+                android:paddingLeft="200dp"
+                android:src="@drawable/mask" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingTop="250dp"
+                android:paddingRight="200dp"
+                android:paddingLeft="200dp"
+                android:src="@drawable/mask4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constrainButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainChooseButton1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.33333"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainCaptureButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.33333"
+                app:layout_constraintLeft_toRightOf="@+id/constrainChooseButton1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <ImageButton
+                    android:id="@+id/imageCaptureButton"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/take_button"
+                    app:tint="@color/seed" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainSwitch"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.33333"
+                app:layout_constraintLeft_toRightOf="@+id/constrainCaptureButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <ImageButton
+                    android:id="@+id/imageSwitch"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/camera_switch"
+                    app:tint="@color/seed" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:clickable="true"
+            android:indeterminateTint="@color/seed"
+            android:visibility="invisible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

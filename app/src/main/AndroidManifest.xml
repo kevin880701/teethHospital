@@ -29,10 +29,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.lhr.teethHospital.ui.login.LoginActivity"
+            android:launchMode="singleTask"
+            android:requestLegacyExternalStorage = "true"
+            android:theme="@style/AppTheme"></activity>
+
         <activity android:name="com.lhr.teethHospital.ui.main.MainActivity"
-                  android:launchMode="singleTask"
-                  android:requestLegacyExternalStorage = "true"
-                  android:theme="@style/AppTheme"></activity>
+            android:launchMode="singleTask"
+            android:requestLegacyExternalStorage = "true"
+            android:theme="@style/AppTheme"></activity>
 
         <activity android:name="com.lhr.teethHospital.ui.Teach.TeachActivity"
                   android:launchMode="singleTask"

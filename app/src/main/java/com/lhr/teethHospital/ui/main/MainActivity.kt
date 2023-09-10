@@ -1,9 +1,6 @@
 package com.lhr.teethHospital.ui.main
 
 import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -21,7 +18,6 @@ import com.lhr.teethHospital.ui.setting.SettingFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lhr.teethHospital.databinding.ActivityMainBinding
-import com.lhr.teethHospital.model.Model.Companion.PROGRESSBAR
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isPersonalManagerBack
 
@@ -41,7 +37,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             MainViewModelFactory(this.application)
         )[MainViewModel::class.java]
         binding.viewModel = viewModel
-
 
         isProgressBar.observe(this) { isProgressBar ->
             if(isProgressBar){

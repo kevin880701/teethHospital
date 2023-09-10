@@ -28,8 +28,8 @@ class PersonalManagerAdapter(personalManagerFragment: PersonalManagerFragment) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textClassName.text = hospitalInfoList[position].className
-        holder.textNumber.text = hospitalInfoList[position].number.toString() + "人"
+        holder.textClassName.text = hospitalInfoList[position].hospitalName
+        holder.textNumber.text = hospitalInfoList[position].quantity.toString() + "人"
         if (isShowCheckBox.value!!) {
             holder.checkboxDelete.visibility = View.VISIBLE
         } else {
@@ -46,14 +46,14 @@ class PersonalManagerAdapter(personalManagerFragment: PersonalManagerFragment) :
                 }
             } else {
                 var list = hospitalEntityList.stream()
-                    .filter { classEntity -> classEntity.hospitalName == hospitalInfoList[position].className }
+                    .filter { hospitalEntity -> hospitalEntity.hospitalName == hospitalInfoList[position].hospitalName }
                     .collect(
                         Collectors.toList()
                     ) as ArrayList<HospitalEntity>
                 var classmateAdapter = PatientAdapter(list, personalManagerFragment)
                 personalManagerFragment.binding.recyclerInfo.adapter = classmateAdapter
                 personalManagerFragment.binding.textTitleBar.text =
-                    hospitalInfoList[position].className
+                    hospitalInfoList[position].hospitalName
                 recyclerInfoStatus.value = CLASS_INFO_LIST
             }
         }

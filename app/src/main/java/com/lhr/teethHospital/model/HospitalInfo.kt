@@ -1,6 +1,3 @@
 package com.lhr.teethHospital.model
 
-class HospitalInfo() {
-    var className = ""
-    var number = 0
-}
+data class HospitalInfo(val hospitalName: String, val quantity: Int)

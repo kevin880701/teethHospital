@@ -43,7 +43,7 @@ class DetectResultActivity : AppCompatActivity(), View.OnClickListener {
         
         recordEntity = intent.getSerializableExtra("recordEntity") as RecordEntity
         var dateArray = recordEntity.recordDate.split("-")
-        binding.textFileName.text = "${dateArray[1]}年${dateArray[2]}月${dateArray[3]}日 ${dateArray[4]}點${dateArray[5]}分${dateArray[6]}秒"
+        binding.textFileName.text = "${dateArray[1]}/${dateArray[2]}/${dateArray[3]} ${dateArray[4]}:${dateArray[5]}:${dateArray[6]}"
 //        textFileName.text = recordEntity.recordDate
 
         initTabLayout(binding.tabLayoutPicture)

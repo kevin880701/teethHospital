@@ -66,7 +66,7 @@ class SettingFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             val data: Intent? = result.data
             if (data != null) {
-                GoogleDriveServiceFunction().uploadFile2(this.requireActivity())
+                GoogleDriveServiceFunction().uploadFile(this.requireActivity())
             }
         }
     }
@@ -102,6 +102,7 @@ class SettingFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.textUploadBackup -> {
+                isProgressBar.value = true
                 // 創建要被備份的檔案
                 File(APP_FILES_PATH, BACKUP_NAME).createNewFile()
                 lateinit var hospitalCursor: Cursor

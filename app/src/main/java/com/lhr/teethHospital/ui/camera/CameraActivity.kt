@@ -24,6 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
 import com.lhr.teethHospital.databinding.ActivityCameraBinding
+import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.popupWindow.ChooseImagePopupWindow
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.viewPager.ViewPageAdapter
@@ -54,7 +55,7 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
         binding.viewModel = viewModel
         dataBase = SqlDatabase(this)
 
-        hospitalEntity = intent.getSerializableExtra("hospitalEntity") as HospitalEntity
+        hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
 
         cameraActivity = this
 

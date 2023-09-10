@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.R
+import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerFragment
@@ -35,7 +36,7 @@ class PatientAdapter(arrayList: ArrayList<HospitalEntity>, personalManagerFragme
             holder.checkboxDelete.isChecked = false
         }
         holder.itemView.setOnClickListener {
-            if (isShowCheckBox.value!!) {
+            if (isShowCheckBox.value!!) { // 如果是長按刪除狀態
                 holder.checkboxDelete.isChecked = !holder.checkboxDelete.isChecked
                 if(holder.checkboxDelete.isChecked){
                     deleteList.add(arrayList[position])
@@ -44,7 +45,7 @@ class PatientAdapter(arrayList: ArrayList<HospitalEntity>, personalManagerFragme
                 }
             } else {
                 val intent = Intent(personalManagerFragment.requireActivity(), PatientInformationActivity::class.java)
-                intent.putExtra("hospitalEntity", arrayList[position])
+                intent.putExtra(ROOT, arrayList[position])
                 personalManagerFragment.requireActivity().startActivity(intent)
             }
         }

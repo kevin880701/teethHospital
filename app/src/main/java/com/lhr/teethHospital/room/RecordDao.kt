@@ -7,6 +7,8 @@ import com.android.notesk.SQLite.SqlModel.Companion.RECORD_TABLE_NAME
 
 @Dao
 interface RecordDao {
+    @Query("SELECT * FROM $RECORD_TABLE_NAME")
+    fun getAll(): List<RecordEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: RecordEntity)

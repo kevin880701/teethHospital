@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">口腔衛教</string>
+    <string name="login">登入</string>
+    <string name="enter_number">輸入學號</string>
     <string name="information">基本資料</string>
     <string name="teach">衛教導引</string>
     <string name="camera">圖片檢測</string>
@@ -9,6 +11,10 @@
     <string name="patient_information">患者資料</string>
     <string name="patient_name">病人名稱</string>
     <string name="patient_number">病歷號</string>
+    <string name="file_name">檔案名稱</string>
+    <string name="record_date">記錄時間</string>
+    <string name="before_percent">刷牙前百分比</string>
+    <string name="after_percent">刷牙後百分比</string>
     <string name="patient_number_input">病歷號：</string>
     <string name="hospital_name_input">診所名稱：</string>
     <string name="gender_input">性別：</string>
@@ -32,28 +38,9 @@
     <string name="clean_after">清潔後</string>
     <string name="save_record">儲存紀錄</string>
     <string name="clean_Image">清除圖片</string>
-    <string name="import_more">大量匯入</string>
-    <string name="import_single">單筆匯入</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="add_multiple_information">匯入資料</string>
+    <string name="add_single_information">新增單筆資料</string>
 
-
-    <string name="description_info">Info</string>
-    <string name="request_permission">This sample needs camera permission.</string>
-    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-    <string name="intro_message">
-        <![CDATA[
-
-
-            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
-            you can display camera preview and take pictures.
-
-
-        ]]>
-    </string>
 
     <string-array name="tab_commodity_title">
         <item>基本資料</item>

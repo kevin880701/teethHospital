@@ -4,7 +4,6 @@
  */
 package com.lhr.teethHospital.ui.cover
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
 import android.net.Uri
@@ -13,10 +12,11 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.APP_FILES_PATH
 import com.lhr.teethHospital.model.Model.Companion.DATABASES_PATH
@@ -27,15 +27,16 @@ import com.lhr.teethHospital.permission.PermissionManager.Companion.CAMERA
 import com.lhr.teethHospital.permission.PermissionManager.Companion.READ_EXTERNAL_STORAGE
 import com.lhr.teethHospital.permission.PermissionManager.Companion.WRITE_EXTERNAL_STORAGE
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.ui.main.MainActivity
+import com.lhr.teethHospital.databinding.ActivityCoverBinding
+import com.lhr.teethHospital.ui.login.LoginActivity
+import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel
 import java.io.File
 
 
 class CoverActivity : AppCompatActivity() {
-    lateinit var mActivity: Activity
-    lateinit var presenter: CoverPresenter
-    lateinit var imageMusicCover: ImageView
-    lateinit var constrain: ConstraintLayout
+
+    lateinit var viewModel: CoverViewModel
+    lateinit var binding: ActivityCoverBinding
     lateinit var permissionManager: PermissionManager
     var PERMISSION_REQUEST_CODE = 100
     var isSetting = false
@@ -48,32 +49,40 @@ class CoverActivity : AppCompatActivity() {
             finish()
             return
         }
-        setContentView(R.layout.activity_cover)
-//        
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_cover)
+        viewModel = ViewModelProvider(
+            this,
+            CoverViewModelFactory(this.application)
+        )[CoverViewModel::class.java]
+        binding.viewModel = viewModel
 
-        mActivity = this
 
-        val intent = Intent(mActivity, MainActivity::class.java)
         // 創建Model
         Model
 
         APP_FILES_PATH = getExternalFilesDir(null)!!.absolutePath
         DATABASES_PATH = this.getCacheDir().parent + "/databases"
         TEETH_DIR = getExternalFilesDir(null)!!.absolutePath.toString() + "/teeth/"
-        // 在DCIM中創建存圖資料夾
-        val dcimDir = File(TEETH_DIR)
-        if (!dcimDir.exists()) {
-            dcimDir.mkdir()
-        }
-        //掃描全部檔案
-        allFileList = dcimDir.listFiles()
+        // 在DCIM中創建存圖的資料夾
+        viewModel.creeateFolder()
 
-        val layout = findViewById<ConstraintLayout>(R.id.constrain)
+        //取資料成功觸發
+        viewModel.isDataGet.observe(this) { newId ->
+            if(newId) {
+
+                //先檢查權限
+                viewModel.checkPermission(this)
+//                val intent = Intent(this@CoverActivity, LoginActivity::class.java)
+//                startActivity(intent)
+//                finish()
+            }
+        }
+
         val animation = AlphaAnimation(0.0f, 1.0f)
         animation.fillAfter = true
-//        animation.duration = 3500
         animation.duration = 1000
-        layout.startAnimation(animation)
+        binding.constrain.startAnimation(animation)
+
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
                 println("動畫開始")
@@ -81,22 +90,9 @@ class CoverActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animation) {
                 println("動畫結束")
-                if (permissionManager.isCameraPermissionGranted() &&
-                    permissionManager.isWriteExternalStoragePermissionGranted() &&
-                    permissionManager.isReadExternalStoragePermissionGranted()
-                ) {
-                    mActivity.startActivity(intent)
-                    mActivity.finish()
-                } else {
-                    // 如果沒有權限，您可以向使用者要求該權限
-                    ActivityCompat.requestPermissions(
-                        mActivity, *arrayOf(
-                            WRITE_EXTERNAL_STORAGE,
-                            READ_EXTERNAL_STORAGE,
-                            CAMERA
-                        ), PERMISSION_REQUEST_CODE
-                    );
-                }
+
+                // 從Room取患者資料，有取到就跳轉頁面
+                viewModel.getHospitalInfo()
 
             }
 
@@ -128,9 +124,11 @@ class CoverActivity : AppCompatActivity() {
                 // 判斷權限是否都開啟
                 if ((grantResults.isNotEmpty() && grantResults.all { it == 0 })
                 ) {
-                    // 有權限
-                    mActivity.startActivity(intent)
-                    mActivity.finish()
+                    // 有權限並重新啟動Cover頁面
+                    val intent = Intent(this, CoverActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
                 } else {
                     // 無權限
                     AlertDialog.Builder(this)

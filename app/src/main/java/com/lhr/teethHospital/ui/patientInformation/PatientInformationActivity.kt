@@ -17,6 +17,8 @@ import com.lhr.teethHospital.recyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.databinding.ActivityPatientInformationBinding
+import com.lhr.teethHospital.model.Model.Companion.PATIENT
+import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.ui.camera.CameraActivity
 import com.lhr.teethHospital.ui.editPatientInformation.EditPatientInformationActivity
 
@@ -28,7 +30,7 @@ class PatientInformationActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityPatientInformationBinding
     lateinit var patientRecordAdapter: PatientRecordAdapter
     lateinit var hospitalEntity: HospitalEntity
-    lateinit var classRecordList: ArrayList<RecordEntity>
+    lateinit var patientRecordList: ArrayList<RecordEntity>
     lateinit var messageReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +43,19 @@ class PatientInformationActivity : AppCompatActivity(), View.OnClickListener {
         )[PatientInformationViewModel::class.java]
         binding.viewModel = viewModel
 
-        hospitalEntity = intent.getSerializableExtra("hospitalEntity") as HospitalEntity
-        classRecordList = viewModel.getRecord(hospitalEntity.hospitalName, hospitalEntity.number)
-        binding.textPatientNumber.text = hospitalEntity.number
+
+        if (intent.getSerializableExtra(ROOT) != null) {// 如果是管理者
+            hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
+            patientRecordList = viewModel.getRecord(hospitalEntity.hospitalName, hospitalEntity.number)
+            binding.textTitle.text = hospitalEntity.hospitalName
+            binding.textPatientNumber.text = hospitalEntity.number
+        }else if (intent.getSerializableExtra(PATIENT) != null) {//如果是患者
+            hospitalEntity = intent.getSerializableExtra(PATIENT) as HospitalEntity
+            patientRecordList = viewModel.getRecord(hospitalEntity.hospitalName, hospitalEntity.number)
+            binding.textTitle.text = hospitalEntity.hospitalName
+            binding.textPatientNumber.text = hospitalEntity.number
+            binding.imageEdit.visibility = View.INVISIBLE
+        }
 
         viewModel.isShowCheckBox.observe(this) { newIds ->
             showCheckBox()
@@ -56,7 +68,7 @@ class PatientInformationActivity : AppCompatActivity(), View.OnClickListener {
                 DividerItemDecoration.VERTICAL
             )
         )
-        patientRecordAdapter = PatientRecordAdapter(this, classRecordList, viewModel.isShowCheckBox)
+        patientRecordAdapter = PatientRecordAdapter(this, patientRecordList, viewModel.isShowCheckBox)
         binding.recyclerCleanRecord.adapter = patientRecordAdapter
 
 
@@ -94,7 +106,7 @@ class PatientInformationActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.imageAdd -> {
                 val intent = Intent(this, CameraActivity::class.java)
-                intent.putExtra("hospitalEntity", hospitalEntity)
+                intent.putExtra(ROOT, hospitalEntity)
                 startActivity(intent)
             }
             R.id.imageDelete -> {
@@ -102,7 +114,7 @@ class PatientInformationActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.imageEdit -> {
                 val intent = Intent(this, EditPatientInformationActivity::class.java)
-                intent.putExtra("hospitalEntity", hospitalEntity)
+                intent.putExtra(ROOT, hospitalEntity)
                 startActivity(intent)
                 finish()
             }

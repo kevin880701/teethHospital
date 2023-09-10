@@ -24,7 +24,7 @@
             android:textColor="@color/seed"
             android:background="@drawable/radius"
             style="?android:attr/borderlessButtonStyle"
-            android:text="@string/import_more"
+            android:text="@string/add_multiple_information"
             android:textSize="18sp" />
 
         <Button
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/radius2"
             style="?android:attr/borderlessButtonStyle"
-            android:text="@string/import_single"
+            android:text="@string/add_single_information"
             android:textSize="18sp"
             android:textColor="@color/seed" />
     </LinearLayout>

@@ -8,6 +8,9 @@
             name="viewModel"
             type="com.lhr.teethHospital.ui.editPatientInformation.EditPatientInformationViewModel" />
     </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,6 +63,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constrainTitleBar"
+            app:tint="@color/seed"
             android:src="@drawable/person" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -226,15 +230,18 @@
         <Button
             android:id="@+id/buttonSaveInformation"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.08"
+            android:layout_height="56dp"
             app:layout_constraintWidth_percent="0.3"
             app:layout_constraintTop_toBottomOf="@+id/constraintBirthday"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="42dp"
+            android:background="@drawable/login_button_radius"
+            android:textColor="@color/white"
             android:text="@string/save_information"
             android:textStyle="bold"
-            android:textSize="18dp"
-            android:layout_marginTop="2dp" />
+            android:textSize="17dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 </layout>

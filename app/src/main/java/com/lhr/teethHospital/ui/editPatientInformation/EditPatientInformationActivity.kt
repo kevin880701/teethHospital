@@ -14,6 +14,7 @@ import com.lhr.teethHospital.R
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.databinding.ActivityEditPatientInformationBinding
+import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,8 +37,8 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
         )[EditPatientInformationViewModel::class.java]
         binding.viewModel = viewModel
 
-        if (intent.getSerializableExtra("hospitalEntity") != null) {
-            hospitalEntity = intent.getSerializableExtra("hospitalEntity") as HospitalEntity
+        if (intent.getSerializableExtra(ROOT) != null) {
+            hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
             binding.editHospitalName.setText(hospitalEntity.hospitalName)
             binding.editPatientNumber.setText(hospitalEntity.number)
             binding.editGender.setText(hospitalEntity.gender)
@@ -96,7 +97,7 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
                         newHospitalEntity.gender = binding.editGender.text.toString()
                         newHospitalEntity.birthday = binding.editBirthday.text.toString()
                         val intent = Intent(this, PatientInformationActivity::class.java)
-                        intent.putExtra("hospitalEntity", newHospitalEntity)
+                        intent.putExtra(ROOT, newHospitalEntity)
                         startActivity(intent)
                         finish()
                     }

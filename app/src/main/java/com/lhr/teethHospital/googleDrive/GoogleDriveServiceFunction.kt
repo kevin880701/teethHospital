@@ -1,6 +1,8 @@
 package com.lhr.teethHospital.googleDrive
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,6 +20,12 @@ import com.lhr.teethHospital.R
 import com.lhr.teethHospital.file.DeleteFile
 import com.lhr.teethHospital.model.Model.Companion.APP_FILES_PATH
 import com.lhr.teethHospital.model.Model.Companion.BACKUP_NAME
+import com.lhr.teethHospital.ui.main.MainViewModel
+import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,47 +37,51 @@ internal class GoogleDriveServiceFunction() {
     private val mExecutor: Executor = Executors.newSingleThreadExecutor()
 //    private var mDriveService = mDriveService
 
-    fun uploadFile2(activity: Activity) {
-        Tasks.call(mExecutor) {
-            val credential =
-                GoogleSignIn.getLastSignedInAccount(activity)
-                    ?.let { account ->
-                        GoogleAccountCredential.usingOAuth2(
-                            activity,
-                            setOf(DriveScopes.DRIVE_FILE)
-                        )
-                            .setBackOff(ExponentialBackOff())
-                            .setSelectedAccount(account.account)
-                    } ?: throw IllegalArgumentException("Google account not found")
-            var mDriveService =
-                Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                    .setApplicationName(
-                        activity.getString(R.string.app_name)
+    fun uploadFile(activity: Activity) {
+        val credential =
+            GoogleSignIn.getLastSignedInAccount(activity)
+                ?.let { account ->
+                    GoogleAccountCredential.usingOAuth2(
+                        activity,
+                        setOf(DriveScopes.DRIVE_FILE)
                     )
-                    .build()
+                        .setBackOff(ExponentialBackOff())
+                        .setSelectedAccount(account.account)
+                } ?: throw IllegalArgumentException("Google account not found")
+        var mDriveService =
+            Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                .setApplicationName(
+                    activity.getString(R.string.app_name)
+                )
+                .build()
 
-            val recordDate = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss-")
-            val time: String = recordDate.format(Date())
-            var fileMetaData = File()
-            fileMetaData.name = time + BACKUP_NAME
-            val filePath = java.io.File(APP_FILES_PATH, BACKUP_NAME)
-            val mediaContent = FileContent("application/x-rar-compressed", filePath)
+        val recordDate = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss-")
+        val time: String = recordDate.format(Date())
+        var fileMetaData = File()
+        fileMetaData.name = time + BACKUP_NAME
+        val filePath = java.io.File(APP_FILES_PATH, BACKUP_NAME)
+        val mediaContent = FileContent("application/x-rar-compressed", filePath)
 
-            try {
-                val file = mDriveService.files().create(fileMetaData, mediaContent)
-                    .setFields("id, parents")
-                    .execute()
-                DeleteFile(APP_FILES_PATH + java.io.File.separator + BACKUP_NAME)
-                if (file != null) {
+        try {
+            val file = mDriveService.files().create(fileMetaData, mediaContent)
+                .setFields("id, parents")
+                .execute()
+            DeleteFile(APP_FILES_PATH + java.io.File.separator + BACKUP_NAME)
+            if (file != null) {
+                val handler = Handler(Looper.getMainLooper())
+
+                handler.post {
+                    isProgressBar.value = false
                     Toast.makeText(activity, "檔案上傳成功", Toast.LENGTH_LONG).show()
                 }
-            } catch (e: GoogleJsonResponseException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
             }
 
+        } catch (e: GoogleJsonResponseException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
+
 
     }
 

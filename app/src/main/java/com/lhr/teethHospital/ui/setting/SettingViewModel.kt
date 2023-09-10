@@ -3,6 +3,7 @@ package com.lhr.teethHospital.ui.setting
 import android.app.Application
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
@@ -15,6 +16,12 @@ import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.googleDrive.GoogleDriveServiceFunction
+import com.lhr.teethHospital.ui.main.MainViewModel
+import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -35,8 +42,11 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
             ).signInIntent
             settingFragment.uploadBackupResult.launch(signInIntent)
         } else {
-            // 如果已登錄，執行上傳備份操作
-            GoogleDriveServiceFunction().uploadFile2(settingFragment.requireActivity())
+            GlobalScope.launch(Dispatchers.IO) {
+
+                // 如果已登錄，執行上傳備份操作
+                GoogleDriveServiceFunction().uploadFile(settingFragment.requireActivity())
+            }
         }
     }
 

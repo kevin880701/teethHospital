@@ -1,6 +1,7 @@
 package com.lhr.teethHospital.model
 
 import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.RecordEntity
 import java.io.File
 
 class Model {
@@ -24,11 +25,12 @@ class Model {
         val BACKUP_NAME : String = "teethHospitalBackup.rar"
         val HOSPITAL_CSV = "hospitalBackUp.csv"
         val RECORD_CSV = "recordBackUp.csv"
-        val PROGRESSBAR = "ProgressBar"
+        val ROOT = "ROOT"
+        val PATIENT = "PATIENT"
         lateinit var allFileList: Array<File>
         var hospitalInfoList : ArrayList<HospitalInfo> = ArrayList()
         var hospitalEntityList : ArrayList<HospitalEntity> = ArrayList()
-        val hospitalEntityMap : HashMap<String,ArrayList<HospitalEntity>> = HashMap()
+        var recordEntityList : ArrayList<RecordEntity> = ArrayList()
 
     }
 }

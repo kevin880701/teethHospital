@@ -1,6 +1,7 @@
 package com.lhr.teethHospital.ui.personalManager
 
 import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.lhr.teethHospital.model.FileManager
@@ -14,7 +15,8 @@ import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.data.personalManager.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
-import com.lhr.teethHospital.ui.main.MainViewModel
+import com.lhr.teethHospital.ui.login.LoginActivity
+import com.lhr.teethHospital.ui.main.MainActivity
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,9 +53,9 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 adapter.deleteList.stream().forEach { classInfo ->
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            personalManagerFragment.dataBase.getHospitalDao().deleteRecordByClassName(classInfo.className)
+                            personalManagerFragment.dataBase.getHospitalDao().deleteRecordByClassName(classInfo.hospitalName)
                             var patientRecordList = personalManagerFragment.dataBase.getRecordDao()
-                                .getPatientRecordByHospitalName(classInfo.className) as ArrayList<RecordEntity>
+                                .getPatientRecordByHospitalName(classInfo.hospitalName) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach { recordEntity ->
                                 fileManager.deleteDirectory(
                                     TEETH_DIR + recordEntity.fileName + "/",
@@ -71,14 +73,14 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 adapter.arrayList.removeAll(adapter.deleteList.toSet())
                 adapter.notifyDataSetChanged()
 
-                adapter.deleteList.stream().forEach { classEntity ->
+                adapter.deleteList.stream().forEach { hospitalEntity ->
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
                             personalManagerFragment.dataBase.getHospitalDao()
-                                .deleteRecord(classEntity.hospitalName, classEntity.number)
+                                .deleteRecord(hospitalEntity.hospitalName, hospitalEntity.number)
                             var patientRecordList = personalManagerFragment.dataBase.getRecordDao().getPatientRecord(
-                                classEntity.hospitalName,
-                                classEntity.number
+                                hospitalEntity.hospitalName,
+                                hospitalEntity.number
                             ) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach { recordEntity ->
                                 fileManager.deleteDirectory(
@@ -106,7 +108,7 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
             (binding.recyclerInfo.adapter as PatientAdapter).clearItems()
             getHospitalInfo()
             var list = hospitalEntityList.stream()
-                .filter { classEntity -> classEntity.hospitalName == binding.textTitleBar.text }.collect(
+                .filter { hospitalEntity -> hospitalEntity.hospitalName == binding.textTitleBar.text }.collect(
                     Collectors.toList()
                 ) as java.util.ArrayList<HospitalEntity>
             var classmateAdapter = PatientAdapter(list, personalManagerFragment)
@@ -119,7 +121,7 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
         binding: FragmentPersonalManagerBinding,
         personalManagerFragment: PersonalManagerFragment
     ) {
-        if (isShowCheckBox.value!!) {
+        if (isShowCheckBox.value!!) {  // 如果處於償案顯示刪除框的狀態
             isShowCheckBox.value = false
             when (recyclerInfoStatus.value) {
                 CLASS_LIST -> {
@@ -135,6 +137,10 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
         } else {
             when (recyclerInfoStatus.value) {
                 CLASS_LIST -> {
+//                    personalManagerFragment.requireActivity().finish()
+
+                    val intent = Intent(personalManagerFragment.requireActivity(), LoginActivity::class.java)
+                    personalManagerFragment.requireActivity().startActivity(intent)
                     personalManagerFragment.requireActivity().finish()
                 }
 
