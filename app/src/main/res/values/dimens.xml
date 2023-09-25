@@ -1,3 +1,21 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Elevation levels -->
+    <dimen name="elevation_level0">0dp</dimen>
+    <dimen name="elevation_level1">1dp</dimen>
+    <dimen name="elevation_level2">3dp</dimen>
+    <dimen name="elevation_level3">6dp</dimen>
+    <dimen name="elevation_level4">8dp</dimen>
+    <dimen name="elevation_level5">12dp</dimen>
+
+    <!-- Component elevation levels -->
+    <dimen name="component_elevation_level0">0dp</dimen>
+    <dimen name="component_elevation_level1">1dp</dimen>
+    <dimen name="component_elevation_level2">3dp</dimen>
+    <dimen name="component_elevation_level3">6dp</dimen>
+    <dimen name="component_elevation_level4">8dp</dimen>
+    <dimen name="component_elevation_level5">12dp</dimen>
+
+    <dimen name="corner_radius">28dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
 </resources>

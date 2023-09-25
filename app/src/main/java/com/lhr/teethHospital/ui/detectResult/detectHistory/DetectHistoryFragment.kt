@@ -45,7 +45,7 @@ class DetectHistoryFragment(originalUri: String, afterUri: String, percent: Floa
             val afterBitmapFile = File(afterUri)
             val afterBitmap: Bitmap =
                 BitmapFactory.decodeStream(this.requireActivity().contentResolver.openInputStream(afterBitmapFile.toUri()))
-            binding.imageAfter.setImageBitmap(afterBitmap)
+            binding.imageDetect.setImageBitmap(afterBitmap)
 
             if (percent > 0.2) {
 //                imageLight.visibility = View.VISIBLE

@@ -28,7 +28,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/buttonImportSingle"
+            android:id="@+id/buttonChoosePicture"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/radius2"

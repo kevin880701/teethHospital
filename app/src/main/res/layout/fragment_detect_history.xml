@@ -50,7 +50,7 @@
             android:src="@drawable/green_light" />
 
         <ImageView
-            android:id="@+id/imageAfter"
+            android:id="@+id/imageDetect"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.45"

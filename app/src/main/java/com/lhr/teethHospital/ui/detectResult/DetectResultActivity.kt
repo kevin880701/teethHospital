@@ -1,35 +1,30 @@
 package com.lhr.teethHospital.ui.detectResult
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import com.lhr.teethHospital.model.Model.Companion.CLEAN_AFTER_DETECT
-import com.lhr.teethHospital.model.Model.Companion.CLEAN_AFTER_ORIGINAL
-import com.lhr.teethHospital.model.Model.Companion.CLEAN_BEFORE_DETECT
-import com.lhr.teethHospital.model.Model.Companion.CLEAN_BEFORE_ORIGINAL
+import com.lhr.teethHospital.model.Model.Companion.detectPictureFileName
+import com.lhr.teethHospital.model.Model.Companion.originalPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.room.RecordEntity
-import com.lhr.teethHospital.ui.detectResult.detectHistory.DetectHistoryFragment
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
 import com.lhr.teethHospital.databinding.ActivityDetectResultBinding
-import com.lhr.teethHospital.viewPager.ViewPageAdapter
-
+import com.lhr.teethHospital.model.Model
+import java.io.File
+import java.text.DecimalFormat
 
 class DetectResultActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var viewModel: DetectResultViewModel
     lateinit var binding: ActivityDetectResultBinding
-    lateinit var tabTitleList: ArrayList<String>
-    lateinit var pageAdapter: ViewPageAdapter
     lateinit var recordEntity: RecordEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,29 +37,39 @@ class DetectResultActivity : AppCompatActivity(), View.OnClickListener {
         binding.viewModel = viewModel
         
         recordEntity = intent.getSerializableExtra("recordEntity") as RecordEntity
-        var dateArray = recordEntity.recordDate.split("-")
-        binding.textFileName.text = "${dateArray[1]}/${dateArray[2]}/${dateArray[3]} ${dateArray[4]}:${dateArray[5]}:${dateArray[6]}"
-//        textFileName.text = recordEntity.recordDate
+        // 使用正則表達式匹配同時包含 hospitalName 和 number 的字串
+        val pattern = Regex("(${Regex.escape(recordEntity.hospitalName)}.*?${Regex.escape(recordEntity.number)})")
+        // 使用 replace 將匹配的字串替換為空字串
+        binding.textTitle.text = pattern.replace(recordEntity.fileName, "")
+        println(recordEntity.detectPercent.toFloat())
 
-        initTabLayout(binding.tabLayoutPicture)
+
+        // 如果小於等於0代表沒有拍攝照片(percent預設-1.0)
+        if(recordEntity.detectPercent.toFloat() >=0){
+            val originalBitmapFile = File(TEETH_DIR + recordEntity.fileName + "/" + originalPictureFileName)
+            val originalBitmap: Bitmap =
+                BitmapFactory.decodeStream(contentResolver.openInputStream(originalBitmapFile.toUri()))
+            binding.imageOriginal.setImageBitmap(originalBitmap)
+            val afterBitmapFile = File(TEETH_DIR + recordEntity.fileName + "/" + detectPictureFileName)
+            val afterBitmap: Bitmap =
+                BitmapFactory.decodeStream(contentResolver.openInputStream(afterBitmapFile.toUri()))
+            binding.imageDetect.setImageBitmap(afterBitmap)
+
+            if (recordEntity.detectPercent.toFloat() > 0.2) {
+//                imageLight.visibility = View.VISIBLE
+//                binding.imageLight.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.red_light))
+            } else {
+//                imageLight.visibility = View.VISIBLE
+//                binding.imageLight.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.green_light))
+            }
+
+            val df = DecimalFormat("00%")
+
+            binding.textPercent.text = "殘留量：" + df.format(recordEntity.detectPercent.toFloat())
+        }
+
         binding.imageBack.setOnClickListener(this)
         binding.imageDelete.setOnClickListener(this)
-    }
-
-    fun initTabLayout(tabLayout: TabLayout) {
-        tabLayout.apply {
-            tabTitleList = resources.getStringArray(R.array.clean).toCollection(ArrayList())
-            var fragments = arrayListOf(
-                DetectHistoryFragment(TEETH_DIR + recordEntity.fileName + "/" + CLEAN_BEFORE_ORIGINAL, TEETH_DIR + recordEntity.fileName + "/" + CLEAN_BEFORE_DETECT, recordEntity.beforePercent.toFloat()),
-                DetectHistoryFragment(TEETH_DIR + recordEntity.fileName + "/" + CLEAN_AFTER_ORIGINAL, TEETH_DIR + recordEntity.fileName + "/" + CLEAN_AFTER_DETECT, recordEntity.afterPercent.toFloat()),
-            ) as ArrayList<Fragment>
-            pageAdapter = ViewPageAdapter(this@DetectResultActivity.supportFragmentManager, lifecycle, fragments)
-            binding.viewPager.adapter = pageAdapter
-            TabLayoutMediator(this, binding.viewPager) { tab, position ->
-                tab.text = tabTitleList[position]
-            }.attach()
-            binding.viewPager.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-        }
     }
 
     override fun onClick(v: View?) {

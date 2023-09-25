@@ -1,34 +1,37 @@
 package com.lhr.teethHospital.ui.camera
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.lhr.teethHospital.model.Model.Companion.CLEAN_AFTER_EXIST
-import com.lhr.teethHospital.model.Model.Companion.CLEAN_BEFORE_EXIST
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.ui.camera.detect.DetectFragment
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
 import com.lhr.teethHospital.databinding.ActivityCameraBinding
+import com.lhr.teethHospital.dialog.SaveRecordDialog
+import com.lhr.teethHospital.model.Model
+import com.lhr.teethHospital.model.Model.Companion.CAMERA_INTENT_FILTER
+import com.lhr.teethHospital.model.Model.Companion.DETECT_PERCENT
+import com.lhr.teethHospital.model.Model.Companion.DETECT_PICTURE
+import com.lhr.teethHospital.model.Model.Companion.ORIGINAL_PICTURE
+import com.lhr.teethHospital.model.Model.Companion.RECORD_DATE
 import com.lhr.teethHospital.model.Model.Companion.ROOT
+import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
+import com.lhr.teethHospital.model.Model.Companion.isSetPicture
 import com.lhr.teethHospital.popupWindow.ChooseImagePopupWindow
+import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.viewPager.ViewPageAdapter
-
 
 class CameraActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
@@ -37,13 +40,11 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var viewModel: CameraViewModel
     lateinit var binding: ActivityCameraBinding
-    lateinit var tabTitleList: ArrayList<String>
-    lateinit var fragments: ArrayList<Fragment>
+    lateinit var messageReceiver: BroadcastReceiver
     lateinit var dataBase: SqlDatabase
-//    lateinit var beforeDetectFragment: DetectFragment
-//    lateinit var afterDetectFragment: DetectFragment
     lateinit var pageAdapter: ViewPageAdapter
     lateinit var hospitalEntity: HospitalEntity
+    var percent = -1.0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,32 +60,41 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
 
         cameraActivity = this
 
-        initTabLayout(binding.tabLayoutPicture)
+        // 註冊 BroadcastReceiver
+        messageReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == CAMERA_INTENT_FILTER) {
+                    if(intent.hasExtra(ORIGINAL_PICTURE) && intent.hasExtra(DETECT_PICTURE)){
+                        var originalBitmapByteArray = intent.getByteArrayExtra(ORIGINAL_PICTURE)
+                        var originalBitmap = BitmapFactory.decodeByteArray(originalBitmapByteArray, 0, originalBitmapByteArray!!.size)
+                        viewModel.setTakePicture(binding.imageOriginal, originalBitmap!!)
+                        var detectBitmapByteArray = intent.getByteArrayExtra(DETECT_PICTURE)
+                        var detectBitmap = BitmapFactory.decodeByteArray(detectBitmapByteArray, 0, detectBitmapByteArray!!.size)
+                        viewModel.setTakePicture(binding.imageDetect, detectBitmap!!)
+                        percent = intent.getFloatExtra(DETECT_PERCENT, 0.0F)
+                        isSetPicture = true
+                    }
+                    if(intent.hasExtra(RECORD_DATE)){
+                        val recordDate = intent.getStringExtra(RECORD_DATE)
+                        cameraActivity.viewModel.saveRecord(hospitalEntity, this@CameraActivity, dataBase, recordDate!!)
+                    // 更新患者紀錄Adapter
+                    sendBroadcast(
+                        Intent(UPDATE_PATIENT_RECORD).putExtra("action", UPDATE_PATIENT_RECORD)
+                    )
+                        finish()
+                    }
+                }
+            }
+        }
+        val intentFilter = IntentFilter(CAMERA_INTENT_FILTER)
+        this.registerReceiver(messageReceiver, intentFilter)
 
-        binding.buttonImportSingle.setOnClickListener(this)
+        binding.buttonChoosePicture.setOnClickListener(this)
         binding.buttonSaveRecord.setOnClickListener(this)
         binding.buttonCleanImage.setOnClickListener(this)
         binding.imageBack.setOnClickListener(this)
     }
 
-    private fun initTabLayout(tabLayout: TabLayout) {
-        tabLayout.apply {
-            tabTitleList =
-                resources.getStringArray(R.array.clean).toCollection(ArrayList())
-
-            fragments = arrayListOf(
-                DetectFragment(),
-                DetectFragment()
-            ) as ArrayList<Fragment>
-//            beforeDetectFragment = DetectFragment()
-//            afterDetectFragment = DetectFragment()
-            pageAdapter = ViewPageAdapter(supportFragmentManager, lifecycle, fragments)
-            binding.viewPager.adapter = pageAdapter
-            TabLayoutMediator(tabLayout, binding.viewPager) { tab, position ->
-                tab.text = tabTitleList[position]
-            }.attach()
-        }
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -93,35 +103,37 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
                 sendBroadcast(intent)
                 finish()
             }
-            R.id.buttonImportSingle -> {
+
+            R.id.buttonChoosePicture -> {
                 val choose = ChooseImagePopupWindow(this)
                 val view: View = LayoutInflater.from(this).inflate(
                     R.layout.popup_window_choose_image,
                     null
                 )
                 choose.showAtLocation(view, Gravity.CENTER, 0, 0)
-                //強制隱藏鍵盤
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
             }
             // 圖片儲存
             R.id.buttonSaveRecord -> {
-                if(!(CLEAN_BEFORE_EXIST || CLEAN_AFTER_EXIST)){
+                if (!(isSetPicture)) {
                     Toast.makeText(this, "圖片未選擇", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(this, "儲存紀錄", Toast.LENGTH_SHORT).show()
-                    viewModel.saveRecord(hospitalEntity, fragments, dataBase)
-                    sendBroadcast(
-                        Intent(UPDATE_PATIENT_RECORD).putExtra("action", UPDATE_PATIENT_RECORD)
-                    )
-                    finish()
+                } else {
+                    val customDialog = SaveRecordDialog(this)
+                    customDialog.show()
                 }
             }
+
             R.id.buttonCleanImage -> {
-                viewModel.cleanImage(pageAdapter, binding.viewPager)
+                viewModel.cleanImage(this)
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 取消註冊 BroadcastReceiver
+        unregisterReceiver(messageReceiver)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean { //捕捉返回鍵
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish()
@@ -136,16 +148,8 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
             val myData: Intent? = result.data
             if (myData != null) {
                 // 選擇圖片後變更圖片
-                val currentFragment = pageAdapter.fragments[binding.viewPager.currentItem] as DetectFragment
-                currentFragment.viewModel.setDetectImage(currentFragment,myData.data!!)
-                when(binding.viewPager.currentItem){
-                    0 -> {
-                        CLEAN_BEFORE_EXIST = true
-                    }
-                    1-> {
-                        CLEAN_AFTER_EXIST = true
-                    }
-                }
+                viewModel.choosePhotoAlbum(this, myData.data!!)
+                isSetPicture = true
             }
         }
     }

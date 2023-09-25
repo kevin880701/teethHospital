@@ -2,25 +2,14 @@ package com.lhr.teethHospital.file
 
 import android.content.Context
 import android.database.Cursor
-import android.util.Log
-import com.android.notesk.SQLite.SqlModel.Companion.birthday
-import com.android.notesk.SQLite.SqlModel.Companion.gender
-import com.android.notesk.SQLite.SqlModel.Companion.hospitalName
-import com.android.notesk.SQLite.SqlModel.Companion.id
-import com.android.notesk.SQLite.SqlModel.Companion.number
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
-import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.BufferedWriter
 import java.io.File
-import java.io.FileWriter
 import java.io.IOException
 
 class SqlToCsv {
@@ -134,8 +123,8 @@ class SqlToCsv {
 
                         // 將數據每一行寫入 CSV 文件
                         for (record in recordList) {
-                            println("${record.hospitalName},${record.number},${record.gender},${record.birthday},${record.fileName},${record.recordDate},${record.beforePercent},${record.afterPercent}")
-                            out.println("${record.hospitalName},${record.number},${record.gender},${record.birthday},${record.fileName},${record.recordDate},${record.beforePercent},${record.afterPercent}")
+                            println("${record.hospitalName},${record.number},${record.gender},${record.birthday},${record.fileName},${record.recordDate},${record.detectPercent}")
+                            out.println("${record.hospitalName},${record.number},${record.gender},${record.birthday},${record.fileName},${record.recordDate},${record.detectPercent}")
                         }
                     }
                 }

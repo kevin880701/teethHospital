@@ -17,6 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
+import com.android.notesk.SQLite.SqlModel.Companion.DB_NAME
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.APP_FILES_PATH
 import com.lhr.teethHospital.model.Model.Companion.DATABASES_PATH
@@ -28,6 +30,7 @@ import com.lhr.teethHospital.permission.PermissionManager.Companion.READ_EXTERNA
 import com.lhr.teethHospital.permission.PermissionManager.Companion.WRITE_EXTERNAL_STORAGE
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityCoverBinding
+import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.login.LoginActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel
 import java.io.File
@@ -55,7 +58,6 @@ class CoverActivity : AppCompatActivity() {
             CoverViewModelFactory(this.application)
         )[CoverViewModel::class.java]
         binding.viewModel = viewModel
-
 
         // 創建Model
         Model

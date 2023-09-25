@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="280dp"
+    android:maxWidth="560dp"
+    android:padding="24dp"
+    android:background="@color/transparent">
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/record_name"
+        android:background="@drawable/dialog_background"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        android:textColor="@color/md_theme_dark_surfaceVariant"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/editRecordName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:hint="@string/record_date"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/editRecordName"
+        app:layout_constraintRight_toLeftOf="@+id/buttonOk"
+        android:textStyle="bold"
+        android:textColor="@color/md_theme_light_primary"
+        android:text="@string/cancel" />
+
+    <Button
+        android:id="@+id/buttonOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/editRecordName"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textStyle="bold"
+        android:textColor="@color/md_theme_light_primary"
+        android:text="@string/ok" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

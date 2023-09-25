@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var viewModel: MainViewModel
     lateinit var binding: ActivityMainBinding
     lateinit var pageAdapter: ViewPageAdapter
-    lateinit var messageReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

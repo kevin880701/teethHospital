@@ -3,14 +3,6 @@ package com.lhr.teethHospital.file
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.android.notesk.SQLite.SqlModel.Companion.afterPercent
-import com.android.notesk.SQLite.SqlModel.Companion.beforePercent
-import com.android.notesk.SQLite.SqlModel.Companion.birthday
-import com.android.notesk.SQLite.SqlModel.Companion.fileName
-import com.android.notesk.SQLite.SqlModel.Companion.gender
-import com.android.notesk.SQLite.SqlModel.Companion.hospitalName
-import com.android.notesk.SQLite.SqlModel.Companion.number
-import com.android.notesk.SQLite.SqlModel.Companion.recordDate
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
@@ -105,8 +97,7 @@ class CsvToSql {
                     recordEntity.birthday = str[birthdayIndex]
                     recordEntity.fileName = str[fileNameIndex]
                     recordEntity.recordDate = str[recordDateIndex]
-                    recordEntity.beforePercent = str[beforePercentIndex]
-                    recordEntity.afterPercent = str[afterPercentIndex]
+                    recordEntity.detectPercent = str[beforePercentIndex]
 
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
@@ -117,8 +108,7 @@ class CsvToSql {
                                 recordEntity.birthday,
                                 recordEntity.fileName,
                                 recordEntity.recordDate,
-                                recordEntity.beforePercent,
-                                recordEntity.afterPercent
+                                recordEntity.detectPercent
                             )
                         }
                     }

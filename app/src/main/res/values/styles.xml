@@ -49,4 +49,12 @@
         <item name="android:windowEnterAnimation">@anim/entet_choose</item>
         <item name="android:windowExitAnimation">@anim/exit_choose</item>
     </style>
+
+<!--    <style name="SaveRecordDialog" parent="Theme.AppCompat.Dialog">-->
+<!--        <item name="android:background">@drawable/dialog_background</item> &lt;!&ndash; 设置背景为圆角形状 &ndash;&gt;-->
+<!--    </style>-->
+
+    <style name="SaveRecordDialog" parent="@style/Theme.MaterialComponents.Dialog">
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
 </resources>

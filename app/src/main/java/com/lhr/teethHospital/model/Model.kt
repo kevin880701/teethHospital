@@ -12,13 +12,15 @@ class Model {
         const val IMPORT_CSV : Int = 300
         const val IMAGE_URI : String = "IMAGE_URI"
         val RESULT_FILE_NAME = "result.png"
-        val CLEAN_BEFORE_ORIGINAL = "clean_before_original.png"
-        val CLEAN_BEFORE_DETECT = "clean_before_detect.png"
-        val CLEAN_AFTER_ORIGINAL = "clean_after_original.png"
-        val CLEAN_AFTER_DETECT = "clean_after_detect.png"
+        val originalPictureFileName = "originalPicture.png"
+        val detectPictureFileName = "detectPicture.png"
+        val CAMERA_INTENT_FILTER = "CAMERA_INTENT_FILTER"
+        val RECORD_DATE = "RECORD_DATE"
+        val ORIGINAL_PICTURE = "ORIGINAL_PICTURE"
+        val DETECT_PERCENT = "DETECT_PERCENT"
+        val DETECT_PICTURE = "DETECT_PICTURE"
         val PERCENT_RECORD = "percent.txt"
-        var CLEAN_BEFORE_EXIST = false
-        var CLEAN_AFTER_EXIST = false
+        var isSetPicture = false
         var APP_FILES_PATH : String = "" // /storage/emulated/0/Android/data/com.lhr.teethHospital/files
         var DATABASES_PATH : String = "" // /data/user/0/com.lhr.teethHospital/databases
         var TEETH_DIR = "" // /storage/emulated/0/Android/data/com.lhr.teethHospital/files/teeth/
@@ -30,7 +32,5 @@ class Model {
         lateinit var allFileList: Array<File>
         var hospitalInfoList : ArrayList<HospitalInfo> = ArrayList()
         var hospitalEntityList : ArrayList<HospitalEntity> = ArrayList()
-        var recordEntityList : ArrayList<RecordEntity> = ArrayList()
-
     }
 }

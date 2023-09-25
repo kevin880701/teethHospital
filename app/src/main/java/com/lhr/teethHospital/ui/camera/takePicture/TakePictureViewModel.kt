@@ -1,6 +1,7 @@
 package com.lhr.teethHospital.ui.camera.takePicture
 
 import android.app.Application
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -10,13 +11,14 @@ import android.hardware.camera2.CameraCharacteristics
 import android.media.Image
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.R
+import com.lhr.teethHospital.model.Model.Companion.isSetPicture
 import com.lhr.teethHospital.data.takePicture.TakePictureRepository
-import com.lhr.teethHospital.ui.camera.CameraActivity
-import com.lhr.teethHospital.ui.camera.detect.DetectFragment
+import com.lhr.teethHospital.model.Model.Companion.CAMERA_INTENT_FILTER
+import com.lhr.teethHospital.model.Model.Companion.DETECT_PERCENT
+import com.lhr.teethHospital.model.Model.Companion.DETECT_PICTURE
+import com.lhr.teethHospital.model.Model.Companion.ORIGINAL_PICTURE
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -143,31 +145,34 @@ class TakePictureViewModel(application: Application) : AndroidViewModel(applicat
         convBitmap = Bitmap.createBitmap(convBitmap, widthMin, heightMin, widthMax - widthMin, heightMax - heightMin)
         var (detectBitmap, percent) = getDetectPicture(convBitmap,mask2)
 
+        val intent = Intent(CAMERA_INTENT_FILTER)
+//        intent.putExtra(ORIGINAL_PICTURE, arrayListOf(convBitmap, detectBitmap))
 
-        val currentFragment = CameraActivity.cameraActivity.pageAdapter.fragments[CameraActivity.cameraActivity.binding.viewPager.currentItem] as DetectFragment
-        currentFragment.viewModel.setTakePicture(currentFragment, convBitmap, detectBitmap)
+        // Bitmap需顯轉換成數組在傳輸，不然太大
+        var originalStream = ByteArrayOutputStream()
+        convBitmap.compress(Bitmap.CompressFormat.PNG, 100, originalStream)
+        var originalByteArray = originalStream.toByteArray()
+        intent.putExtra(ORIGINAL_PICTURE, originalByteArray)
+        // Bitmap需顯轉換成數組在傳輸，不然太大
+        var detectStream = ByteArrayOutputStream()
+        detectBitmap.compress(Bitmap.CompressFormat.PNG, 100, detectStream)
+        var detectByteArray = detectStream.toByteArray()
+        intent.putExtra(DETECT_PICTURE, detectByteArray)
+        intent.putExtra(DETECT_PERCENT, percent)
+        takePictureActivity.sendBroadcast(intent)
+
         if (percent>0.2){
 //                    CameraActivity.cameraActivity.beforeDetectFragment.imageLight.visibility = View.VISIBLE
-            currentFragment.binding.imageLight.setImageDrawable(
-                ContextCompat.getDrawable(
-                    CameraActivity.cameraActivity, R.drawable.red_light))
+//            currentFragment.binding.imageLight.setImageDrawable(
+//                ContextCompat.getDrawable(
+//                    CameraActivity.cameraActivity, R.drawable.red_light))
         }else{
 //                    CameraActivity.cameraActivity.beforeDetectFragment.imageLight.visibility = View.VISIBLE
-            currentFragment.binding.imageLight.setImageDrawable(
-                ContextCompat.getDrawable(
-                    CameraActivity.cameraActivity, R.drawable.green_light))
+//            currentFragment.binding.imageLight.setImageDrawable(
+//                ContextCompat.getDrawable(
+//                    CameraActivity.cameraActivity, R.drawable.green_light))
         }
-        currentFragment.percent = percent
-
-
-        when (CameraActivity.cameraActivity.binding.viewPager.currentItem) {
-            0 -> {
-                Model.CLEAN_BEFORE_EXIST = true
-            }
-            1 -> {
-                Model.CLEAN_AFTER_EXIST = true
-            }
-        }
+        isSetPicture = true
         takePictureActivity.finish()
     }
 
@@ -218,7 +223,6 @@ class TakePictureViewModel(application: Application) : AndroidViewModel(applicat
         convBitmap.setPixels(convPixels, 0, width, 0, 0, width, height)
 
         var percent = (count)/(width * height)
-
         return Pair(convBitmap, percent)
     }
 }

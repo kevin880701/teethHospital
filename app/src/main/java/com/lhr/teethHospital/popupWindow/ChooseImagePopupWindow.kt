@@ -24,7 +24,7 @@ class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnC
     init {
         var view = LayoutInflater.from(mActivity).inflate(R.layout.popup_window_choose_image, null)
         buttonTakePicture = view.findViewById(R.id.buttonImportMore)
-        buttonChooseImage = view.findViewById(R.id.buttonImportSingle)
+        buttonChooseImage = view.findViewById(R.id.buttonChoosePicture)
         // 外部可點擊
         this.isOutsideTouchable = true
         // mMenuView添加OnTouchListener監聽判斷獲取觸屏位置如果在選擇框外面則銷毀彈出框
@@ -77,15 +77,18 @@ class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnC
 
     fun takePicture() {
         dismiss()
-        val intent = Intent(mActivity, TakePictureActivity::class.java)
-        mActivity.startActivity(intent)
+//        val intent = Intent(mActivity, TakePictureActivity::class.java)
+//        mActivity.startActivity(intent)
+
+        val takePictureIntent = Intent(mActivity, TakePictureActivity::class.java)
+        mActivity.startForResult.launch(takePictureIntent)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.buttonImportMore -> {
                 takePicture()
-            }R.id.buttonImportSingle -> {
+            }R.id.buttonChoosePicture -> {
                 chooseImage()
             }
         }

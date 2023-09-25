@@ -42,8 +42,8 @@ interface RecordDao {
     fun getCursor(): Cursor
 
     @Query("INSERT OR IGNORE INTO ${RECORD_TABLE_NAME}(${SqlModel.hospitalName}, ${SqlModel.number}, ${SqlModel.gender}," +
-            " ${SqlModel.birthday}, ${SqlModel.fileName}, ${SqlModel.recordDate}, ${SqlModel.beforePercent}, ${SqlModel.afterPercent}) " +
-            "VALUES (:hospitalName, :number, :gender, :birthday, :fileName, :recordDate, :beforePercent, :afterPercent)")
+            " ${SqlModel.birthday}, ${SqlModel.fileName}, ${SqlModel.recordDate}, ${SqlModel.detectPercent}) " +
+            "VALUES (:hospitalName, :number, :gender, :birthday, :fileName, :recordDate, :beforePercent)")
     fun importPatientRecord(hospitalName: String, number: String, gender: String, birthday: String,
-                            fileName: String, recordDate: String, beforePercent: String, afterPercent: String)
+                            fileName: String, recordDate: String, beforePercent: String)
 }

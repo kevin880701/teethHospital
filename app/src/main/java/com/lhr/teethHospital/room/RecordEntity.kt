@@ -10,7 +10,7 @@ import com.android.notesk.SQLite.SqlModel.Companion.fileName
 import java.io.Serializable
 
 
-@Entity(tableName = SqlModel.RECORD_TABLE_NAME, indices = [Index(value = [fileName], unique = true)])
+@Entity(tableName = SqlModel.RECORD_TABLE_NAME)
 class RecordEntity : Serializable  {
 
     @NonNull
@@ -35,9 +35,6 @@ class RecordEntity : Serializable  {
     @ColumnInfo(name = SqlModel.recordDate, typeAffinity = ColumnInfo.TEXT)
     var recordDate : String = ""
 
-    @ColumnInfo(name = SqlModel.beforePercent, typeAffinity = ColumnInfo.TEXT)
-    var beforePercent : String = ""
-
-    @ColumnInfo(name = SqlModel.afterPercent, typeAffinity = ColumnInfo.TEXT)
-    var afterPercent : String = ""
+    @ColumnInfo(name = SqlModel.detectPercent, typeAffinity = ColumnInfo.TEXT)
+    var detectPercent : String = ""
 }

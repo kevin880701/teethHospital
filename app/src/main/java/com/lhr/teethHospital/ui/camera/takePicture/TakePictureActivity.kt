@@ -148,7 +148,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
     }
     private fun initData() {
         cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-        //Camera2全程异步
+        //Camera2全程異步
         handlerThread = HandlerThread("Camera2")
         handlerThread!!.start()
         handler = Handler(handlerThread!!.looper)

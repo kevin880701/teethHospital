@@ -13,7 +13,6 @@ class SqlModel {
         const val birthday : String = "birthday"
         const val fileName : String = "fileName"
         const val recordDate : String = "recordDate"
-        const val beforePercent : String = "beforePercent"
-        const val afterPercent : String = "afterPercent"
+        const val detectPercent : String = "detectPercent"
     }
 }

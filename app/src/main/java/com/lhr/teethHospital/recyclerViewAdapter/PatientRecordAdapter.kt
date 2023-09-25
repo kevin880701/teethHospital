@@ -28,7 +28,11 @@ class PatientRecordAdapter(patientInformationActivity: PatientInformationActivit
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var dateArray = arrayList[position].recordDate.split("-")
-        holder.textRecordDate.text = "${dateArray[1]}年${dateArray[2]}月${dateArray[3]}日 ${dateArray[4]}點${dateArray[5]}分${dateArray[6]}秒"
+//        holder.textRecordDate.text = "${dateArray[1]}年${dateArray[2]}月${dateArray[3]}日 ${dateArray[4]}點${dateArray[5]}分${dateArray[6]}秒"
+        // 使用正則表達式匹配同時包含 hospitalName 和 number 的字串
+        val pattern = Regex("(${Regex.escape(arrayList[position].hospitalName)}.*?${Regex.escape(arrayList[position].number)})")
+        // 使用 replace 將匹配的字串替換為空字串
+        holder.textRecordDate.text = pattern.replace(arrayList[position].fileName, "")
         if(isShowCheckBox.value!!){
             holder.checkboxDelete.visibility = View.VISIBLE
         }else {

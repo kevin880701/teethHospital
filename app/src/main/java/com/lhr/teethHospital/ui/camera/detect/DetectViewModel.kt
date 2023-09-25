@@ -18,40 +18,39 @@ import java.text.DecimalFormat
 
 class DetectViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun setDetectImage(detectFragment: DetectFragment, imageUri: Uri) {
-        val originalParcelFileDescriptor = detectFragment.requireActivity().contentResolver.openFileDescriptor(imageUri, "r")
-        val originalImage = BitmapFactory.decodeFileDescriptor(originalParcelFileDescriptor!!.fileDescriptor)
-        detectFragment.binding.imageOriginal.setImageBitmap(originalImage)
-        val (afterImage, percent) = detectFragment.viewModel.getDetectPicture(originalImage)
-        detectFragment.binding.imageAfter.setImageBitmap(afterImage)
-        if (percent>0.2){
-//            detectFragment.imageLight.visibility = View.VISIBLE
-            detectFragment.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.red_light))
-        }else{
-//            detectFragment.imageLight.visibility = View.VISIBLE
-            detectFragment.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.green_light))
-        }
-        val df = DecimalFormat("00%")
-        detectFragment.binding.textPercent.text = "殘留量：" + df.format(percent)
-        detectFragment.percent = percent
-    }
+//    fun setDetectImage(detectFragment: DetectFragment, imageUri: Uri) {
+//        val originalParcelFileDescriptor = detectFragment.requireActivity().contentResolver.openFileDescriptor(imageUri, "r")
+//        val originalImage = BitmapFactory.decodeFileDescriptor(originalParcelFileDescriptor!!.fileDescriptor)
+//        detectFragment.binding.imageOriginal.setImageBitmap(originalImage)
+//        val (afterImage, percent) = detectFragment.viewModel.getDetectPicture(originalImage)
+//        detectFragment.binding.imageAfter.setImageBitmap(afterImage)
+//        if (percent>0.2){
+////            detectFragment.imageLight.visibility = View.VISIBLE
+////            detectFragment.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.red_light))
+//        }else{
+////            detectFragment.imageLight.visibility = View.VISIBLE
+////            detectFragment.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.green_light))
+//        }
+//        val df = DecimalFormat("00%")
+//        detectFragment.binding.textPercent.text = "殘留量：" + df.format(percent)
+//        detectFragment.percent = percent
+//    }
 
-    fun setTakePicture(detectFragment: DetectFragment, originalBitmap: Bitmap, afterBitmap: Bitmap) {
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.Main) {
-                detectFragment.binding.imageOriginal.setImageBitmap(originalBitmap)
-                detectFragment.binding.imageAfter.setImageBitmap(afterBitmap)
-            }
-
-        }
-    }
+//    fun setTakePicture(detectFragment: DetectFragment, originalBitmap: Bitmap, afterBitmap: Bitmap) {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            withContext(Dispatchers.Main) {
+//                detectFragment.binding.imageOriginal.setImageBitmap(originalBitmap)
+//                detectFragment.binding.imageAfter.setImageBitmap(afterBitmap)
+//            }
+//        }
+//    }
 
     fun getDetectPicture(bitmap: Bitmap):Pair<Bitmap,Float>  {
         val width = bitmap.width
         val height = bitmap.height
         var count = 0.0F
 
-        // 保存所有的像素的数组，图片宽×高
+        // 保存所有的像素的數組，圖片寬×高
         val pixels = IntArray(width * height)
         val convPixels = IntArray(width * height)
         bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
