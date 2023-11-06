@@ -1,6 +1,8 @@
 package com.lhr.teethHospital.ui.main
 
+import android.app.Activity
 import android.content.BroadcastReceiver
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -18,6 +20,8 @@ import com.lhr.teethHospital.ui.setting.SettingFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lhr.teethHospital.databinding.ActivityMainBinding
+import com.lhr.teethHospital.file.CsvToSql
+import com.lhr.teethHospital.model.Model.Companion.IMPORT_CSV
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isPersonalManagerBack
 
@@ -26,6 +30,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var viewModel: MainViewModel
     lateinit var binding: ActivityMainBinding
     lateinit var pageAdapter: ViewPageAdapter
+    lateinit var personalManagerFragment: PersonalManagerFragment
+    lateinit var settingFragment: SettingFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +61,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 R.drawable.person_manager,
                 R.drawable.setting
             )
+            personalManagerFragment = PersonalManagerFragment()
+            settingFragment = SettingFragment()
             var fragments = arrayListOf(
-                PersonalManagerFragment(),
-                SettingFragment(),
+                personalManagerFragment,
+                settingFragment,
             ) as ArrayList<Fragment>
             pageAdapter = ViewPageAdapter(supportFragmentManager, lifecycle, fragments)
             binding.viewPager.adapter = pageAdapter
@@ -87,5 +95,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == IMPORT_CSV) { // 使用之前定义的请求代码
+            if (resultCode == Activity.RESULT_OK) { // 检查结果码是否正常
+                if (data != null) {
+
+//                    val myData: Intent? = result.data
+                    if (data != null) {
+                        CsvToSql().csvToHospitalSql(this, data.data!!)
+                        personalManagerFragment.viewModel.updateRecyclerInfo(personalManagerFragment.binding, personalManagerFragment)
+                    }
+                }
+            }
+        }
     }
 }
