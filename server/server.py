@@ -13,7 +13,7 @@ app = flask.Flask(__name__)
 
 IMAGE_FOLDER = './Image/'
 # IMAGE_FOLDER = os.path.dirname('Image/')
-app.config["DEBUG"] = True
+app.config['DEBUG'] = True
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDERapp = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@0.0.0.0:3306/test'
 db = SQLAlchemy(app)
@@ -36,7 +36,7 @@ def display_files():
 @app.route('/create', methods=['GET'])
 def create():
     db.create_all()
-    return "<h1>Hello Create</h1>"
+    return '<h1>Hello Create</h1>'
 
 @app.route('/insert', methods=['GET'])
 def insert():
@@ -53,7 +53,7 @@ def insert():
     # db.session.add(admin)
     # db.session.add(guest)
     # db.session.commit()
-    return "<h1>Hello Insert</h1>"
+    return '<h1>Hello Insert</h1>'
 
 @app.route('/delete', methods=['GET'])
 def delete():
@@ -65,8 +65,8 @@ def delete():
         db.session.delete(user_to_delete)
         db.session.commit()
     else:
-        print("User 'admin' not found, cannot delete.")
-    return "<h1>Hello Delete</h1>"
+        print('User 'admin' not found, cannot delete.')
+    return '<h1>Hello Delete</h1>'
 
 @app.route('/list_tabel', methods=['GET'])
 def list_tabel():
@@ -74,12 +74,12 @@ def list_tabel():
     all_users = User.query.all()
     # 遍历所有数据并打印出来
     # for user in all_users:
-    #     print(f"ID: {user.id}, Username: {user.username}, Email: {user.email}")
+    #     print(f'ID: {user.id}, Username: {user.username}, Email: {user.email}')
     return render_template('user_list.html', users=all_users)
 
 @app.route('/', methods=['GET'])
 def home():
-    return "<h1>Hello Flask!</h1>"
+    return '<h1>Hello Flask!</h1>'
 
 
 # https://stackoverflow.com/questions/44926465/upload-image-in-flask
@@ -95,13 +95,13 @@ def upload_file():
 
     view = f'''
     <h1>Upload new File</h1>
-    <form method="post" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit">
+    <form method='post' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit'>
     </form>
     <hr>
     <h1>View File</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method='post' enctype='multipart/form-data'>
         <table>
     '''
     list_file = display_files()
@@ -109,8 +109,8 @@ def upload_file():
     for filename in list_file:
       td = f'''        
       <tr>
-        <td><a href="/viewImage/{filename}">{filename}</a></td>
-        <td><a style="color:red;text-decoration:none;" href="/delete/{filename}" id="remove" >刪除</a></td>
+        <td><a href='/viewImage/{filename}'>{filename}</a></td>
+        <td><a style='color:red;text-decoration:none;' href='/delete/{filename}' id='remove' >刪除</a></td>
       </tr>
       '''
       view = view + td
@@ -128,14 +128,14 @@ def upload_file():
     
 #     file_list_str = f'''
 #     <h1>View File</h1>
-#     <form method="post" enctype="multipart/form-data">
+#     <form method='post' enctype='multipart/form-data'>
 #         <table>'''
         
 #     for filename in list_file:
 #         li = f'''        
 #       <tr>
-#         <td><a href="/viewImage/{filename}">{filename}</a></td>
-#         <td><a style="color:red;text-decoration:none;" href="/delete/{filename}" id="remove" >刪除</a></td>
+#         <td><a href='/viewImage/{filename}'>{filename}</a></td>
+#         <td><a style='color:red;text-decoration:none;' href='/delete/{filename}' id='remove' >刪除</a></td>
 #       </tr>
 #       '''
 
@@ -166,7 +166,7 @@ def return_img_stream(img_local_path):
 @app.route('/viewImage/<filename>', methods=['GET']) 
 def view_image(filename):
   img_stream = return_img_stream(IMAGE_FOLDER + filename)
-  return render_template("view_image.html", img_stream=img_stream)
+  return render_template('view_image.html', img_stream=img_stream)
 
 # app.run()
 app.run(host='0.0.0.0', port=80)
