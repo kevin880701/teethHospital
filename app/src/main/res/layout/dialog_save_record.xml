@@ -16,7 +16,7 @@
         android:background="@drawable/dialog_background"
         android:textStyle="bold"
         android:textSize="16dp"
-        android:textColor="@color/md_theme_dark_surfaceVariant"
+        android:textColor="@color/primaryBlack"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editRecordName"
         app:layout_constraintRight_toLeftOf="@+id/buttonOk"
         android:textStyle="bold"
-        android:textColor="@color/md_theme_light_primary"
+        android:textColor="@color/primaryBlack"
         android:text="@string/cancel" />
 
     <Button
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editRecordName"
         app:layout_constraintRight_toRightOf="parent"
         android:textStyle="bold"
-        android:textColor="@color/md_theme_light_primary"
+        android:textColor="@color/primaryBlack"
         android:text="@string/ok" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
