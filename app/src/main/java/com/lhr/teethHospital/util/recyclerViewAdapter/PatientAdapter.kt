@@ -12,7 +12,7 @@ import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerFragment
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isShowCheckBox
 
@@ -44,7 +44,7 @@ class PatientAdapter(arrayList: ArrayList<HospitalEntity>, personalManagerFragme
                     deleteList.remove(arrayList[position])
                 }
             } else {
-                val intent = Intent(personalManagerFragment.requireActivity(), PatientInformationActivity::class.java)
+                val intent = Intent(personalManagerFragment.requireActivity(), MemberInformationActivity::class.java)
                 intent.putExtra(ROOT, arrayList[position])
                 personalManagerFragment.requireActivity().startActivity(intent)
             }

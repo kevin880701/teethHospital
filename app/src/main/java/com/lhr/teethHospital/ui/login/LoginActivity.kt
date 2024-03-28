@@ -16,7 +16,7 @@ import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
 import com.lhr.teethHospital.spinnerAdapter.HospitalNameSpinnerAdapter
 import com.lhr.teethHospital.ui.main.MainActivity
-import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 
 
 class LoginActivity : AppCompatActivity(),
@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity(),
                     startActivity(intent)
                     finish()
                 }else if(found != null){
-                    val intent = Intent(this, PatientInformationActivity::class.java)
+                    val intent = Intent(this, MemberInformationActivity::class.java)
                     intent.putExtra(PATIENT, found)
                     startActivity(intent)
                 }else{

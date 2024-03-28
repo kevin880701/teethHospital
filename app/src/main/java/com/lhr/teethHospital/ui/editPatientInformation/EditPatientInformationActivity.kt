@@ -15,7 +15,7 @@ import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.databinding.ActivityEditPatientInformationBinding
 import com.lhr.teethHospital.model.Model.Companion.ROOT
-import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -93,7 +93,7 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
                         newHospitalEntity.number = binding.editPatientNumber.text.toString()
                         newHospitalEntity.gender = binding.editGender.text.toString()
                         newHospitalEntity.birthday = binding.editBirthday.text.toString()
-                        val intent = Intent(this, PatientInformationActivity::class.java)
+                        val intent = Intent(this, MemberInformationActivity::class.java)
                         intent.putExtra(ROOT, newHospitalEntity)
                         startActivity(intent)
                         finish()

@@ -26,7 +26,7 @@ import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.ui.base.BaseFragment
-import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isShowCheckBox
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.titleBarText
 import com.lhr.teethHospital.util.recyclerViewAdapter.GroupAdapter
@@ -194,7 +194,7 @@ class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapt
     }
 
     override fun onItemClick(hospitalEntity: HospitalEntity) {
-        val intent = Intent(requireActivity(), PatientInformationActivity::class.java)
+        val intent = Intent(requireActivity(), MemberInformationActivity::class.java)
         intent.putExtra(Model.ROOT, hospitalEntity)
         requireActivity().startActivity(intent)
     }

@@ -10,5 +10,13 @@
             <enum name="visible" value="0" />
             <enum name="gone" value="8" />
         </attr>
+        <attr name="showCamera" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="showEdit" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="8" />
+        </attr>
     </declare-styleable>
 </resources>

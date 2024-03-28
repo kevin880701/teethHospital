@@ -25,8 +25,10 @@ class TitleBarWidget @JvmOverloads constructor(
 
             // 設定標題
             setTitleText(attrs.getString(R.styleable.TitleBarWidget_titleText))
-            setBack(attrs.getInt(R.styleable.TitleBarWidget_showBack, 1))
-            setAdd(attrs.getInt(R.styleable.TitleBarWidget_showAdd, 1))
+            setBack(attrs.getInt(R.styleable.TitleBarWidget_showBack, 8))
+            setAdd(attrs.getInt(R.styleable.TitleBarWidget_showAdd, 8))
+            setCamera(attrs.getInt(R.styleable.TitleBarWidget_showCamera, 8))
+            setEdit(attrs.getInt(R.styleable.TitleBarWidget_showEdit, 8))
 
             attrs.recycle()
         }
@@ -38,11 +40,17 @@ class TitleBarWidget @JvmOverloads constructor(
 
     fun setBack(visibility: Int) {
         binding.imageBack.visibility = visibility
-
-//            if (visibility == 0) View.VISIBLE else View.GONE
     }
 
-    fun setAdd(isShow: Int) {
-        binding.imageAdd.visibility = if (isShow == 0) View.VISIBLE else View.GONE
+    fun setAdd(visibility: Int) {
+        binding.imageAdd.visibility = visibility
+    }
+
+    fun setCamera(visibility: Int) {
+        binding.imageCamera.visibility = visibility
+    }
+
+    fun setEdit(visibility: Int) {
+        binding.imageEdit.visibility = visibility
     }
 }

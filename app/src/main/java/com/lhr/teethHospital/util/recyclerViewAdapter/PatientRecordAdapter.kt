@@ -10,16 +10,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.room.RecordEntity
-import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 import com.lhr.teethHospital.ui.detectResult.DetectResultActivity
-import com.lhr.teethHospital.ui.patientInformation.PatientInformationViewModel
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationViewModel
 
-class PatientRecordAdapter(patientInformationActivity: PatientInformationActivity, arrayList: ArrayList<RecordEntity>, isShowCheckBox: MutableLiveData<Boolean>) : RecyclerView.Adapter<PatientRecordAdapter.ViewHolder>() {
+class PatientRecordAdapter(patientInformationActivity: MemberInformationActivity, arrayList: ArrayList<RecordEntity>, isShowCheckBox: MutableLiveData<Boolean>) : RecyclerView.Adapter<PatientRecordAdapter.ViewHolder>() {
     var arrayList = arrayList
     var isShowCheckBox = isShowCheckBox
     var deleteList: ArrayList<RecordEntity> = ArrayList()
     var patientInformationActivity = patientInformationActivity
-    lateinit var viewModel: PatientInformationViewModel
+    lateinit var viewModel: MemberInformationViewModel
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_patient_record, parent, false)
 

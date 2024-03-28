@@ -1,4 +1,4 @@
-package com.lhr.teethHospital.ui.patientInformation
+package com.lhr.teethHospital.ui.memberInformation
 
 import android.app.Application
 import android.content.Intent
@@ -11,18 +11,17 @@ import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.data.patientInformation.PatientInformationRepository
 
-class PatientInformationViewModel(application: Application) : AndroidViewModel(application) {
+class MemberInformationViewModel(application: Application) : AndroidViewModel(application) {
 
     var isShowCheckBox: MutableLiveData<Boolean> =
         MutableLiveData<Boolean>().apply { value = false }
     var patientInformationRepository = PatientInformationRepository(application)
-    val fileManager = FileManager()
 
     fun getRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
         return patientInformationRepository.fetchPatientRecord(hospitalName, number)
     }
 
-    fun deleteRecord(patientInformationActivity: PatientInformationActivity){
+    fun deleteRecord(patientInformationActivity: MemberInformationActivity){
         patientInformationActivity.patientRecordAdapter.arrayList.removeAll(patientInformationActivity.patientRecordAdapter.deleteList.toSet())
         patientInformationActivity.patientRecordAdapter.notifyDataSetChanged()
         patientInformationActivity.patientRecordAdapter.deleteList.stream().forEach { recordEntity ->
@@ -40,12 +39,12 @@ class PatientInformationViewModel(application: Application) : AndroidViewModel(a
         patientRecordAdapter.notifyDataSetChanged()
     }
 
-    fun back(patientInformationActivity: PatientInformationActivity){
+    fun back(patientInformationActivity: MemberInformationActivity){
         if(isShowCheckBox.value!!){
             isShowCheckBox.value = false
             patientInformationActivity.patientRecordAdapter.notifyDataSetChanged()
-            patientInformationActivity.binding.imageAdd.visibility = View.VISIBLE
-            patientInformationActivity.binding.imageDelete.visibility = View.INVISIBLE
+//            patientInformationActivity.binding.imageAdd.visibility = View.VISIBLE
+//            patientInformationActivity.binding.imageDelete.visibility = View.INVISIBLE
             patientInformationActivity.patientRecordAdapter.deleteList.clear()
         }else{
             patientInformationActivity.finish()

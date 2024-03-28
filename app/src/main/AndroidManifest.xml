@@ -58,7 +58,7 @@
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
-        <activity android:name="com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity"
+        <activity android:name="com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity"
                   android:launchMode="singleTask"
                   android:theme="@style/AppTheme"></activity>
 
