@@ -3,53 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.lhr.teethHospital.ui.camera.CameraViewModel" />
-    </data>
+    <data></data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/underline">
+        android:layout_height="match_parent">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.lhr.teethHospital.util.widget.TitleBarWidget
             android:id="@+id/titleBar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/underline">
-
-            <ImageView
-                android:id="@+id/imageBack"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/OptionsTint"
-                android:src="@drawable/navigate_before" />
-
-            <TextView
-                android:id="@+id/textFileName"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toRightOf="@+id/imageBack"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@null"
-                android:gravity="center_vertical|left"
-                android:text="@string/camera"
-                android:textColor="@color/primaryBlue"
-                android:textStyle="bold"
-                android:textSize="25dp" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintRight_toRightOf="parent"
+            app:titleText="@string/camera"
+            app:showBack="visible" />
 
         <ImageView
             android:id="@+id/imageOriginal"
@@ -61,6 +28,15 @@
             app:layout_constraintTop_toBottomOf="@+id/titleBar"
             android:layout_marginBottom="1dp" />
 
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageOriginal"
+            android:background="@color/primaryBlack" />
+
         <TextView
             android:id="@+id/textOriginal"
             android:layout_width="0dp"
@@ -68,12 +44,10 @@
             app:layout_constraintHeight_percent="0.1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageOriginal"
+            app:layout_constraintTop_toBottomOf="@+id/view1"
             android:gravity="center"
-            android:textColor="@color/primaryBlue"
             android:textStyle="bold"
-            android:textSize="15dp"
-            android:background="@drawable/topunderline" />
+            android:textSize="15dp" />
 
         <ImageView
             android:id="@+id/imageLight"
@@ -86,6 +60,15 @@
             android:visibility="invisible"
             android:src="@drawable/green_light" />
 
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textOriginal"
+            android:background="@color/primaryBlack" />
+
         <ImageView
             android:id="@+id/imageDetect"
             android:layout_width="0dp"
@@ -93,9 +76,9 @@
             app:layout_constraintHeight_percent="0.36"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textOriginal"
-            app:layout_constraintBottom_toTopOf="@+id/constrainChooseButton"
-            android:background="@drawable/underline" />
+            app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:layout_constraintBottom_toTopOf="@+id/constrainChooseButton" />
+
 
         <TextView
             android:id="@+id/textPercent"
@@ -110,6 +93,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="20dp" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constrainChooseButton"
@@ -130,9 +114,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:background="@drawable/button_radius"
-                android:textStyle="bold"
-                android:textColor="@color/primaryBlue"
+                android:background="@drawable/bg_r64_primary_blue"
+                style="@style/TextStyle_16dp_black"
+                android:textColor="@color/white"
                 android:text="@string/choose_button" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -146,8 +130,7 @@
             app:layout_constraintLeft_toRightOf="@+id/constrainChooseButton"
             app:layout_constraintBottom_toBottomOf="parent"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:background="@drawable/underline">
+            android:paddingRight="15dp">
 
             <Button
                 android:id="@+id/buttonSaveRecord"
@@ -157,10 +140,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/button_radius"
-                android:text="@string/save_record"
-                android:textStyle="bold"
-                android:textColor="@color/primaryBlue" />
+                android:background="@drawable/bg_r64_primary_blue"
+                style="@style/TextStyle_16dp_black"
+                android:textColor="@color/white"
+                android:text="@string/save_record" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,8 +156,7 @@
             app:layout_constraintLeft_toRightOf="@+id/constrainSaveButton"
             app:layout_constraintBottom_toBottomOf="parent"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:background="@drawable/underline">
+            android:paddingRight="15dp">
 
             <Button
                 android:id="@+id/buttonCleanImage"
@@ -184,10 +166,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/button_radius"
                 android:text="@string/clean_Image"
-                android:textStyle="bold"
-                android:textColor="@color/primaryBlue" />
+                android:background="@drawable/bg_r64_primary_blue"
+                style="@style/TextStyle_16dp_black"
+                android:textColor="@color/white" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageDetect"
+            android:background="@color/primaryBlack" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -19,10 +19,11 @@ import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.model.Model.Companion.PATIENT
 import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.ui.base.APP
+import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.camera.CameraActivity
 import com.lhr.teethHospital.ui.editPatientInformation.EditPatientInformationActivity
 
-class MemberInformationActivity : AppCompatActivity(), View.OnClickListener {
+class MemberInformationActivity : BaseActivity(), View.OnClickListener {
     companion object{
         var UPDATE_PATIENT_RECORD = "UPDATE_PATIENT_RECORD"
     }

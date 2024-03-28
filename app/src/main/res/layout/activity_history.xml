@@ -11,8 +11,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.08"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/underline" >
+        app:layout_constraintTop_toTopOf="parent" >
         <ImageView
             android:id="@+id/imageBack"
             android:layout_width="35dp"

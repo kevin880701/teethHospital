@@ -13,11 +13,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityCameraBinding
+import com.lhr.teethHospital.databinding.ActivityMemberInformationBinding
 import com.lhr.teethHospital.dialog.SaveRecordDialog
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.CAMERA_INTENT_FILTER
@@ -31,28 +33,29 @@ import com.lhr.teethHospital.model.Model.Companion.isSetPicture
 import com.lhr.teethHospital.popupWindow.ChooseImagePopupWindow
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.APP
+import com.lhr.teethHospital.ui.base.BaseActivity
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationViewModel
 import com.lhr.teethHospital.viewPager.ViewPageAdapter
 
-class CameraActivity : AppCompatActivity(), View.OnClickListener {
+class CameraActivity : BaseActivity(), View.OnClickListener {
     companion object {
         lateinit var cameraActivity: CameraActivity
     }
 
-    lateinit var viewModel: CameraViewModel
-    lateinit var binding: ActivityCameraBinding
+    private val viewModel: CameraViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
+    private var _binding: ActivityCameraBinding? = null
+//    private val binding get() = _binding!!
+    val binding get() = _binding!!
     lateinit var messageReceiver: BroadcastReceiver
-    lateinit var pageAdapter: ViewPageAdapter
     lateinit var hospitalEntity: HospitalEntity
     var percent = -1.0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
-        viewModel = ViewModelProvider(
-            this,
-            CameraViewModelFactory(this.application)
-        )[CameraViewModel::class.java]
-        binding.viewModel = viewModel
+
+        _binding = ActivityCameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
 
@@ -62,23 +65,25 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
         messageReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.action == CAMERA_INTENT_FILTER) {
-                    if(intent.hasExtra(ORIGINAL_PICTURE) && intent.hasExtra(DETECT_PICTURE)){
+                    if (intent.hasExtra(ORIGINAL_PICTURE) && intent.hasExtra(DETECT_PICTURE)) {
                         var originalBitmapByteArray = intent.getByteArrayExtra(ORIGINAL_PICTURE)
-                        var originalBitmap = BitmapFactory.decodeByteArray(originalBitmapByteArray, 0, originalBitmapByteArray!!.size)
+                        var originalBitmap =
+                            BitmapFactory.decodeByteArray(originalBitmapByteArray, 0, originalBitmapByteArray!!.size)
                         viewModel.setTakePicture(binding.imageOriginal, originalBitmap!!)
                         var detectBitmapByteArray = intent.getByteArrayExtra(DETECT_PICTURE)
-                        var detectBitmap = BitmapFactory.decodeByteArray(detectBitmapByteArray, 0, detectBitmapByteArray!!.size)
+                        var detectBitmap =
+                            BitmapFactory.decodeByteArray(detectBitmapByteArray, 0, detectBitmapByteArray!!.size)
                         viewModel.setTakePicture(binding.imageDetect, detectBitmap!!)
                         percent = intent.getFloatExtra(DETECT_PERCENT, 0.0F)
                         isSetPicture = true
                     }
-                    if(intent.hasExtra(RECORD_DATE)){
+                    if (intent.hasExtra(RECORD_DATE)) {
                         val recordDate = intent.getStringExtra(RECORD_DATE)
                         cameraActivity.viewModel.saveRecord(hospitalEntity, this@CameraActivity, recordDate!!)
-                    // 更新患者紀錄Adapter
-                    sendBroadcast(
-                        Intent(UPDATE_PATIENT_RECORD).putExtra("action", UPDATE_PATIENT_RECORD)
-                    )
+                        // 更新患者紀錄Adapter
+                        sendBroadcast(
+                            Intent(UPDATE_PATIENT_RECORD).putExtra("action", UPDATE_PATIENT_RECORD)
+                        )
                         finish()
                     }
                 }
@@ -90,7 +95,7 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonChoosePicture.setOnClickListener(this)
         binding.buttonSaveRecord.setOnClickListener(this)
         binding.buttonCleanImage.setOnClickListener(this)
-        binding.imageBack.setOnClickListener(this)
+        binding.titleBar.binding.imageBack.setOnClickListener(this)
     }
 
 

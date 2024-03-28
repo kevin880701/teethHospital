@@ -20,8 +20,7 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.08"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/underline">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageBack"
@@ -81,8 +80,7 @@
             android:gravity="center"
             android:textColor="@color/primaryBlue"
             android:textStyle="bold"
-            android:textSize="15dp"
-            android:background="@drawable/topunderline" />
+            android:textSize="15dp" />
 
         <ImageView
             android:id="@+id/imageLight"
@@ -103,7 +101,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textOriginal"
-            android:background="@drawable/underline" />
+             />
 
         <TextView
             android:id="@+id/textPercent"

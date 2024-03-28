@@ -1,6 +1,7 @@
 package com.lhr.teethHospital.ui.camera
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -8,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.widget.ImageView
 import androidx.lifecycle.AndroidViewModel
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.detectPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.isSetPicture
@@ -17,6 +19,7 @@ import com.lhr.teethHospital.model.Model.Companion.allFileList
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.APP
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,12 +31,13 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class CameraViewModel(application: Application) : AndroidViewModel(application) {
-    companion object{
+class CameraViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) :
+    AndroidViewModel(context.applicationContext as APP) {
+    companion object {
 
     }
 
-    fun cleanImage(cameraActivity: CameraActivity){
+    fun cleanImage(cameraActivity: CameraActivity) {
         cameraActivity.binding.imageOriginal.setImageDrawable(null)
         cameraActivity.binding.imageDetect.setImageDrawable(null)
         cameraActivity.binding.textPercent.text = ""
@@ -47,10 +51,10 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
         cameraActivity.binding.imageOriginal.setImageBitmap(originalImage)
         val (afterImage, percent) = getDetectPicture(originalImage)
         cameraActivity.binding.imageDetect.setImageBitmap(afterImage)
-        if (percent>0.2){
+        if (percent > 0.2) {
 //            cameraActivity.imageLight.visibility = View.VISIBLE
 //            cameraActivity.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.red_light))
-        }else{
+        } else {
 //            cameraActivity.imageLight.visibility = View.VISIBLE
 //            cameraActivity.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.green_light))
         }
@@ -109,7 +113,7 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
 //        }
 //    }
 
-    fun saveRecord(hospitalEntity: HospitalEntity, cameraActivity: CameraActivity, folderName: String){
+    fun saveRecord(hospitalEntity: HospitalEntity, cameraActivity: CameraActivity, folderName: String) {
         val recordDate = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss")
         var savePath = Model.TEETH_DIR + hospitalEntity.hospitalName + hospitalEntity.number + folderName + "/"
         val file = File(savePath)
@@ -118,9 +122,9 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
         }
 
         // 如果有設置照片
-        if(isSetPicture){
-            convertViewToBitmap(cameraActivity.binding.imageOriginal,savePath,originalPictureFileName)
-            convertViewToBitmap(cameraActivity.binding.imageDetect,savePath, detectPictureFileName)
+        if (isSetPicture) {
+            convertViewToBitmap(cameraActivity.binding.imageOriginal, savePath, originalPictureFileName)
+            convertViewToBitmap(cameraActivity.binding.imageDetect, savePath, detectPictureFileName)
         }
         // 將偵測出的牙菌斑占比寫入txt
         val fileName = savePath + PERCENT_RECORD
@@ -149,7 +153,7 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getDetectPicture(bitmap: Bitmap):Pair<Bitmap,Float>  {
+    fun getDetectPicture(bitmap: Bitmap): Pair<Bitmap, Float> {
         val width = bitmap.width
         val height = bitmap.height
         var count = 0.0F
@@ -183,9 +187,10 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
 
         val convBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         convBitmap.setPixels(convPixels, 0, width, 0, 0, width, height)
-        var percent = (count)/(width * height)
+        var percent = (count) / (width * height)
         return Pair(convBitmap, percent)
     }
+
     fun convertViewToBitmap(imageView: ImageView, savePath: String, fileName: String) {
         val drawable = imageView.drawable as BitmapDrawable
         val bitmap = drawable.bitmap

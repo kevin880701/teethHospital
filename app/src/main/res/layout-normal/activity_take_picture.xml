@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.lhr.teethHospital.ui.camera.takePicture.TakePictureViewModel" />
@@ -11,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constrainImage"
@@ -20,15 +22,16 @@
             app:layout_constraintHeight_percent="0.65"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/white">
 
             <ImageView
                 android:id="@+id/imageViewBlack"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:paddingTop="200dp"
                 android:paddingRight="100dp"
@@ -40,9 +43,9 @@
                 android:id="@+id/imageViewLine"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:paddingTop="200dp"
                 android:paddingRight="100dp"
@@ -54,9 +57,9 @@
                 android:id="@+id/textTureCapture"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageView
@@ -92,70 +95,35 @@
             app:layout_constraintHeight_percent="0.35"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/black">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constrainChooseButton1"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintWidth_percent="0.33333"
+            <ImageButton
+                android:id="@+id/imageCaptureButton"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/take_button"
+                app:tint="@color/white" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constrainCaptureButton"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintWidth_percent="0.33333"
-                app:layout_constraintLeft_toRightOf="@+id/constrainChooseButton1"
+            <ImageButton
+                android:id="@+id/imageSwitch"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintLeft_toRightOf="@+id/imageCaptureButton"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
-
-                <ImageButton
-                    android:id="@+id/imageCaptureButton"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/take_button"
-                    app:tint="@color/primaryBlue" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constrainSwitch"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintWidth_percent="0.33333"
-                app:layout_constraintLeft_toRightOf="@+id/constrainCaptureButton"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
-
-                <ImageButton
-                    android:id="@+id/imageSwitch"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/camera_switch"
-                    app:tint="@color/primaryBlue" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/camera_switch"
+                app:tint="@color/white" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar

@@ -35,8 +35,7 @@
             android:gravity="center"
             android:textColor="@color/primaryBlue"
             android:textStyle="bold"
-            android:textSize="15dp"
-            android:background="@drawable/topunderline" />
+            android:textSize="15dp" />
 
         <ImageView
             android:id="@+id/imageLight"
@@ -57,7 +56,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textOriginal"
-            android:background="@drawable/underline" />
+             />
 
         <TextView
             android:id="@+id/textPercent"
