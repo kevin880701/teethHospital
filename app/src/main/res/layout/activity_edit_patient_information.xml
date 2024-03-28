@@ -63,7 +63,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleBar"
-            app:tint="@color/primaryBlue"
+            app:tint="@color/primaryBlack"
             android:src="@drawable/person" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,7 +74,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageAvatar"
-            android:background="@drawable/top_underline"
             android:padding="1dp">
 
             <TextView
@@ -114,7 +113,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintHospitalName"
-            android:background="@drawable/top_underline"
             android:padding="1dp">
 
             <TextView
@@ -155,7 +153,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintPatientNumber"
-            android:background="@drawable/top_underline"
             android:padding="1dp">
 
             <TextView
@@ -195,7 +192,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintGender"
-            android:background="@drawable/top_underline"
             android:padding="1dp">
 
             <TextView
@@ -236,7 +232,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="42dp"
-            android:background="@drawable/login_button_radius"
+            android:background="@drawable/bg_r16_primary_blue"
             android:textColor="@color/white"
             android:text="@string/save_information"
             android:textStyle="bold"

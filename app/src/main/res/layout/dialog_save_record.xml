@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/record_name"
-        android:background="@drawable/dialog_background"
+        android:background="@drawable/bg_r16_white"
         android:textStyle="bold"
         android:textSize="16dp"
         android:textColor="@color/primaryBlack"

@@ -20,6 +20,7 @@ class CsvToSql {
         try {
             var fileInputStream = mContext.contentResolver.openInputStream(filepath)
             val r = BufferedReader(InputStreamReader(fileInputStream))
+            println(r)
             var mLine: String?
             var hospitalNameIndex = 0
             var numberIndex = 0

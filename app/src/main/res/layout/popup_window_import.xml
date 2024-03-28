@@ -22,7 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryBlue"
-            android:background="@drawable/radius"
+            android:background="@drawable/bg_r16_top_white"
             style="?android:attr/borderlessButtonStyle"
             android:text="@string/add_multiple_information"
             android:textSize="18sp" />
@@ -31,7 +31,7 @@
             android:id="@+id/buttonChoosePicture"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/radius2"
+            android:background="@drawable/bg_r16_bottom_white"
             style="?android:attr/borderlessButtonStyle"
             android:text="@string/add_single_information"
             android:textSize="18sp"
