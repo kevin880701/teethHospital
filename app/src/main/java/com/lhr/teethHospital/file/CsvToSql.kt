@@ -20,7 +20,6 @@ class CsvToSql {
         try {
             var fileInputStream = mContext.contentResolver.openInputStream(filepath)
             val r = BufferedReader(InputStreamReader(fileInputStream))
-            println(r)
             var mLine: String?
             var hospitalNameIndex = 0
             var numberIndex = 0
@@ -31,13 +30,17 @@ class CsvToSql {
                 if (linePosition == 0) {
                     for (index in str.indices) {
                         when (str[index]) {
-                            mContext.getString(R.string.hospital) -> hospitalNameIndex = index
-                            mContext.getString(R.string.patient_number) -> numberIndex = index
-                            mContext.getString(R.string.gender) -> genderIndex = index
-                            mContext.getString(R.string.birthday) -> birthdayIndex = index
+                            mContext.getString(R.string.hospital), "hospitalName" -> hospitalNameIndex = index
+                            mContext.getString(R.string.patient_number), "number" -> numberIndex = index
+                            mContext.getString(R.string.gender), "gender" -> genderIndex = index
+                            mContext.getString(R.string.birthday), "birthday" -> birthdayIndex = index
                         }
                     }
                 }
+                println(hospitalNameIndex)
+                println(numberIndex)
+                println(genderIndex)
+                println(birthdayIndex)
                 if (linePosition > 0) {
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {

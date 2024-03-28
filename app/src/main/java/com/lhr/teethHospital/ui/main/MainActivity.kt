@@ -99,8 +99,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == IMPORT_CSV) { // 使用之前定义的请求代码
-            if (resultCode == Activity.RESULT_OK) { // 检查结果码是否正常
+        if (requestCode == IMPORT_CSV) { // 使用之前定義的請求代碼
+            if (resultCode == Activity.RESULT_OK) { // 檢查結果碼是否正常
                 if (data != null) {
 
 //                    val myData: Intent? = result.data
