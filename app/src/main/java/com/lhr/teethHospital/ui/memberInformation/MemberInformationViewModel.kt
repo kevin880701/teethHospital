@@ -1,24 +1,23 @@
 package com.lhr.teethHospital.ui.memberInformation
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
-import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.model.FileManager
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.room.RecordEntity
-import com.lhr.teethHospital.data.patientInformation.PatientInformationRepository
+import com.lhr.teethHospital.ui.base.APP
 
-class MemberInformationViewModel(application: Application) : AndroidViewModel(application) {
-
+    class MemberInformationViewModel(context: Context,var personalManagerRepository: PersonalManagerRepository) :
+        AndroidViewModel(context.applicationContext as APP) {
     var isShowCheckBox: MutableLiveData<Boolean> =
         MutableLiveData<Boolean>().apply { value = false }
-    var patientInformationRepository = PatientInformationRepository(application)
 
-    fun getRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
-        return patientInformationRepository.fetchPatientRecord(hospitalName, number)
+    fun getMemberRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
+        return personalManagerRepository.getMemberRecord(hospitalName, number)
     }
 
     fun deleteRecord(patientInformationActivity: MemberInformationActivity){
@@ -35,7 +34,7 @@ class MemberInformationViewModel(application: Application) : AndroidViewModel(ap
     }
 
     fun updateRecycler(patientRecordAdapter: PatientRecordAdapter, hospitalName: String, number: String){
-        patientRecordAdapter.arrayList = getRecord(hospitalName, number)
+        patientRecordAdapter.arrayList = getMemberRecord(hospitalName, number)
         patientRecordAdapter.notifyDataSetChanged()
     }
 

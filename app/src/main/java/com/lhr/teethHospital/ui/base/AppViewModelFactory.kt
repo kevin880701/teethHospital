@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.ui.main.MainViewModel
+import com.lhr.teethHospital.ui.memberInformation.MemberInformationViewModel
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel
 
 class AppViewModelFactory(
@@ -18,6 +19,7 @@ class AppViewModelFactory(
         return when (modelClass) {
             MainViewModel::class.java -> MainViewModel(context) as T
             PersonalManagerViewModel::class.java -> PersonalManagerViewModel(context) as T
+            MemberInformationViewModel::class.java -> MemberInformationViewModel(context, personalManagerRepository) as T
             else -> throw IllegalArgumentException("not support")
         }
     }

@@ -3,7 +3,11 @@ package com.lhr.teethHospital.data
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 class PersonalManagerRepository(context: Context) {
@@ -24,6 +28,15 @@ class PersonalManagerRepository(context: Context) {
         MutableLiveData<ArrayList<GroupInfo>>().apply { value = ArrayList() }
 
 
+    fun getMemberRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
+        lateinit var patientRecordList: ArrayList<RecordEntity>
+        runBlocking {     // 阻塞主執行緒
+            launch(Dispatchers.IO) {
+                patientRecordList = SqlDatabase.getInstance().getRecordDao().getPatientRecord(hospitalName, number) as ArrayList<RecordEntity>
+            }
+        }
+        return patientRecordList
+    }
 
     fun fetchHospitalInfo() {
 //        hospitalEntityList.clear()

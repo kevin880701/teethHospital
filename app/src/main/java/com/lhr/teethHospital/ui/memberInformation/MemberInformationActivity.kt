@@ -41,12 +41,12 @@ class MemberInformationActivity : AppCompatActivity(), View.OnClickListener {
 
         if (intent.getSerializableExtra(ROOT) != null) {// 如果是管理者
             hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
-            patientRecordList = viewModel.getRecord(hospitalEntity.hospitalName, hospitalEntity.number)
+            patientRecordList = viewModel.getMemberRecord(hospitalEntity.hospitalName, hospitalEntity.number)
             binding.titleBar.binding.textTitle.text = hospitalEntity.hospitalName
             binding.textPatientNumber.text = hospitalEntity.number
         }else if (intent.getSerializableExtra(PATIENT) != null) {//如果是患者
             hospitalEntity = intent.getSerializableExtra(PATIENT) as HospitalEntity
-            patientRecordList = viewModel.getRecord(hospitalEntity.hospitalName, hospitalEntity.number)
+            patientRecordList = viewModel.getMemberRecord(hospitalEntity.hospitalName, hospitalEntity.number)
             binding.titleBar.binding.textTitle.text = hospitalEntity.hospitalName
             binding.textPatientNumber.text = hospitalEntity.number
             binding.titleBar.binding.imageCamera.visibility = View.INVISIBLE

@@ -119,15 +119,14 @@
 
         <Button
             android:id="@+id/buttonLogin"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="42dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            app:layout_constraintWidth_percent="0.6"
             app:layout_constraintTop_toBottomOf="@id/constraintNumber"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="@drawable/bg_r16_primary_blue"
+            android:background="@drawable/bg_r64_primary_blue"
             android:textColor="@color/white"
             style="@style/TextStyle_16dp_black"
             android:textStyle="bold"
