@@ -23,7 +23,6 @@ import kotlinx.coroutines.runBlocking
 class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var viewModel: EditPatientInformationViewModel
     lateinit var binding: ActivityEditPatientInformationBinding
-    lateinit var dataBase: SqlDatabase
     lateinit var hospitalEntity: HospitalEntity
     val fileManager = FileManager()
     var state = "IMPORT"
@@ -46,8 +45,6 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
             state = "EDIT"
         }
 
-        dataBase = SqlDatabase(this)
-
         binding.imageBack.setOnClickListener(this)
         binding.buttonSaveInformation.setOnClickListener(this)
     }
@@ -68,7 +65,7 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
                     } else {
                         runBlocking {     // 阻塞主執行緒
                             launch(Dispatchers.IO) {
-                                dataBase.getHospitalDao().updatePatientInformation(
+                                SqlDatabase.getInstance().getHospitalDao().updatePatientInformation(
                                     hospitalEntity.hospitalName,
                                     hospitalEntity.number,
                                     binding.editHospitalName.text.toString(),
@@ -81,7 +78,7 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
                                     binding.editHospitalName.text.toString(), binding.editPatientNumber.text.toString(),
                                     this@EditPatientInformationActivity
                                 )
-                                dataBase.getRecordDao().updateRecord(
+                                SqlDatabase.getInstance().getRecordDao().updateRecord(
                                     hospitalEntity.hospitalName,
                                     hospitalEntity.number,
                                     binding.editHospitalName.text.toString(),
@@ -104,7 +101,7 @@ class EditPatientInformationActivity : AppCompatActivity(), View.OnClickListener
                 } else {
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            dataBase.getHospitalDao().importPatientInformation(
+                            SqlDatabase.getInstance().getHospitalDao().importPatientInformation(
                                 binding.editHospitalName.text.toString(),
                                 binding.editPatientNumber.text.toString(),
                                 binding.editGender.text.toString(),

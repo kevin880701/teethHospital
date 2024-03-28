@@ -15,7 +15,6 @@ import java.io.File
 class DetectResultViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteDirectory(dir: String, recordEntity: RecordEntity, activity: Activity): Boolean {
-        val dataBase = SqlDatabase(activity)
         // 如果dir不以文件分隔符結尾，自動添加文件分隔符
         var dir = dir
         if (!dir.endsWith(File.separator)) dir += File.separator
@@ -40,7 +39,7 @@ class DetectResultViewModel(application: Application) : AndroidViewModel(applica
         }
         runBlocking {     // 阻塞主執行緒
             launch(Dispatchers.IO) {
-                dataBase.getRecordDao().deleteRecord(recordEntity.fileName)
+                SqlDatabase.getInstance().getRecordDao().deleteRecord(recordEntity.fileName)
             }
         }
 

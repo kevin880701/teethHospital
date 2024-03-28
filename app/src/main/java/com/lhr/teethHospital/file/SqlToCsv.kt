@@ -70,7 +70,6 @@ class SqlToCsv {
 //    }
 //
     fun hospitalSqlToCsv(mContext: Context, cursor: Cursor, csvFilePath: String) {
-        val dataBase = SqlDatabase(mContext)
         val csvFile = File(csvFilePath)
         val hospitalName = mContext.getString(R.string.hospital)
         val patientNumber = mContext.getString(R.string.patient_number)
@@ -82,7 +81,7 @@ class SqlToCsv {
                 runBlocking {     // 阻塞主執行緒
                     launch(Dispatchers.IO) {
                         var hospitalList =
-                            dataBase.getHospitalDao().getAll() as ArrayList<HospitalEntity>
+                            SqlDatabase.getInstance().getHospitalDao().getAll() as ArrayList<HospitalEntity>
                         // CSV 文件的標題行
                         out.println("$hospitalName,$patientNumber,$gender,$birthday")
 
@@ -101,7 +100,6 @@ class SqlToCsv {
     }
 
     fun recordSqlToCsv(mContext: Context, cursor: Cursor, csvFilePath: String) {
-        val dataBase = SqlDatabase(mContext)
         val csvFile = File(csvFilePath)
         val hospitalName = mContext.getString(R.string.hospital)
         val patientNumber = mContext.getString(R.string.patient_number)
@@ -117,7 +115,7 @@ class SqlToCsv {
                 runBlocking {     // 阻塞主執行緒
                     launch(Dispatchers.IO) {
                         var recordList =
-                            dataBase.getRecordDao().getAll() as ArrayList<RecordEntity>
+                            SqlDatabase.getInstance().getRecordDao().getAll() as ArrayList<RecordEntity>
                         // CSV 文件的標題行
                         out.println("$hospitalName,$patientNumber,$gender,$birthday,$fileName,$recordDate,$beforePercent,$afterPercent")
 

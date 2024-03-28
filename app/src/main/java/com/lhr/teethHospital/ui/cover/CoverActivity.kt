@@ -31,12 +31,13 @@ import com.lhr.teethHospital.permission.PermissionManager.Companion.WRITE_EXTERN
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityCoverBinding
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.login.LoginActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel
 import java.io.File
 
 
-class CoverActivity : AppCompatActivity() {
+class CoverActivity : BaseActivity() {
 
     lateinit var viewModel: CoverViewModel
     lateinit var binding: ActivityCoverBinding

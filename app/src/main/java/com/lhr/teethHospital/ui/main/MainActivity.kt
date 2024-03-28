@@ -22,10 +22,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.lhr.teethHospital.databinding.ActivityMainBinding
 import com.lhr.teethHospital.file.CsvToSql
 import com.lhr.teethHospital.model.Model.Companion.IMPORT_CSV
+import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isPersonalManagerBack
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : BaseActivity(), View.OnClickListener {
 
     lateinit var viewModel: MainViewModel
     lateinit var binding: ActivityMainBinding

@@ -50,7 +50,6 @@ class SettingFragment : Fragment(), View.OnClickListener {
 
     lateinit var binding: FragmentSettingBinding
     lateinit var viewModel: SettingViewModel
-    lateinit var dataBase: SqlDatabase
     private var mDriveServiceHelper: DriveServiceHelper? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,9 +65,6 @@ class SettingFragment : Fragment(), View.OnClickListener {
             SettingViewModelFactory(this.requireActivity().application)
         )[SettingViewModel::class.java]
         binding.viewModel = viewModel
-
-
-        dataBase = SqlDatabase(this.requireActivity())
 
         binding.textUploadBackup.setOnClickListener(this)
         binding.textDownloadBackup.setOnClickListener(this)
@@ -126,8 +122,8 @@ class SettingFragment : Fragment(), View.OnClickListener {
                 lateinit var recordCursor: Cursor
                 runBlocking {     // 阻塞主執行緒
                     launch(Dispatchers.IO) {
-                        hospitalCursor = dataBase.getHospitalDao().getCursor()
-                        recordCursor = dataBase.getRecordDao().getCursor()
+                        hospitalCursor = SqlDatabase.getInstance().getHospitalDao().getCursor()
+                        recordCursor = SqlDatabase.getInstance().getRecordDao().getCursor()
                     }
                 }
                 SqlToCsv().hospitalSqlToCsv(this.requireContext(), hospitalCursor, TEETH_DIR + HOSPITAL_CSV)

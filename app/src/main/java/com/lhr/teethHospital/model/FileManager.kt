@@ -13,7 +13,6 @@ class FileManager {
 
     fun deleteDirectory(dir: String, recordEntity: RecordEntity, mContext: Context): Boolean {
         // 如果dir不以文件分隔符结尾，自动添加文件分隔符
-        val dataBase = SqlDatabase(mContext)
         var dir = dir
         if (!dir.endsWith(File.separator)) dir += File.separator
         val dirFile = File(dir)
@@ -37,7 +36,7 @@ class FileManager {
         }
         runBlocking {     // 阻塞主執行緒
             launch(Dispatchers.IO) {
-                dataBase.getRecordDao().deleteRecord(recordEntity.fileName)
+                SqlDatabase.getInstance().getRecordDao().deleteRecord(recordEntity.fileName)
             }
         }
 
@@ -78,14 +77,13 @@ class FileManager {
         newNumber: String,
         mContext: Context
     ) {
-        val dataBase = SqlDatabase(mContext)
         runBlocking {     // 阻塞主執行緒
             launch(Dispatchers.IO) {
-                var recordEntityList = dataBase.getRecordDao()
+                var recordEntityList = SqlDatabase.getInstance().getRecordDao()
                     .selectUpdateFileName(oldHospitalName, oldNumber) as ArrayList<RecordEntity>
                 for (recordEntity in recordEntityList) {
                     File(TEETH_DIR + recordEntity.fileName).renameTo(File(TEETH_DIR + newHospitalName + newNumber + recordEntity.recordDate))
-                    dataBase.getRecordDao().updateFileName(
+                    SqlDatabase.getInstance().getRecordDao().updateFileName(
                         recordEntity.fileName,
                         newHospitalName + newNumber + recordEntity.recordDate
                     )

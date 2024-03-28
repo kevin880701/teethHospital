@@ -15,6 +15,7 @@ import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.data.personalManager.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
+import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.login.LoginActivity
 import com.lhr.teethHospital.ui.main.MainActivity
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
@@ -34,6 +35,8 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
             MutableLiveData<Boolean>().apply { value = false }
         var isPersonalManagerBack: MutableLiveData<Boolean> =
             MutableLiveData<Boolean>().apply { value = false }
+        var personalAdapterStatus: MutableLiveData<Int> =
+            MutableLiveData<Int>().apply { value = 0 }
     }
 
     var personalManagerRepository = PersonalManagerRepository(application)
@@ -53,8 +56,8 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 adapter.deleteList.stream().forEach { classInfo ->
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            personalManagerFragment.dataBase.getHospitalDao().deleteRecordByClassName(classInfo.hospitalName)
-                            var patientRecordList = personalManagerFragment.dataBase.getRecordDao()
+                            SqlDatabase.getInstance().getHospitalDao().deleteRecordByClassName(classInfo.hospitalName)
+                            var patientRecordList = SqlDatabase.getInstance().getRecordDao()
                                 .getPatientRecordByHospitalName(classInfo.hospitalName) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach { recordEntity ->
                                 fileManager.deleteDirectory(
@@ -76,9 +79,9 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 adapter.deleteList.stream().forEach { hospitalEntity ->
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            personalManagerFragment.dataBase.getHospitalDao()
+                            SqlDatabase.getInstance().getHospitalDao()
                                 .deleteRecord(hospitalEntity.hospitalName, hospitalEntity.number)
-                            var patientRecordList = personalManagerFragment.dataBase.getRecordDao().getPatientRecord(
+                            var patientRecordList = SqlDatabase.getInstance().getRecordDao().getPatientRecord(
                                 hospitalEntity.hospitalName,
                                 hospitalEntity.number
                             ) as ArrayList<RecordEntity>

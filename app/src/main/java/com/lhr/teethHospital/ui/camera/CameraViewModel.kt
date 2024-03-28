@@ -111,7 +111,7 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
 //        }
 //    }
 
-    fun saveRecord(hospitalEntity: HospitalEntity, cameraActivity: CameraActivity, dataBase: SqlDatabase, folderName: String){
+    fun saveRecord(hospitalEntity: HospitalEntity, cameraActivity: CameraActivity, folderName: String){
         val recordDate = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss")
         var savePath = Model.TEETH_DIR + hospitalEntity.hospitalName + hospitalEntity.number + folderName + "/"
         val file = File(savePath)
@@ -146,7 +146,7 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
                 recordEntity.fileName = hospitalEntity.hospitalName + hospitalEntity.number + folderName
                 recordEntity.recordDate = recordDate.format(Date())
                 recordEntity.detectPercent = cameraActivity.percent.toString()
-                dataBase.getRecordDao().insert(recordEntity)
+                SqlDatabase.getInstance().getRecordDao().insert(recordEntity)
             }
         }
     }

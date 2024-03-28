@@ -41,7 +41,6 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var viewModel: CameraViewModel
     lateinit var binding: ActivityCameraBinding
     lateinit var messageReceiver: BroadcastReceiver
-    lateinit var dataBase: SqlDatabase
     lateinit var pageAdapter: ViewPageAdapter
     lateinit var hospitalEntity: HospitalEntity
     var percent = -1.0F
@@ -54,7 +53,6 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
             CameraViewModelFactory(this.application)
         )[CameraViewModel::class.java]
         binding.viewModel = viewModel
-        dataBase = SqlDatabase(this)
 
         hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
 
@@ -76,7 +74,7 @@ class CameraActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     if(intent.hasExtra(RECORD_DATE)){
                         val recordDate = intent.getStringExtra(RECORD_DATE)
-                        cameraActivity.viewModel.saveRecord(hospitalEntity, this@CameraActivity, dataBase, recordDate!!)
+                        cameraActivity.viewModel.saveRecord(hospitalEntity, this@CameraActivity, recordDate!!)
                     // 更新患者紀錄Adapter
                     sendBroadcast(
                         Intent(UPDATE_PATIENT_RECORD).putExtra("action", UPDATE_PATIENT_RECORD)

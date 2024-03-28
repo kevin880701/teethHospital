@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class PersonalManagerRepository(application: Application) {
-    val dataBase = SqlDatabase(application)
 
     fun fetchHospitalInfo() {
         runBlocking {     // 阻塞主執行緒
@@ -19,7 +18,7 @@ class PersonalManagerRepository(application: Application) {
                 hospitalEntityList.clear()
                 hospitalInfoList.clear()
                 // 取得所有患者細節資料
-                hospitalEntityList = dataBase.getHospitalDao().getAll() as ArrayList<HospitalEntity>
+                hospitalEntityList = SqlDatabase.getInstance().getHospitalDao().getAll() as ArrayList<HospitalEntity>
 
                 // 取得醫院名稱跟患者總數列表
                 hospitalInfoList = hospitalEntityList

@@ -9,13 +9,12 @@ import kotlinx.coroutines.runBlocking
 
 class PatientInformationRepository(application: Application) {
 
-    val dataBase = SqlDatabase(application)
 
     fun fetchPatientRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
                 lateinit var patientRecordList: ArrayList<RecordEntity>
         runBlocking {     // 阻塞主執行緒
             launch(Dispatchers.IO) {
-                patientRecordList = dataBase.getRecordDao().getPatientRecord(hospitalName, number) as ArrayList<RecordEntity>
+                patientRecordList = SqlDatabase.getInstance().getRecordDao().getPatientRecord(hospitalName, number) as ArrayList<RecordEntity>
             }
         }
         return patientRecordList

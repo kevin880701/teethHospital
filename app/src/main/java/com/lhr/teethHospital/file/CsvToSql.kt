@@ -16,7 +16,6 @@ class CsvToSql {
     var linePosition = 0
 
     fun csvToHospitalSql(mContext: Context, filepath: Uri) {
-        var dataBase = SqlDatabase(mContext)
         try {
             var fileInputStream = mContext.contentResolver.openInputStream(filepath)
             val r = BufferedReader(InputStreamReader(fileInputStream))
@@ -44,7 +43,7 @@ class CsvToSql {
                 if (linePosition > 0) {
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            dataBase.getHospitalDao().importPatientInformation(
+                            SqlDatabase.getInstance().getHospitalDao().importPatientInformation(
                                 str[hospitalNameIndex],
                                 str[numberIndex],
                                 str[genderIndex],
@@ -62,7 +61,6 @@ class CsvToSql {
 
 
     fun csvToRecordSql(mContext: Context, filepath: Uri) {
-        var dataBase = SqlDatabase(mContext)
         try {
             var fileInputStream = mContext.contentResolver.openInputStream(filepath)
             val r = BufferedReader(InputStreamReader(fileInputStream))
@@ -105,7 +103,7 @@ class CsvToSql {
 
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            dataBase.getRecordDao().importPatientRecord(
+                            SqlDatabase.getInstance().getRecordDao().importPatientRecord(
                                 recordEntity.hospitalName,
                                 recordEntity.number,
                                 recordEntity.gender,

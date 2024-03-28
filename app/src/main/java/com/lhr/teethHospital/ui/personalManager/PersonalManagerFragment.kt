@@ -32,7 +32,6 @@ class PersonalManagerFragment : Fragment(), View.OnClickListener {
 
     lateinit var binding: FragmentPersonalManagerBinding
     lateinit var viewModel: PersonalManagerViewModel
-    lateinit var dataBase: SqlDatabase
     lateinit var personalManagerAdapter: PersonalManagerAdapter
     lateinit var messageReceiver: BroadcastReceiver
     lateinit var personalManagerFragment: PersonalManagerFragment
@@ -52,7 +51,6 @@ class PersonalManagerFragment : Fragment(), View.OnClickListener {
 
         binding.lifecycleOwner = this
         personalManagerFragment = this
-        dataBase = SqlDatabase(this.requireActivity())
         viewModel.getHospitalInfo()
         personalManagerAdapter = PersonalManagerAdapter(this)
         initRecyclerView(binding.recyclerInfo)
