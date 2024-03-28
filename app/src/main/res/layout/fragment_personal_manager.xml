@@ -3,82 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel" />
-    </data>
+    <data></data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/underline">
+        android:background="@color/gray">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constrainTitleBar"
+        <com.lhr.teethHospital.util.widget.TitleBarWidget
+            android:id="@+id/titleBar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintRight_toRightOf="parent"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/underline">
-
-            <ImageView
-                android:id="@+id/imageBack"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/left_arrow"
-                app:tint="@color/seed" />
-
-            <TextView
-                android:id="@+id/textTitleBar"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toRightOf="@+id/imageBack"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@null"
-                android:gravity="center_vertical|left"
-                android:text="@string/hospital_information"
-                android:textColor="@color/seed"
-                android:textStyle="bold"
-                android:textSize="25dp" />
-
-
-            <ImageView
-                android:id="@+id/imageAdd"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/seed"
-                android:src="@drawable/add" />
-
-            <ImageView
-                android:id="@+id/imageDelete"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="invisible"
-                android:src="@drawable/delete"
-                app:tint="@color/red" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintRight_toRightOf="parent"
+            app:titleText="@string/hospital_information"
+            app:showAdd="visible"
+            app:showBack="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerInfo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constrainTitleBar"
+            app:layout_constraintTop_toBottomOf="@+id/titleBar"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

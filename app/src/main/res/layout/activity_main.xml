@@ -19,7 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tabLayout" />
+            app:layout_constraintBottom_toTopOf="@id/border" />
+
+        <View
+            android:id="@+id/border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/borderGrey"
+            app:layout_constraintBottom_toTopOf="@id/tabLayout"/>
 
 
         <com.google.android.material.tabs.TabLayout
@@ -28,19 +35,18 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.08"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tabSelectedTextColor="@color/seed"
-            app:tabIndicatorColor="@color/seed"
+            app:tabSelectedTextColor="@color/light_blue"
+            app:tabIndicatorColor="@color/light_blue"
             app:tabIndicatorHeight="2dp"
             app:tabRippleColor="@null"
-            app:tabIconTint="@color/seed"
+            app:tabIconTint="@color/tab_selector"
             app:tabIndicatorFullWidth="false"
-            tools:layout_editor_absoluteX="-112dp"
-            android:background="@drawable/topline">
+            android:background="@color/white">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/person_manager" />
+                android:icon="@drawable/person_manager_icon_selector"/>
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

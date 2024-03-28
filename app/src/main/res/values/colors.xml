@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="gray">#FFF7F7F7</color>
+    <color name="gray">#FFF6F6F6</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
-    <color name="seed">#153460</color>
     <color name="primaryBlack">#FF414141</color>
     <color name="borderGrey">#FFEAEAEA</color>
-    <color name="primaryBlue">#153460</color>
+    <color name="primaryBlue">#FF00599D</color>
     <color name="light_blue">#00668A</color>
     <color name="cover_gray">#80A0A0A0</color>
     <color name="background">#F1F1F1</color>

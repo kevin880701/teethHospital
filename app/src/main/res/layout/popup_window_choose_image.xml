@@ -21,7 +21,7 @@
             android:id="@+id/buttonImportMore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/seed"
+            android:textColor="@color/primaryBlue"
             android:background="@drawable/radius"
             style="?android:attr/borderlessButtonStyle"
             android:text="@string/take"
@@ -35,6 +35,6 @@
             style="?android:attr/borderlessButtonStyle"
             android:text="@string/choose_button"
             android:textSize="18sp"
-            android:textColor="@color/seed" />
+            android:textColor="@color/primaryBlue" />
     </LinearLayout>
 </RelativeLayout>

@@ -129,7 +129,7 @@
                     android:background="@null"
                     android:scaleType="fitCenter"
                     android:src="@drawable/take_button"
-                    app:tint="@color/seed" />
+                    app:tint="@color/primaryBlue" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,7 +154,7 @@
                     android:background="@null"
                     android:scaleType="fitCenter"
                     android:src="@drawable/camera_switch"
-                    app:tint="@color/seed" />
+                    app:tint="@color/primaryBlue" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -167,7 +167,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:clickable="true"
-            android:indeterminateTint="@color/seed"
+            android:indeterminateTint="@color/primaryBlue"
             android:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

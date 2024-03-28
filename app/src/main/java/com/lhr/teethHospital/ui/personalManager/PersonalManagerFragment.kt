@@ -49,7 +49,6 @@ class PersonalManagerFragment : Fragment(), View.OnClickListener {
             this,
             PersonalManagerViewModelFactory(this.requireActivity().application)
         )[PersonalManagerViewModel::class.java]
-        binding.viewModel = viewModel
 
         binding.lifecycleOwner = this
         personalManagerFragment = this
@@ -77,21 +76,23 @@ class PersonalManagerFragment : Fragment(), View.OnClickListener {
         val intentFilter = IntentFilter("updateRecyclerInfo")
         this.requireActivity().registerReceiver(messageReceiver, intentFilter)
 
-        binding.imageAdd.setOnClickListener(this)
-        binding.imageDelete.setOnClickListener(this)
-        binding.imageBack.setOnClickListener(this)
+        binding.titleBar.binding.imageAdd.setOnClickListener(this)
+        binding.titleBar.binding.imageBack.setOnClickListener(this)
+//        binding.imageAdd.setOnClickListener(this)
+//        binding.imageDelete.setOnClickListener(this)
+//        binding.imageBack.setOnClickListener(this)
         return view
     }
 
     fun showCheckBox() {
         if(isShowCheckBox.value!!){
             binding.recyclerInfo.adapter?.notifyDataSetChanged()
-            binding.imageDelete.visibility = View.VISIBLE
-            binding.imageAdd.visibility = View.INVISIBLE
+//            binding.imageDelete.visibility = View.VISIBLE
+//            binding.imageAdd.visibility = View.INVISIBLE
         }else{
             binding.recyclerInfo.adapter?.notifyDataSetChanged()
-            binding.imageDelete.visibility = View.INVISIBLE
-            binding.imageAdd.visibility = View.VISIBLE
+//            binding.imageDelete.visibility = View.INVISIBLE
+//            binding.imageAdd.visibility = View.VISIBLE
         }
     }
 

@@ -22,7 +22,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="120dp"
-            app:tint="@color/seed"
+            app:tint="@color/primaryBlue"
             android:src="@drawable/login_icon" />
 
         <TextView
@@ -55,7 +55,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_margin="16dp"
-                app:tint="@color/seed"
+                app:tint="@color/primaryBlue"
                 android:src="@drawable/house" />
 
             <Spinner
@@ -94,7 +94,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_margin="16dp"
-                app:tint="@color/seed"
+                app:tint="@color/primaryBlue"
                 android:src="@drawable/person" />
 
             <EditText

@@ -52,8 +52,8 @@ class PersonalManagerAdapter(personalManagerFragment: PersonalManagerFragment) :
                     ) as ArrayList<HospitalEntity>
                 var classmateAdapter = PatientAdapter(list, personalManagerFragment)
                 personalManagerFragment.binding.recyclerInfo.adapter = classmateAdapter
-                personalManagerFragment.binding.textTitleBar.text =
-                    hospitalInfoList[position].hospitalName
+//                personalManagerFragment.binding.textTitleBar.text =
+//                    hospitalInfoList[position].hospitalName
                 recyclerInfoStatus.value = CLASS_INFO_LIST
             }
         }

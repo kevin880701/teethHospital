@@ -8,5 +8,5 @@
     <stroke android:width="0dp" />
     <corners android:radius="100dp"/>
     <!--邊框的寬度及顏色-->
-    <stroke android:width="2px" android:color="@color/seed" />
+    <stroke android:width="2px" android:color="@color/primaryBlue" />
 </shape>

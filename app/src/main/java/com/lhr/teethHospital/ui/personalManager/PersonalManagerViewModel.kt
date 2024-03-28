@@ -107,12 +107,12 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
         } else if (binding.recyclerInfo.adapter is PatientAdapter) {
             (binding.recyclerInfo.adapter as PatientAdapter).clearItems()
             getHospitalInfo()
-            var list = hospitalEntityList.stream()
-                .filter { hospitalEntity -> hospitalEntity.hospitalName == binding.textTitleBar.text }.collect(
-                    Collectors.toList()
-                ) as java.util.ArrayList<HospitalEntity>
-            var classmateAdapter = PatientAdapter(list, personalManagerFragment)
-            binding.recyclerInfo.adapter = classmateAdapter
+//            var list = hospitalEntityList.stream()
+//                .filter { hospitalEntity -> hospitalEntity.hospitalName == binding.textTitleBar.text }.collect(
+//                    Collectors.toList()
+//                ) as java.util.ArrayList<HospitalEntity>
+//            var classmateAdapter = PatientAdapter(list, personalManagerFragment)
+//            binding.recyclerInfo.adapter = classmateAdapter
         }
         isProgressBar.value = false
     }
@@ -146,8 +146,8 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
 
                 CLASS_INFO_LIST -> {
                     binding.recyclerInfo.adapter = PersonalManagerAdapter(personalManagerFragment)
-                    binding.textTitleBar.text = personalManagerFragment.requireActivity()
-                        .getString(R.string.hospital_information)
+//                    binding.textTitleBar.text = personalManagerFragment.requireActivity()
+//                        .getString(R.string.hospital_information)
                     recyclerInfoStatus.value = CLASS_LIST
                 }
             }

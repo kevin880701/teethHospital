@@ -51,15 +51,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-
         initTabLayout(binding.tabLayout)
     }
 
     fun initTabLayout(tabLayoutMain: TabLayout) {
         tabLayoutMain.apply {
             var tabIconList = arrayListOf(
-                R.drawable.person_manager,
-                R.drawable.setting
+                R.drawable.person_manager_icon_selector,
+                R.drawable.setting_icon_selector
             )
             personalManagerFragment = PersonalManagerFragment()
             settingFragment = SettingFragment()

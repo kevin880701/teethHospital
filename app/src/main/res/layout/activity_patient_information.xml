@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constrainTitleBar"
+            android:id="@+id/titleBar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.08"
@@ -45,7 +45,7 @@
                 android:background="@null"
                 android:gravity="center_vertical|left"
                 android:text="@string/patient_information"
-                android:textColor="@color/seed"
+                android:textColor="@color/primaryBlue"
                 android:textStyle="bold"
                 android:textSize="25dp" />
 
@@ -91,16 +91,16 @@
             app:layout_constraintWidth_percent="0.2"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constrainTitleBar"
+            app:layout_constraintTop_toBottomOf="@id/titleBar"
             android:src="@drawable/person"
-            app:tint="@color/seed" />
+            app:tint="@color/primaryBlue" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintLeft_toRightOf="@+id/imageAvatar"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constrainTitleBar"
+            app:layout_constraintTop_toBottomOf="@id/titleBar"
             app:layout_constraintBottom_toTopOf="@+id/textCleanRecord">
             <!--        <TextView-->
             <!--            android:id="@+id/textPatientName"-->
@@ -113,7 +113,7 @@
             <!--            android:background="@null"-->
             <!--            android:gravity="center_vertical"-->
             <!--            android:text="@string/patient_name"-->
-            <!--            android:textColor="@color/seed"-->
+            <!--            android:textColor="@color/primaryBlue"-->
             <!--            android:textStyle="bold"-->
             <!--            android:textSize="25dp"/>-->
 
@@ -129,7 +129,7 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:text="@string/patient_number"
-                android:textColor="@color/seed"
+                android:textColor="@color/primaryBlue"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -148,7 +148,7 @@
             android:background="@null"
             android:gravity="center"
             android:text="@string/clean_record"
-            android:textColor="@color/seed"
+            android:textColor="@color/primaryBlue"
             android:textStyle="bold"
             android:textSize="25dp" />
 

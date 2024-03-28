@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitleBarWidget">
+        <attr name="titleText" format="string" />
+        <attr name="showBack" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="1" />
+        </attr>
+        <attr name="showAdd" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>
