@@ -1,4 +1,4 @@
-package com.lhr.teethHospital.recyclerViewAdapter
+package com.lhr.teethHospital.util.recyclerViewAdapter
 
 import android.content.Intent
 import android.view.LayoutInflater

@@ -13,7 +13,6 @@ import com.lhr.teethHospital.model.Model.Companion.detectPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.isSetPicture
 import com.lhr.teethHospital.model.Model.Companion.originalPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.PERCENT_RECORD
-import com.lhr.teethHospital.data.camera.CameraRepository
 import com.lhr.teethHospital.model.Model.Companion.allFileList
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
@@ -33,7 +32,6 @@ class CameraViewModel(application: Application) : AndroidViewModel(application) 
     companion object{
 
     }
-    var cameraRepository = CameraRepository(application)
 
     fun cleanImage(cameraActivity: CameraActivity){
         cameraActivity.binding.imageOriginal.setImageDrawable(null)

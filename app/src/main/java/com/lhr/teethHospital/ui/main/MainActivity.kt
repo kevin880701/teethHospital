@@ -1,13 +1,9 @@
 package com.lhr.teethHospital.ui.main
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -24,7 +20,6 @@ import com.lhr.teethHospital.file.CsvToSql
 import com.lhr.teethHospital.model.Model.Companion.IMPORT_CSV
 import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
-import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isPersonalManagerBack
 
 class MainActivity : BaseActivity(), View.OnClickListener {
 
@@ -80,23 +75,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        when (keyCode) {
-            KeyEvent.KEYCODE_BACK -> {
-                when (pageAdapter.fragments[binding.viewPager.currentItem]) {
-                    is PersonalManagerFragment -> {
-                        isPersonalManagerBack.value = true
-                    }
-                    is SettingFragment -> {
-                        finish()
-                    }
-                }
-                return true
-            }
-        }
-        return super.onKeyDown(keyCode, event)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -107,7 +85,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 //                    val myData: Intent? = result.data
                     if (data != null) {
                         CsvToSql().csvToHospitalSql(this, data.data!!)
-                        personalManagerFragment.viewModel.updateRecyclerInfo(personalManagerFragment.binding, personalManagerFragment)
+//                        personalManagerFragment.viewModel.updateRecyclerInfo(personalManagerFragment.binding, personalManagerFragment)
                     }
                 }
             }

@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.model.HospitalInfo
+import com.lhr.teethHospital.data.GroupInfo
 
 class HospitalNameSpinnerAdapter(
     private val context: Context,
-    private val data: ArrayList<HospitalInfo>
+    private val data: ArrayList<GroupInfo>
 ) : BaseAdapter() {
 
     override fun getCount(): Int {
@@ -30,9 +30,9 @@ class HospitalNameSpinnerAdapter(
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.item_hospital_name, parent, false)
 
-        val hospitalInfo = getItem(position) as HospitalInfo
+        val hospitalInfo = getItem(position) as GroupInfo
         val textView = view.findViewById<TextView>(R.id.textHospitalName)
-        textView.text = hospitalInfo.hospitalName
+        textView.text = hospitalInfo.groupName
 
         return view
     }

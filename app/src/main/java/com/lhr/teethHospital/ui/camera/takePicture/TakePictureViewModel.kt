@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import com.lhr.teethHospital.model.Model.Companion.isSetPicture
-import com.lhr.teethHospital.data.takePicture.TakePictureRepository
 import com.lhr.teethHospital.model.Model.Companion.CAMERA_INTENT_FILTER
 import com.lhr.teethHospital.model.Model.Companion.DETECT_PERCENT
 import com.lhr.teethHospital.model.Model.Companion.DETECT_PICTURE
@@ -24,8 +23,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 class TakePictureViewModel(application: Application) : AndroidViewModel(application) {
-
-    var cameraRepository = TakePictureRepository(application)
 
     fun imageSaver(image: Image, //拍攝的照片
                    file: File, //儲存位址

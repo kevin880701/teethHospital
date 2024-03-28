@@ -1,31 +1,27 @@
 package com.lhr.teethHospital.ui.personalManager
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.lhr.teethHospital.model.FileManager
 import com.lhr.teethHospital.model.Model.Companion.TEETH_DIR
-import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
-import com.lhr.teethHospital.R
-import com.lhr.teethHospital.recyclerViewAdapter.PatientAdapter
-import com.lhr.teethHospital.recyclerViewAdapter.PersonalManagerAdapter
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.util.recyclerViewAdapter.PatientAdapter
+import com.lhr.teethHospital.util.recyclerViewAdapter.PersonalManagerAdapter
 import com.lhr.teethHospital.room.RecordEntity
-import com.lhr.teethHospital.data.personalManager.PersonalManagerRepository
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.login.LoginActivity
-import com.lhr.teethHospital.ui.main.MainActivity
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.util.stream.Collectors
 
-class PersonalManagerViewModel(application: Application) : AndroidViewModel(application) {
-
+class PersonalManagerViewModel(context: Context) :
+    AndroidViewModel(context.applicationContext as APP) {
     companion object {
         const val CLASS_LIST: Int = 100
         const val CLASS_INFO_LIST: Int = 101
@@ -33,21 +29,17 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
             MutableLiveData<Int>().apply { value = CLASS_LIST }
         var isShowCheckBox: MutableLiveData<Boolean> =
             MutableLiveData<Boolean>().apply { value = false }
-        var isPersonalManagerBack: MutableLiveData<Boolean> =
-            MutableLiveData<Boolean>().apply { value = false }
-        var personalAdapterStatus: MutableLiveData<Int> =
-            MutableLiveData<Int>().apply { value = 0 }
+        var titleBarText: MutableLiveData<String> =
+            MutableLiveData<String>().apply { value = ""}
     }
 
-    var personalManagerRepository = PersonalManagerRepository(application)
+    var personalManagerRepository = PersonalManagerRepository(context)
     val fileManager = FileManager()
 
-    fun getHospitalInfo() {
-        personalManagerRepository.fetchHospitalInfo()
-    }
-
-    fun deleteRecord(binding: FragmentPersonalManagerBinding,
-                     personalManagerFragment: PersonalManagerFragment) {
+    fun deleteRecord(
+        binding: FragmentPersonalManagerBinding,
+        personalManagerFragment: PersonalManagerFragment
+    ) {
         when (recyclerInfoStatus.value) {
             CLASS_LIST -> {
                 var adapter = binding.recyclerInfo.adapter as PersonalManagerAdapter
@@ -56,9 +48,10 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 adapter.deleteList.stream().forEach { classInfo ->
                     runBlocking {     // 阻塞主執行緒
                         launch(Dispatchers.IO) {
-                            SqlDatabase.getInstance().getHospitalDao().deleteRecordByClassName(classInfo.hospitalName)
+                            SqlDatabase.getInstance().getHospitalDao()
+                                .deleteRecordByClassName(classInfo.groupName)
                             var patientRecordList = SqlDatabase.getInstance().getRecordDao()
-                                .getPatientRecordByHospitalName(classInfo.hospitalName) as ArrayList<RecordEntity>
+                                .getPatientRecordByHospitalName(classInfo.groupName) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach { recordEntity ->
                                 fileManager.deleteDirectory(
                                     TEETH_DIR + recordEntity.fileName + "/",
@@ -71,6 +64,7 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 }
                 adapter.deleteList.clear()
             }
+
             CLASS_INFO_LIST -> {
                 var adapter = binding.recyclerInfo.adapter as PatientAdapter
                 adapter.arrayList.removeAll(adapter.deleteList.toSet())
@@ -81,10 +75,11 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                         launch(Dispatchers.IO) {
                             SqlDatabase.getInstance().getHospitalDao()
                                 .deleteRecord(hospitalEntity.hospitalName, hospitalEntity.number)
-                            var patientRecordList = SqlDatabase.getInstance().getRecordDao().getPatientRecord(
-                                hospitalEntity.hospitalName,
-                                hospitalEntity.number
-                            ) as ArrayList<RecordEntity>
+                            var patientRecordList =
+                                SqlDatabase.getInstance().getRecordDao().getPatientRecord(
+                                    hospitalEntity.hospitalName,
+                                    hospitalEntity.number
+                                ) as ArrayList<RecordEntity>
                             patientRecordList.stream().forEach { recordEntity ->
                                 fileManager.deleteDirectory(
                                     TEETH_DIR + recordEntity.fileName + "/",
@@ -99,17 +94,19 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
             }
         }
         updateRecyclerInfo(binding, personalManagerFragment)
-        isPersonalManagerBack.value = true
     }
 
-    fun updateRecyclerInfo(binding: FragmentPersonalManagerBinding, personalManagerFragment: PersonalManagerFragment) {
+    fun updateRecyclerInfo(
+        binding: FragmentPersonalManagerBinding,
+        personalManagerFragment: PersonalManagerFragment
+    ) {
         if (binding.recyclerInfo.adapter is PersonalManagerAdapter) {
             (binding.recyclerInfo.adapter as PersonalManagerAdapter).clearItems()
-            getHospitalInfo()
+//            getHospitalInfo()
             binding.recyclerInfo.adapter = PersonalManagerAdapter(personalManagerFragment)
         } else if (binding.recyclerInfo.adapter is PatientAdapter) {
             (binding.recyclerInfo.adapter as PatientAdapter).clearItems()
-            getHospitalInfo()
+//            getHospitalInfo()
 //            var list = hospitalEntityList.stream()
 //                .filter { hospitalEntity -> hospitalEntity.hospitalName == binding.textTitleBar.text }.collect(
 //                    Collectors.toList()
@@ -142,7 +139,8 @@ class PersonalManagerViewModel(application: Application) : AndroidViewModel(appl
                 CLASS_LIST -> {
 //                    personalManagerFragment.requireActivity().finish()
 
-                    val intent = Intent(personalManagerFragment.requireActivity(), LoginActivity::class.java)
+                    val intent =
+                        Intent(personalManagerFragment.requireActivity(), LoginActivity::class.java)
                     personalManagerFragment.requireActivity().startActivity(intent)
                     personalManagerFragment.requireActivity().finish()
                 }

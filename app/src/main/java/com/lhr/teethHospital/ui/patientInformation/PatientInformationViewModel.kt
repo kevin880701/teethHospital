@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.lhr.teethHospital.model.FileManager
 import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.recyclerViewAdapter.PatientRecordAdapter
+import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.data.patientInformation.PatientInformationRepository
 

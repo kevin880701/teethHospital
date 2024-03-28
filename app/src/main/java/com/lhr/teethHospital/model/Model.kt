@@ -1,7 +1,7 @@
 package com.lhr.teethHospital.model
 
+import com.lhr.teethHospital.data.GroupInfo
 import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.room.RecordEntity
 import java.io.File
 
 class Model {
@@ -30,7 +30,7 @@ class Model {
         val ROOT = "ROOT"
         val PATIENT = "PATIENT"
         lateinit var allFileList: Array<File>
-        var hospitalInfoList : ArrayList<HospitalInfo> = ArrayList()
+        var hospitalInfoList : ArrayList<GroupInfo> = ArrayList()
         var hospitalEntityList : ArrayList<HospitalEntity> = ArrayList()
     }
 }

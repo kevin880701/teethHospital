@@ -5,7 +5,6 @@
     <string name="information">基本資料</string>
     <string name="teach">衛教導引</string>
     <string name="camera">圖片檢測</string>
-    <string name="hospital_information">診所資訊</string>
     <string name="history">歷史紀錄</string>
     <string name="hospital_name">診所名稱</string>
     <string name="patient_information">患者資料</string>
@@ -43,6 +42,9 @@
     <string name="clean_Image">清除圖片</string>
     <string name="add_multiple_information">匯入資料</string>
     <string name="add_single_information">新增單筆資料</string>
+
+<!--    TitleBar-->
+    <string name="hospital_information">診所資訊</string>
 
 
     <string-array name="tab_commodity_title">

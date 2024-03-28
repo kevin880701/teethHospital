@@ -10,118 +10,142 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.lhr.teethHospital.file.CsvToSql
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.recyclerViewAdapter.PersonalManagerAdapter
-import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.data.GroupInfo
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.popupWindow.ImportPopupWindow
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
-import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isPersonalManagerBack
+import com.lhr.teethHospital.model.Model
+import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.ui.base.BaseFragment
+import com.lhr.teethHospital.ui.patientInformation.PatientInformationActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isShowCheckBox
+import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.titleBarText
+import com.lhr.teethHospital.util.recyclerViewAdapter.GroupAdapter
+import com.lhr.teethHospital.util.recyclerViewAdapter.MemberAdapter
+import timber.log.Timber
 
-class PersonalManagerFragment : Fragment(), View.OnClickListener {
+class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapter.Listener, MemberAdapter.Listener {
 
+    private val viewModel: PersonalManagerViewModel by viewModels { viewModelFactory }
     lateinit var binding: FragmentPersonalManagerBinding
-    lateinit var viewModel: PersonalManagerViewModel
-    lateinit var personalManagerAdapter: PersonalManagerAdapter
-    lateinit var messageReceiver: BroadcastReceiver
-    lateinit var personalManagerFragment: PersonalManagerFragment
+    lateinit var groupAdapter: GroupAdapter
+    lateinit var memberAdapter: MemberAdapter
+    lateinit var repository: PersonalManagerRepository
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    lateinit var messageReceiver: BroadcastReceiver
+    private val callback = object : OnBackPressedCallback(true /* enabled by default */) {
+        override fun handleOnBackPressed() {
+            onBackButtonPressed()
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_personal_manager, container, false
         )
         val view: View = binding!!.root
+        repository = PersonalManagerRepository.getInstance(requireContext())
 
-        viewModel = ViewModelProvider(
-            this,
-            PersonalManagerViewModelFactory(this.requireActivity().application)
-        )[PersonalManagerViewModel::class.java]
-
-        binding.lifecycleOwner = this
-        personalManagerFragment = this
-        viewModel.getHospitalInfo()
-        personalManagerAdapter = PersonalManagerAdapter(this)
-        initRecyclerView(binding.recyclerInfo)
+        bindViewModel()
+        initView()
+        repository.fetchHospitalInfo()
 
         isShowCheckBox.observe(viewLifecycleOwner) { newIds ->
             showCheckBox()
-        }
-        isPersonalManagerBack.observe(viewLifecycleOwner) { newIds ->
-            if(isPersonalManagerBack.value!!) {
-                viewModel.back(binding, this)
-                isPersonalManagerBack.value = false
-            }
         }
 
         // 註冊 BroadcastReceiver
         messageReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                    viewModel.updateRecyclerInfo(binding, personalManagerFragment)
+                viewModel.updateRecyclerInfo(binding, this@PersonalManagerFragment)
             }
         }
         val intentFilter = IntentFilter("updateRecyclerInfo")
-        this.requireActivity().registerReceiver(messageReceiver, intentFilter)
+        requireActivity().registerReceiver(messageReceiver, intentFilter)
 
-        binding.titleBar.binding.imageAdd.setOnClickListener(this)
-        binding.titleBar.binding.imageBack.setOnClickListener(this)
-//        binding.imageAdd.setOnClickListener(this)
 //        binding.imageDelete.setOnClickListener(this)
-//        binding.imageBack.setOnClickListener(this)
         return view
     }
 
+    private fun initView() {
+        titleBarText.postValue(getString(R.string.hospital_information))
+        initRecyclerView()
+
+        binding.titleBar.binding.imageAdd.setOnClickListener(this)
+        binding.titleBar.binding.imageBack.setOnClickListener(this)
+    }
+
+    private fun initRecyclerView() {
+        groupAdapter = GroupAdapter(this, requireContext())
+        memberAdapter = MemberAdapter(this, requireContext())
+        binding.recyclerInfo.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerInfo.adapter = groupAdapter
+    }
+
+    private fun bindViewModel() {
+        titleBarText.observe(viewLifecycleOwner) { text ->
+            binding.titleBar.binding.textTitle.text = text
+            if (text != getString(R.string.hospital_information)) {
+                binding.titleBar.setBack(View.VISIBLE)
+                memberAdapter.submitList(repository.hospitalInfoList.value?.filter { it.hospitalName == text })
+                binding.recyclerInfo.adapter = memberAdapter
+            } else {
+                binding.titleBar.setBack(View.GONE)
+                memberAdapter.submitList(ArrayList())
+                binding.recyclerInfo.adapter = groupAdapter
+            }
+        }
+
+        repository.groupInfoList.observe(viewLifecycleOwner) { list ->
+            groupAdapter.submitList(list)
+            binding.recyclerInfo.adapter = groupAdapter
+        }
+    }
+
     fun showCheckBox() {
-        if(isShowCheckBox.value!!){
+        if (isShowCheckBox.value!!) {
             binding.recyclerInfo.adapter?.notifyDataSetChanged()
 //            binding.imageDelete.visibility = View.VISIBLE
 //            binding.imageAdd.visibility = View.INVISIBLE
-        }else{
+        } else {
             binding.recyclerInfo.adapter?.notifyDataSetChanged()
 //            binding.imageDelete.visibility = View.INVISIBLE
 //            binding.imageAdd.visibility = View.VISIBLE
         }
     }
 
-    fun initRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
-        recyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    this.context,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
-
-        recyclerView.adapter = personalManagerAdapter
-    }
-
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.imageAdd -> {
-                val choose = ImportPopupWindow(this.requireActivity(),this)
-                val view: View = LayoutInflater.from(this.requireActivity()).inflate(
+                val choose = ImportPopupWindow(requireActivity(), this)
+                val view: View = LayoutInflater.from(requireActivity()).inflate(
                     R.layout.popup_window_import,
                     null
                 )
                 choose.showAtLocation(view, Gravity.CENTER, 0, 0)
                 //強制隱藏鍵盤
-                val imm = this.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(this.requireActivity().window.decorView.windowToken, 0)
+                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(requireActivity().window.decorView.windowToken, 0)
             }
+
             R.id.imageBack -> {
-                isPersonalManagerBack.value = true
+                titleBarText.postValue(getString(R.string.hospital_information))
+                onBackButtonPressed()
             }
+
             R.id.imageDelete -> {
                 viewModel.deleteRecord(binding, this)
             }
@@ -133,14 +157,45 @@ class PersonalManagerFragment : Fragment(), View.OnClickListener {
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             val myData: Intent? = result.data
             if (myData != null) {
-                CsvToSql().csvToHospitalSql(this.requireActivity(), myData.data!!)
+                CsvToSql().csvToHospitalSql(requireActivity(), myData.data!!)
                 viewModel.updateRecyclerInfo(binding, this)
             }
+        }
+    }
+
+
+    /**
+     * 處理返回按鈕的點擊事件。
+     * 如果標題欄為R.string.hospital_information，則結束當前Activity。
+     * 否則，將標題欄文本設定為醫院信息。
+     */
+    private fun onBackButtonPressed() {
+        if (titleBarText.value == getString(R.string.hospital_information)) {
+            requireActivity().finish()
+        } else {
+            titleBarText.postValue(getString(R.string.hospital_information))
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         this.requireActivity().unregisterReceiver(messageReceiver)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    override fun onItemClick(groupInfo: GroupInfo) {
+        titleBarText.postValue(groupInfo.groupName)
+    }
+
+    override fun onItemClick(hospitalEntity: HospitalEntity) {
+        val intent = Intent(requireActivity(), PatientInformationActivity::class.java)
+        intent.putExtra(Model.ROOT, hospitalEntity)
+        requireActivity().startActivity(intent)
     }
 }

@@ -36,8 +36,10 @@ class TitleBarWidget @JvmOverloads constructor(
         binding.textTitle.text = title
     }
 
-    fun setBack(isShow: Int) {
-        binding.imageBack.visibility = if (isShow == 0) View.VISIBLE else View.GONE
+    fun setBack(visibility: Int) {
+        binding.imageBack.visibility = visibility
+
+//            if (visibility == 0) View.VISIBLE else View.GONE
     }
 
     fun setAdd(isShow: Int) {

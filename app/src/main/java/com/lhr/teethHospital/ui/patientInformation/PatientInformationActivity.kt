@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.recyclerViewAdapter.PatientRecordAdapter
+import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.room.HospitalEntity
 import com.lhr.teethHospital.room.RecordEntity
 import com.lhr.teethHospital.databinding.ActivityPatientInformationBinding

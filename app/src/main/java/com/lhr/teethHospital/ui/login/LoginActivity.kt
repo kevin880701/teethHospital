@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityLoginBinding
-import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.PATIENT
 import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
@@ -80,7 +79,7 @@ class LoginActivity : AppCompatActivity(),
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // 獲取當前選擇的內容
-        currentSpinnerText = hospitalInfoList[position].hospitalName
+        currentSpinnerText = hospitalInfoList[position].groupName
 
     }
 

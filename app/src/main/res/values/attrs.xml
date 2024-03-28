@@ -4,11 +4,11 @@
         <attr name="titleText" format="string" />
         <attr name="showBack" format="enum">
             <enum name="visible" value="0" />
-            <enum name="gone" value="1" />
+            <enum name="gone" value="8" />
         </attr>
         <attr name="showAdd" format="enum">
             <enum name="visible" value="0" />
-            <enum name="gone" value="1" />
+            <enum name="gone" value="8" />
         </attr>
     </declare-styleable>
 </resources>
