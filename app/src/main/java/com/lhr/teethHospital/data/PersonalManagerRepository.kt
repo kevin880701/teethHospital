@@ -8,7 +8,6 @@ import com.lhr.teethHospital.room.SqlDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 
 class PersonalManagerRepository(context: Context) {
 
@@ -38,8 +37,7 @@ class PersonalManagerRepository(context: Context) {
         return patientRecordList
     }
 
-    fun fetchHospitalInfo() {
-//        hospitalEntityList.clear()
+    fun getAllInfo() {
         // 取得所有患者細節資料
         var hospitalEntityList = SqlDatabase.getInstance().getHospitalDao().getAll() as ArrayList<HospitalEntity>
 

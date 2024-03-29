@@ -20,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class PersonalManagerViewModel(context: Context) :
+class PersonalManagerViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) :
     AndroidViewModel(context.applicationContext as APP) {
     companion object {
         const val CLASS_LIST: Int = 100
@@ -30,10 +30,9 @@ class PersonalManagerViewModel(context: Context) :
         var isShowCheckBox: MutableLiveData<Boolean> =
             MutableLiveData<Boolean>().apply { value = false }
         var titleBarText: MutableLiveData<String> =
-            MutableLiveData<String>().apply { value = ""}
+            MutableLiveData<String>().apply { value = "" }
     }
 
-    var personalManagerRepository = PersonalManagerRepository(context)
     val fileManager = FileManager()
 
     fun deleteRecord(
@@ -93,27 +92,12 @@ class PersonalManagerViewModel(context: Context) :
                 adapter.deleteList.clear()
             }
         }
-        updateRecyclerInfo(binding, personalManagerFragment)
+        updateRecyclerInfo()
     }
 
     fun updateRecyclerInfo(
-        binding: FragmentPersonalManagerBinding,
-        personalManagerFragment: PersonalManagerFragment
     ) {
-        if (binding.recyclerInfo.adapter is PersonalManagerAdapter) {
-            (binding.recyclerInfo.adapter as PersonalManagerAdapter).clearItems()
-//            getHospitalInfo()
-            binding.recyclerInfo.adapter = PersonalManagerAdapter(personalManagerFragment)
-        } else if (binding.recyclerInfo.adapter is PatientAdapter) {
-            (binding.recyclerInfo.adapter as PatientAdapter).clearItems()
-//            getHospitalInfo()
-//            var list = hospitalEntityList.stream()
-//                .filter { hospitalEntity -> hospitalEntity.hospitalName == binding.textTitleBar.text }.collect(
-//                    Collectors.toList()
-//                ) as java.util.ArrayList<HospitalEntity>
-//            var classmateAdapter = PatientAdapter(list, personalManagerFragment)
-//            binding.recyclerInfo.adapter = classmateAdapter
-        }
+        personalManagerRepository.getAllInfo()
         isProgressBar.value = false
     }
 
