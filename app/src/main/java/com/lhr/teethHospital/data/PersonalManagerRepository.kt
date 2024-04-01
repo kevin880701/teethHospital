@@ -37,8 +37,7 @@ class PersonalManagerRepository(context: Context) {
         return patientRecordList
     }
 
-    fun fetchHospitalInfo() {
-//        hospitalEntityList.clear()
+    fun getAllInfo() {
         // 取得所有患者細節資料
         var hospitalEntityList = SqlDatabase.getInstance().getHospitalDao().getAll() as ArrayList<HospitalEntity>
 

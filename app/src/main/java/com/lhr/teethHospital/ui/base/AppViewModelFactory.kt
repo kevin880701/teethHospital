@@ -17,7 +17,7 @@ class AppViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when (modelClass) {
             MainViewModel::class.java -> MainViewModel(context) as T
-            PersonalManagerViewModel::class.java -> PersonalManagerViewModel(context) as T
+            PersonalManagerViewModel::class.java -> PersonalManagerViewModel(context, personalManagerRepository) as T
             MemberInformationViewModel::class.java -> MemberInformationViewModel(context, personalManagerRepository) as T
             CameraViewModel::class.java -> CameraViewModel(context, personalManagerRepository) as T
             else -> throw IllegalArgumentException("not support")

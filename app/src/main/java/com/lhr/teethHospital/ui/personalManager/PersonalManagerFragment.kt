@@ -61,7 +61,7 @@ class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapt
 
         bindViewModel()
         initView()
-        repository.fetchHospitalInfo()
+        repository.getAllInfo()
 
         isShowCheckBox.observe(viewLifecycleOwner) { newIds ->
             showCheckBox()
@@ -70,7 +70,7 @@ class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapt
         // 註冊 BroadcastReceiver
         messageReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                viewModel.updateRecyclerInfo(binding, this@PersonalManagerFragment)
+                viewModel.updateRecyclerInfo()
             }
         }
         val intentFilter = IntentFilter("updateRecyclerInfo")
@@ -158,7 +158,7 @@ class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapt
             val myData: Intent? = result.data
             if (myData != null) {
                 CsvToSql().csvToHospitalSql(requireActivity(), myData.data!!)
-                viewModel.updateRecyclerInfo(binding, this)
+                viewModel.updateRecyclerInfo()
             }
         }
     }
