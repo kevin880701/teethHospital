@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.android.notesk.SQLite.SqlModel
 import com.android.notesk.SQLite.SqlModel.Companion.DB_NAME
-import com.android.notesk.SQLite.SqlModel.Companion.RECORD_TABLE_NAME
+import com.lhr.teethHospital.room.dao.HospitalDao
+import com.lhr.teethHospital.room.dao.RecordDao
+import com.lhr.teethHospital.room.entity.HospitalEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 
-@Database(entities = [HospitalEntity::class,RecordEntity::class], version = 2, exportSchema = false)
+@Database(entities = [HospitalEntity::class, RecordEntity::class], version = 2, exportSchema = false)
 abstract class SqlDatabase : RoomDatabase() {
 
 

@@ -2,7 +2,7 @@ package com.lhr.teethHospital.model
 
 import android.content.Context
 import com.lhr.teethHospital.model.Model.Companion.TEETH_DIR
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

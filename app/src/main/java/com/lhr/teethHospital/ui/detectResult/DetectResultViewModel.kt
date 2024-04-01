@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

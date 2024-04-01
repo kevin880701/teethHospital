@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.model.FileManager
 import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.databinding.ActivityEditPatientInformationBinding
 import com.lhr.teethHospital.model.Model.Companion.ROOT

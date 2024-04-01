@@ -9,7 +9,7 @@ import com.lhr.teethHospital.model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
 import com.lhr.teethHospital.util.recyclerViewAdapter.PatientAdapter
 import com.lhr.teethHospital.util.recyclerViewAdapter.PersonalManagerAdapter
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
 import com.lhr.teethHospital.room.SqlDatabase

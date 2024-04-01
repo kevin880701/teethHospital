@@ -1,6 +1,5 @@
 package com.lhr.teethHospital.ui.camera
 
-import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -16,8 +15,8 @@ import com.lhr.teethHospital.model.Model.Companion.isSetPicture
 import com.lhr.teethHospital.model.Model.Companion.originalPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.PERCENT_RECORD
 import com.lhr.teethHospital.model.Model.Companion.allFileList
-import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.base.APP
 import kotlinx.coroutines.CoroutineScope
@@ -33,9 +32,6 @@ import java.util.Date
 
 class CameraViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) :
     AndroidViewModel(context.applicationContext as APP) {
-    companion object {
-
-    }
 
     fun cleanImage(cameraActivity: CameraActivity) {
         cameraActivity.binding.imageOriginal.setImageDrawable(null)

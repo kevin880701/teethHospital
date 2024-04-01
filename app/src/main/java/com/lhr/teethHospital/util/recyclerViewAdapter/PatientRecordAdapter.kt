@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 import com.lhr.teethHospital.ui.detectResult.DetectResultActivity
 import com.lhr.teethHospital.ui.memberInformation.MemberInformationViewModel

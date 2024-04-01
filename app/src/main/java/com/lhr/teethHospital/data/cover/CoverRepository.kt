@@ -3,7 +3,7 @@ package com.lhr.teethHospital.data.cover
 import android.app.Application
 import com.lhr.teethHospital.data.GroupInfo
 import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

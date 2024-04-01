@@ -1,4 +1,4 @@
-package com.lhr.teethHospital.room
+package com.lhr.teethHospital.room.entity
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
@@ -6,11 +6,12 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.android.notesk.SQLite.SqlModel
-import com.android.notesk.SQLite.SqlModel.Companion.number
+import com.android.notesk.SQLite.SqlModel.Companion.fileName
 import java.io.Serializable
 
-@Entity(tableName = SqlModel.HOSPITAL_TABLE_NAME, indices = [Index(value = [number], unique = true)])
-class HospitalEntity : Serializable {
+
+@Entity(tableName = SqlModel.RECORD_TABLE_NAME)
+class RecordEntity : Serializable  {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
@@ -26,6 +27,14 @@ class HospitalEntity : Serializable {
     var gender = ""
 
     @ColumnInfo(name = SqlModel.birthday, typeAffinity = ColumnInfo.TEXT)
-    var birthday: String = ""
+    var birthday : String = ""
 
+    @ColumnInfo(name = SqlModel.fileName, typeAffinity = ColumnInfo.TEXT)
+    var fileName : String = ""
+
+    @ColumnInfo(name = SqlModel.recordDate, typeAffinity = ColumnInfo.TEXT)
+    var recordDate : String = ""
+
+    @ColumnInfo(name = SqlModel.detectPercent, typeAffinity = ColumnInfo.TEXT)
+    var detectPercent : String = ""
 }

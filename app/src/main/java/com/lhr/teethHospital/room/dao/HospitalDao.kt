@@ -1,9 +1,10 @@
-package com.lhr.teethHospital.room
+package com.lhr.teethHospital.room.dao
 
 import android.database.Cursor
 import androidx.room.*
 import com.android.notesk.SQLite.SqlModel
 import com.android.notesk.SQLite.SqlModel.Companion.HOSPITAL_TABLE_NAME
+import com.lhr.teethHospital.room.entity.HospitalEntity
 
 @Dao
 interface HospitalDao {

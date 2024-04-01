@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.KeyEvent
@@ -12,16 +14,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityCameraBinding
-import com.lhr.teethHospital.databinding.ActivityMemberInformationBinding
-import com.lhr.teethHospital.dialog.SaveRecordDialog
-import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.CAMERA_INTENT_FILTER
 import com.lhr.teethHospital.model.Model.Companion.DETECT_PERCENT
 import com.lhr.teethHospital.model.Model.Companion.DETECT_PICTURE
@@ -30,22 +29,21 @@ import com.lhr.teethHospital.model.Model.Companion.RECORD_DATE
 import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
 import com.lhr.teethHospital.model.Model.Companion.isSetPicture
-import com.lhr.teethHospital.popupWindow.ChooseImagePopupWindow
-import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.base.BaseActivity
-import com.lhr.teethHospital.ui.memberInformation.MemberInformationViewModel
-import com.lhr.teethHospital.viewPager.ViewPageAdapter
+import com.lhr.teethHospital.util.dialog.SaveRecordDialog
+import com.lhr.teethHospital.util.popupWindow.ChooseImagePopupWindow
+
 
 class CameraActivity : BaseActivity(), View.OnClickListener {
     companion object {
         lateinit var cameraActivity: CameraActivity
+        lateinit var takePicture: ActivityResultLauncher<Void>
     }
 
     private val viewModel: CameraViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
     private var _binding: ActivityCameraBinding? = null
-//    private val binding get() = _binding!!
     val binding get() = _binding!!
     lateinit var messageReceiver: BroadcastReceiver
     lateinit var hospitalEntity: HospitalEntity
@@ -59,6 +57,11 @@ class CameraActivity : BaseActivity(), View.OnClickListener {
 
         hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
 
+        takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { result ->
+            if (result != null) {
+                binding.imageOriginal.setImageBitmap(result)
+            }
+        };
         cameraActivity = this
 
         // 註冊 BroadcastReceiver

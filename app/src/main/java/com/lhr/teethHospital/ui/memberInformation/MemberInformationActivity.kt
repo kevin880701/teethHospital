@@ -8,14 +8,13 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityMemberInformationBinding
 import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
-import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.model.Model.Companion.PATIENT
 import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.ui.base.APP

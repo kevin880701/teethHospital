@@ -1,7 +1,7 @@
 package com.lhr.teethHospital.model
 
 import com.lhr.teethHospital.data.GroupInfo
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
 import java.io.File
 
 class Model {

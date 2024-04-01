@@ -1,4 +1,4 @@
-package com.lhr.teethHospital.dialog
+package com.lhr.teethHospital.util.dialog
 
 import android.app.Dialog
 import android.content.Context

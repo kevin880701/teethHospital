@@ -21,10 +21,10 @@ import com.lhr.teethHospital.file.CsvToSql
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.data.GroupInfo
 import com.lhr.teethHospital.data.PersonalManagerRepository
-import com.lhr.teethHospital.popupWindow.ImportPopupWindow
+import com.lhr.teethHospital.util.popupWindow.ImportPopupWindow
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
 import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.ui.base.BaseFragment
 import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isShowCheckBox

@@ -1,30 +1,31 @@
-package com.lhr.teethHospital.popupWindow
+package com.lhr.teethHospital.util.popupWindow
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.os.Parcelable
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
-import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.app.ActivityCompat
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.ui.camera.CameraActivity
-import com.lhr.teethHospital.ui.camera.takePicture.TakePictureActivity
+import com.lhr.teethHospital.ui.editPatientInformation.EditPatientInformationActivity
+import com.lhr.teethHospital.ui.personalManager.PersonalManagerFragment
 
-class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnClickListener {
-    val mActivity = activity
-    var buttonTakePicture: Button
-    var buttonChooseImage: Button
+class ImportPopupWindow(mContext: Context, personalManagerFragment: PersonalManagerFragment) : PopupWindow(), View.OnClickListener {
+    val mContext = mContext
+    var view: View
+    var buttonImportMore: Button
+    var buttonImportSingle: Button
+    var personalManagerFragment = personalManagerFragment
 
     init {
-        var view = LayoutInflater.from(mActivity).inflate(R.layout.popup_window_choose_image, null)
-        buttonTakePicture = view.findViewById(R.id.buttonImportMore)
-        buttonChooseImage = view.findViewById(R.id.buttonChoosePicture)
+        view = LayoutInflater.from(mContext).inflate(R.layout.popup_window_import, null)
+        buttonImportMore = view.findViewById(R.id.buttonImportMore)
+        buttonImportSingle = view.findViewById(R.id.buttonChoosePicture)
         // 外部可點擊
         this.isOutsideTouchable = true
         // mMenuView添加OnTouchListener監聽判斷獲取觸屏位置如果在選擇框外面則銷毀彈出框
@@ -50,46 +51,38 @@ class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnC
         // 彈出窗体的動畫
         this.animationStyle = R.style.take_photo_anim
 
-        buttonTakePicture.setOnClickListener(this)
-        buttonChooseImage.setOnClickListener(this)
+        buttonImportMore.setOnClickListener(this)
+        buttonImportSingle.setOnClickListener(this)
     }
 
-    fun chooseImage() {
+    fun importMore() {
         val pickIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            Intent.ACTION_GET_CONTENT
         )
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Model.IMAGE_URI)
-        val chooserIntent = Intent.createChooser(pickIntent, "Choose")
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf<Parcelable>(takePhotoIntent))
+        pickIntent.type = "*/*"
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-//            activityForResult.launch(chooserIntent)
             Log.v("PPPPPPPPPPPP","Build.VERSION_CODES.Q")
-            mActivity.startForResult.launch(chooserIntent)
+            personalManagerFragment.importResult.launch(pickIntent)
         } else {
             //support for older than android 11
             Log.v("PPPPPPPPPPPP","support for older than android 11")
-            startActivityForResult(mActivity, chooserIntent, Model.IMAGE_REQUEST_CODE, null)
+            ActivityCompat.startActivityForResult(personalManagerFragment.requireActivity(), pickIntent, Model.IMPORT_CSV, null)
         }
         dismiss()
     }
 
-    fun takePicture() {
+    fun importSingle() {
+        val intent = Intent(personalManagerFragment.requireActivity(), EditPatientInformationActivity::class.java)
+        personalManagerFragment.requireActivity().startActivity(intent)
         dismiss()
-//        val intent = Intent(mActivity, TakePictureActivity::class.java)
-//        mActivity.startActivity(intent)
-
-        val takePictureIntent = Intent(mActivity, TakePictureActivity::class.java)
-        mActivity.startForResult.launch(takePictureIntent)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.buttonImportMore -> {
-                takePicture()
+                importMore()
             }R.id.buttonChoosePicture -> {
-                chooseImage()
+                importSingle()
             }
         }
     }

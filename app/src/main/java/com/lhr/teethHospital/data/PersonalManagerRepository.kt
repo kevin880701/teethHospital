@@ -2,13 +2,12 @@ package com.lhr.teethHospital.data
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import com.lhr.teethHospital.room.HospitalEntity
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 
 class PersonalManagerRepository(context: Context) {
 

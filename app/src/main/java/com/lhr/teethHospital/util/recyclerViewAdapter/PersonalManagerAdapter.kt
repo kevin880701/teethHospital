@@ -10,7 +10,7 @@ import com.lhr.teethHospital.data.GroupInfo
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
 import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerFragment
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.CLASS_INFO_LIST
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel.Companion.isShowCheckBox

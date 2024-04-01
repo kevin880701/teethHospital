@@ -29,11 +29,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityTakePictureBinding
+import com.lhr.teethHospital.ui.base.BaseActivity
 import java.io.File
 import java.util.concurrent.Semaphore
 
 
-class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListener, View.OnClickListener {
+class TakePictureActivity : BaseActivity(), TextureView.SurfaceTextureListener, View.OnClickListener {
 
     lateinit var viewModel: TakePictureViewModel
     lateinit var binding: ActivityTakePictureBinding
@@ -43,7 +44,7 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
     private val mBackgroundHandler: Handler? = null
     private lateinit var previewBuilder: CaptureRequest.Builder
     private var captureBuilder: CaptureRequest.Builder? = null
-    var imageReader: ImageReader? = null
+    private var imageReader: ImageReader? = null
     private lateinit var file: File
     private var cameraCaptureSession: CameraCaptureSession? = null
     var currentCameraId = CameraCharacteristics.LENS_FACING_FRONT
@@ -70,8 +71,6 @@ class TakePictureActivity : AppCompatActivity(), TextureView.SurfaceTextureListe
             mCameraOpenCloseLock.release()
             cameraDevice.close()
             this@TakePictureActivity.cameraDevice = null
-//            val activity: Activity? = takePictureActivity
-//            activity?.finish()
             finish()
         }
     }

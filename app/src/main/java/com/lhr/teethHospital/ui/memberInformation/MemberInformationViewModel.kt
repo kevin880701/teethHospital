@@ -8,7 +8,7 @@ import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.model.FileManager
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.ui.base.APP
 
 class MemberInformationViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) :

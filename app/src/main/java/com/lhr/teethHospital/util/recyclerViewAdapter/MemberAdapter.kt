@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.lhr.teethHospital.databinding.ItemPersonalManagerBinding
-import com.lhr.teethHospital.room.HospitalEntity
+import com.lhr.teethHospital.room.entity.HospitalEntity
 
 class MemberAdapter(val listener: Listener, context: Context) :
     ListAdapter<HospitalEntity, MemberAdapter.ViewHolder>(LOCK_DIFF_UTIL) {

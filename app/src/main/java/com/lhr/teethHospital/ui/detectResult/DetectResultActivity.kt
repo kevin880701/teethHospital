@@ -14,10 +14,9 @@ import com.lhr.teethHospital.model.Model.Companion.detectPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.originalPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.R
-import com.lhr.teethHospital.room.RecordEntity
+import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
 import com.lhr.teethHospital.databinding.ActivityDetectResultBinding
-import com.lhr.teethHospital.model.Model
 import java.io.File
 import java.text.DecimalFormat
 
