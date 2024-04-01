@@ -78,10 +78,10 @@ class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnC
 
     fun takePictureClick() {
         dismiss()
-        val takePictureIntent = Intent(mActivity, TakePictureActivity::class.java)
-        mActivity.startForResult.launch(takePictureIntent)
+//        val takePictureIntent = Intent(mActivity, TakePictureActivity::class.java)
+//        mActivity.startForResult.launch(takePictureIntent)
 
-//        takePicture.launch(null)
+        takePicture.launch(null)
     }
 
     override fun onClick(v: View?) {

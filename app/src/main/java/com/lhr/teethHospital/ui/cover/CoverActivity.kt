@@ -30,6 +30,7 @@ import com.lhr.teethHospital.permission.PermissionManager.Companion.READ_EXTERNA
 import com.lhr.teethHospital.permission.PermissionManager.Companion.WRITE_EXTERNAL_STORAGE
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityCoverBinding
+import com.lhr.teethHospital.net.NetManager
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.login.LoginActivity
@@ -47,6 +48,7 @@ class CoverActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         permissionManager = PermissionManager(this)
         if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {

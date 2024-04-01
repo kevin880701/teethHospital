@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -29,11 +30,23 @@ import com.lhr.teethHospital.model.Model.Companion.RECORD_DATE
 import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.model.Model.Companion.UPDATE_PATIENT_RECORD
 import com.lhr.teethHospital.model.Model.Companion.isSetPicture
+import com.lhr.teethHospital.net.NetManager
 import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.base.BaseActivity
+import com.lhr.teethHospital.util.createImageFile
 import com.lhr.teethHospital.util.dialog.SaveRecordDialog
 import com.lhr.teethHospital.util.popupWindow.ChooseImagePopupWindow
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
+import java.io.File
+import java.io.FileOutputStream
 
 
 class CameraActivity : BaseActivity(), View.OnClickListener {
@@ -59,9 +72,22 @@ class CameraActivity : BaseActivity(), View.OnClickListener {
 
         takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { result ->
             if (result != null) {
+                val imageFile = createImageFile(this) // 创建一个临时文件用于保存图片
+                val outputStream = FileOutputStream(imageFile)
+                result.compress(Bitmap.CompressFormat.JPEG, 100, outputStream) // 将 Bitmap 保存到文件
+                outputStream.close()
+                val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull()) // 将文件转换为 RequestBody
+                val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+
+                val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
+                val params = HashMap<String, RequestBody>()
+                params["file"] = requestBody
+
+                NetManager().uploadImage(requestBody)
+
                 binding.imageOriginal.setImageBitmap(result)
             }
-        };
+        }
         cameraActivity = this
 
         // 註冊 BroadcastReceiver
