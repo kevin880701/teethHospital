@@ -13,8 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -36,6 +35,7 @@ import com.lhr.teethHospital.databinding.FragmentSettingBinding
 import com.lhr.teethHospital.googleDrive.DriveServiceHelper
 import com.lhr.teethHospital.googleDrive.GoogleDriveServiceFunction
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.BaseFragment
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -45,11 +45,10 @@ import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
+class SettingFragment : BaseFragment(), View.OnClickListener {
 
-class SettingFragment : Fragment(), View.OnClickListener {
-
+    private val viewModel: SettingViewModel by viewModels { viewModelFactory }
     lateinit var binding: FragmentSettingBinding
-    lateinit var viewModel: SettingViewModel
     private var mDriveServiceHelper: DriveServiceHelper? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,12 +58,6 @@ class SettingFragment : Fragment(), View.OnClickListener {
             inflater, R.layout.fragment_setting, container, false
         )
         val view: View = binding!!.root
-
-        viewModel = ViewModelProvider(
-            this,
-            SettingViewModelFactory(this.requireActivity().application)
-        )[SettingViewModel::class.java]
-        binding.viewModel = viewModel
 
         binding.textUploadBackup.setOnClickListener(this)
         binding.textDownloadBackup.setOnClickListener(this)

@@ -4,40 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.lhr.teethHospital.ui.setting.SettingViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constrainTitle"
+        <com.lhr.teethHospital.util.widget.TitleBarWidget
+            android:id="@+id/titleBar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@null"
-                android:gravity="center_vertical|left"
-                android:layout_marginLeft="5dp"
-                android:text="@string/setting"
-                android:textColor="@color/primaryBlue"
-                android:textStyle="bold"
-                android:textSize="25dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintRight_toRightOf="parent"
+            app:titleText="@string/setting" />
 
         <TextView
             android:id="@+id/textUploadBackup"
@@ -46,11 +27,10 @@
             app:layout_constraintHeight_percent="0.08"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constrainTitle"
+            app:layout_constraintTop_toBottomOf="@+id/titleBar"
             android:paddingLeft="15dp"
             android:gravity="center_vertical"
-            android:textStyle="bold"
-            android:textColor="@color/primaryBlue"
+            style="@style/TextStyle_16dp_black"
             android:text="備份到雲端" />
 
         <TextView
@@ -63,8 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textUploadBackup"
             android:paddingLeft="15dp"
             android:gravity="center_vertical"
-            android:textStyle="bold"
-            android:textColor="@color/primaryBlue"
+            style="@style/TextStyle_16dp_black"
             android:text="匯入備份" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

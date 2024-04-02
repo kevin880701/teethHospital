@@ -1,6 +1,7 @@
 package com.lhr.teethHospital.ui.setting
 
 import android.app.Application
+import android.content.Context
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,9 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.lhr.teethHospital.R
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.googleDrive.GoogleDriveServiceFunction
+import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.main.MainViewModel
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +29,8 @@ import java.io.IOException
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-class SettingViewModel(application: Application) : AndroidViewModel(application) {
-
+class SettingViewModel(context: Context) :
+    AndroidViewModel(context.applicationContext as APP) {
     private val REQUEST_SIGNIN_CODE = 400
 
     fun uploadBackup(settingFragment: SettingFragment) {

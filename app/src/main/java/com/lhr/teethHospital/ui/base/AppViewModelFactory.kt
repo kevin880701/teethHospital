@@ -8,6 +8,7 @@ import com.lhr.teethHospital.ui.camera.CameraViewModel
 import com.lhr.teethHospital.ui.main.MainViewModel
 import com.lhr.teethHospital.ui.memberInformation.MemberInformationViewModel
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel
+import com.lhr.teethHospital.ui.setting.SettingViewModel
 
 class AppViewModelFactory(
     private val context: Context,
@@ -20,6 +21,7 @@ class AppViewModelFactory(
             PersonalManagerViewModel::class.java -> PersonalManagerViewModel(context, personalManagerRepository) as T
             MemberInformationViewModel::class.java -> MemberInformationViewModel(context, personalManagerRepository) as T
             CameraViewModel::class.java -> CameraViewModel(context, personalManagerRepository) as T
+            SettingViewModel::class.java -> SettingViewModel(context) as T
             else -> throw IllegalArgumentException("not support")
         }
     }

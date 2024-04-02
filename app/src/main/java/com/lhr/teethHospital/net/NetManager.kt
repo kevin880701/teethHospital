@@ -26,8 +26,6 @@ class NetManager() {
 
     fun testPost() {
         val testPostRequest = TestPostRequest("Received data: Hello, Flask!")
-        println("1111111111111111111111111111111111111111111111111111111111111111111111111111111")
-
         apiService.testPost(testPostRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -61,7 +59,6 @@ class NetManager() {
     fun uploadImage(image: RequestBody) {
 //        val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
 //        val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
-println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
 
 //        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
 //        val params = HashMap<String, RequestBody>()
@@ -81,6 +78,7 @@ println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
                         println("data：${data.toString()}")
                         var uploadResponse = data.toUploadResponse()
                         println("teethRangePath：${uploadResponse.teethRangePath}")
+                        println("teethRangePath：${uploadResponse.teethRangeDetectPath}")
                         println("###########################")
                         // 处理响应数据
                     }
