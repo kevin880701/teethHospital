@@ -1,12 +1,9 @@
 package com.lhr.teethHospital.net
 
-import android.media.Image
 import com.lhr.teethHospital.net.request.TestPostRequest
 import com.lhr.teethHospital.net.response.toUploadResponse
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
