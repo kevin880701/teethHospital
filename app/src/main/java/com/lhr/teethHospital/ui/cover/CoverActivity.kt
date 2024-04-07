@@ -64,7 +64,6 @@ class CoverActivity : BaseActivity() {
 
         // 創建Model
         Model
-
         APP_FILES_PATH = getExternalFilesDir(null)!!.absolutePath
         DATABASES_PATH = this.getCacheDir().parent + "/databases"
         TEETH_DIR = getExternalFilesDir(null)!!.absolutePath.toString() + "/teeth/"

@@ -14,6 +14,7 @@ import com.lhr.teethHospital.databinding.ActivityLoginBinding
 import com.lhr.teethHospital.model.Model.Companion.PATIENT
 import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
+import com.lhr.teethHospital.net.NetManager
 import com.lhr.teethHospital.spinnerAdapter.HospitalNameSpinnerAdapter
 import com.lhr.teethHospital.ui.main.MainActivity
 import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
@@ -62,6 +63,8 @@ class LoginActivity : AppCompatActivity(),
                 }else{
                     // 沒有對應的數據
                     Toast.makeText(this, "資料輸入錯誤", Toast.LENGTH_SHORT).show()
+
+                    NetManager().testGet(1)
                 }
             }
         }
