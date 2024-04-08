@@ -45,5 +45,18 @@
             android:gravity="center_vertical"
             style="@style/TextStyle_16dp_black"
             android:text="匯入備份" />
+
+        <TextView
+            android:id="@+id/textTestLogin"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDownloadBackup"
+            android:paddingLeft="15dp"
+            android:gravity="center_vertical"
+            style="@style/TextStyle_16dp_black"
+            android:text="登入測試" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

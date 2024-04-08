@@ -16,7 +16,7 @@ NetManager() {
 
     // 創建 Retrofit 實例
     val retrofit = Retrofit.Builder()
-        .baseUrl(" https://48d3-163-17-136-120.ngrok-free.app/")
+        .baseUrl("https://10f2-163-17-136-120.ngrok-free.app/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()
@@ -132,6 +132,37 @@ NetManager() {
                 }
             }, { error ->
                 // 处理网络请求错误
+            })
+    }
+
+
+
+    fun getImage(imagePath: String) {
+        testApiService.getImage(imagePath)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                if (response.isSuccessful) {
+                    val responseData = response.body()
+                    if (responseData != null) {
+                        println("aAAAAAAAAAAAA")
+                        println("" + responseData)
+                        println("aAAAAAAAAAAAA")
+                        // 处理响应数据
+                    }
+                } else {
+                    // 处理请求失败
+                    val errorBody = response.errorBody()?.string()
+                    println("testGet ERROR：" + errorBody)
+                }
+            }, { error ->
+                if (error is HttpException) {
+                    // 处理网络请求错误
+                    val errorBody = error.response()?.errorBody()?.string()
+                    println("testGet ERROR：" + errorBody)
+                } else {
+                    println("testGet ERROR：" + error.message)
+                }
             })
     }
 }

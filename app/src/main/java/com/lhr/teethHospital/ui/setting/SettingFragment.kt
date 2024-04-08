@@ -1,5 +1,6 @@
 package com.lhr.teethHospital.ui.setting
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.database.Cursor
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -16,7 +18,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Tasks
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -41,6 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -61,9 +66,10 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
 
         binding.textUploadBackup.setOnClickListener(this)
         binding.textDownloadBackup.setOnClickListener(this)
+        binding.textTestLogin.setOnClickListener(this)
 
         // 先確認登入GOOGLE帳戶
-        requestSignIn()
+//        requestSignIn()
         return view
     }
 
@@ -88,16 +94,11 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
 
             val mExecutor: Executor = Executors.newSingleThreadExecutor()
             Tasks.call(mExecutor) {
-//                mainActivity.progressBar.visibility = View.VISIBLE
-//                mainActivity.imageViewBlack.visibility = View.VISIBLE
                 UnZip(uri, TEETH_DIR, this.requireActivity())
                 CsvToSql().csvToHospitalSql(this.requireActivity(), File(TEETH_DIR + HOSPITAL_CSV).toUri())
                 CsvToSql().csvToRecordSql(this.requireActivity(), File(TEETH_DIR + RECORD_CSV).toUri())
-//                this.presenter.updateRecyclerInfo()
                 DeleteFile(TEETH_DIR + HOSPITAL_CSV)
                 DeleteFile(TEETH_DIR + RECORD_CSV)
-//                mainActivity.imageViewBlack.visibility = View.INVISIBLE
-//                mainActivity.progressBar.visibility = View.INVISIBLE
 
                 val intent = Intent("updateRecyclerInfo")
                 this.requireActivity().sendBroadcast(intent)
@@ -148,6 +149,44 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
 //                }
 //                SqlToCsv(mainActivity, hospitalCursor, TEETH_DIR + HOSPITAL_CSV)
             }
+            R.id.textTestLogin -> {
+                val account = GoogleSignIn.getLastSignedInAccount(this.requireContext())
+                Timber.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                Timber.d(account.toString())
+
+
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail() // 如果你需要获取用户的电子邮件地址，请添加此请求
+                    .build()
+
+                val googleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(this.requireContext(), gso)
+                val signInIntent = googleSignInClient.signInIntent
+                googleSignInLauncher.launch(signInIntent)
+                Timber.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            }
+        }
+    }
+    val googleSignInLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result ->
+        Timber.d("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ + ${result.resultCode}")
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                val account2 = GoogleSignIn.getLastSignedInAccount(this.requireContext())
+                Timber.d("UUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+                Timber.d(account2.toString())
+                Timber.d("UUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+                // 登录成功，可以获取用户信息并执行相应操作
+            } catch (e: ApiException) {
+                Timber.d("UUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+                Timber.d(e)
+                Timber.d("UUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+                // 登录失败，处理异常情况
+            }
+        }else if (result.resultCode == Activity.RESULT_CANCELED) {
+            Timber.d("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
+            // 用户取消了登录操作
         }
     }
 

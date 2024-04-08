@@ -2,6 +2,7 @@ package com.lhr.teethHospital.net
 
 import com.lhr.teethHospital.net.request.TestPostRequest
 import com.lhr.teethHospital.net.response.BaseResponse
+import com.lhr.teethHospital.net.response.GetImageResponse
 import com.lhr.teethHospital.net.response.TestResponse
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
@@ -25,6 +26,9 @@ interface ApiService {
 
     @GET("posts/")
     fun testGet(@Query("id") postId: Int): Observable<Response<ArrayList<TestResponse>>>
+
+    @GET("getImage/")
+    fun getImage(@Query("image_path") imagePath: String): Observable<Response<GetImageResponse>>
 
 }
 
