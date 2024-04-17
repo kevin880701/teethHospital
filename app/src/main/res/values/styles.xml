@@ -2,6 +2,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/primaryBlue</item>
         <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless</item><!-- 禁用按鈕陰影 -->
     </style>
 

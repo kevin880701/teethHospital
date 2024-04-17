@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat.getSystemService
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.model.Model

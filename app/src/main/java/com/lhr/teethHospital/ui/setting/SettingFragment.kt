@@ -41,6 +41,7 @@ import com.lhr.teethHospital.googleDrive.GoogleDriveServiceFunction
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.base.BaseFragment
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
+import com.lhr.teethHospital.util.dialog.EnterUrlDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,7 +53,7 @@ import java.util.concurrent.Executors
 
 class SettingFragment : BaseFragment(), View.OnClickListener {
 
-    private val viewModel: SettingViewModel by viewModels { viewModelFactory }
+     val viewModel: SettingViewModel by viewModels { viewModelFactory }
     lateinit var binding: FragmentSettingBinding
     private var mDriveServiceHelper: DriveServiceHelper? = null
     override fun onCreateView(
@@ -67,6 +68,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
         binding.textUploadBackup.setOnClickListener(this)
         binding.textDownloadBackup.setOnClickListener(this)
         binding.textTestLogin.setOnClickListener(this)
+        binding.textUrl.setOnClickListener(this)
 
         // 先確認登入GOOGLE帳戶
 //        requestSignIn()
@@ -163,6 +165,10 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
                 val signInIntent = googleSignInClient.signInIntent
                 googleSignInLauncher.launch(signInIntent)
                 Timber.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            }
+            R.id.textUrl -> {
+                val addStorageDataDialog = EnterUrlDialog()
+                addStorageDataDialog.show(requireActivity().supportFragmentManager, "EnterUrlDialog")
             }
         }
     }

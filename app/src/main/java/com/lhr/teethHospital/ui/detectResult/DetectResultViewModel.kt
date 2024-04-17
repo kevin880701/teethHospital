@@ -2,17 +2,20 @@ package com.lhr.teethHospital.ui.detectResult
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
-class DetectResultViewModel(application: Application) : AndroidViewModel(application) {
+class DetectResultViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) : BaseViewModel(context)  {
 
     fun deleteDirectory(dir: String, recordEntity: RecordEntity, activity: Activity): Boolean {
         // 如果dir不以文件分隔符結尾，自動添加文件分隔符

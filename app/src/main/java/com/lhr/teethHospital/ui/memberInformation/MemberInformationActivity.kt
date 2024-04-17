@@ -11,8 +11,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lhr.teethHospital.R
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.ActivityMemberInformationBinding
-import com.lhr.teethHospital.util.recyclerViewAdapter.PatientRecordAdapter
 import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.room.entity.RecordEntity
 import com.lhr.teethHospital.model.Model.Companion.PATIENT
@@ -20,24 +20,29 @@ import com.lhr.teethHospital.model.Model.Companion.ROOT
 import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.camera.CameraActivity
+import com.lhr.teethHospital.ui.detectResult.DetectResultActivity
 import com.lhr.teethHospital.ui.editPatientInformation.EditPatientInformationActivity
+import com.lhr.teethHospital.util.recyclerViewAdapter.MemberRecordAdapter
 
-class MemberInformationActivity : BaseActivity(), View.OnClickListener {
+class MemberInformationActivity : BaseActivity(), View.OnClickListener, MemberRecordAdapter.Listener {
     companion object{
         var UPDATE_PATIENT_RECORD = "UPDATE_PATIENT_RECORD"
     }
-    private val viewModel: MemberInformationViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
+    override val viewModel: MemberInformationViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
     private var _binding: ActivityMemberInformationBinding? = null
     private val binding get() = _binding!!
-    lateinit var patientRecordAdapter: PatientRecordAdapter
+    lateinit var memberRecordAdapter: MemberRecordAdapter
     lateinit var hospitalEntity: HospitalEntity
     lateinit var patientRecordList: ArrayList<RecordEntity>
     lateinit var messageReceiver: BroadcastReceiver
+    lateinit var repository: PersonalManagerRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMemberInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        repository = PersonalManagerRepository.getInstance(this)
 
         if (intent.getSerializableExtra(ROOT) != null) {// 如果是管理者
             hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
@@ -53,26 +58,18 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener {
         }
 
         initView()
+        bindViewModel()
 
 //        viewModel.isShowCheckBox.observe(this) { newIds ->
 //            showCheckBox()
 //        }
 
-        binding.recyclerCleanRecord.layoutManager = LinearLayoutManager(this)
-        binding.recyclerCleanRecord.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                DividerItemDecoration.VERTICAL
-            )
-        )
-        patientRecordAdapter = PatientRecordAdapter(this, patientRecordList, viewModel.isShowCheckBox)
-        binding.recyclerCleanRecord.adapter = patientRecordAdapter
-
 
         // 註冊 BroadcastReceiver
         messageReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                viewModel.updateRecycler(patientRecordAdapter, hospitalEntity.hospitalName, hospitalEntity.number)
+                memberRecordAdapter.submitList(viewModel.getMemberRecord(hospitalEntity.hospitalName, hospitalEntity.number))
+//                viewModel.updateRecycler(memberRecordAdapter, hospitalEntity.hospitalName, hospitalEntity.number)
             }
         }
         val intentFilter = IntentFilter(UPDATE_PATIENT_RECORD)
@@ -80,13 +77,28 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initView(){
-        binding.titleBar.binding
+        initRecyclerView()
 
         binding.titleBar.binding.imageBack.setOnClickListener(this)
         binding.titleBar.binding.imageCamera.setOnClickListener(this)
-//        binding.imageDelete.setOnClickListener(this)
         binding.titleBar.binding.imageEdit.setOnClickListener(this)
     }
+
+
+
+    private fun bindViewModel() {
+        repository.memberRecordList.observe(this){ _ ->
+            memberRecordAdapter.submitList(viewModel.getMemberRecord(hospitalEntity.hospitalName, hospitalEntity.number))
+        }
+    }
+
+    private fun initRecyclerView() {
+        memberRecordAdapter = MemberRecordAdapter(this)
+        memberRecordAdapter.submitList(viewModel.getMemberRecord(hospitalEntity.hospitalName, hospitalEntity.number))
+        binding.recyclerRecord.adapter = memberRecordAdapter
+        binding.recyclerRecord.layoutManager = LinearLayoutManager(this)
+    }
+
 
 //    fun showCheckBox() {
 //        if(viewModel.isShowCheckBox.value!!){
@@ -111,7 +123,7 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.imageDelete -> {
-                viewModel.deleteRecord(this)
+//                viewModel.deleteRecord(this)
             }
             R.id.imageEdit -> {
                 val intent = Intent(this, EditPatientInformationActivity::class.java)
@@ -135,5 +147,11 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         this.unregisterReceiver(messageReceiver)
+    }
+
+    override fun onItemClick(recordEntity: RecordEntity) {
+        val intent = Intent(this, DetectResultActivity::class.java)
+        intent.putExtra("recordEntity", recordEntity)
+        startActivity(intent)
     }
 }

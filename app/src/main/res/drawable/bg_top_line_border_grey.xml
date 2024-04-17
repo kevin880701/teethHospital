@@ -3,11 +3,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 边框颜色值 --><item>
     <shape>
-        <solid android:color="@color/primaryBlue" />
+        <solid android:color="@color/borderGrey" />
     </shape>
 </item>
     <!-- 主体背景颜色值 -->
-    <item android:top="1dp">
+    <item android:top="2dp">
         <shape>
             <solid android:color="@color/white" />
         </shape>

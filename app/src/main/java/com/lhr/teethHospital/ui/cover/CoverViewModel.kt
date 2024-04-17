@@ -2,6 +2,7 @@ package com.lhr.teethHospital.ui.cover
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
@@ -10,16 +11,17 @@ import com.lhr.teethHospital.data.cover.CoverRepository
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.TEETH_DIR
 import com.lhr.teethHospital.permission.PermissionManager
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import com.lhr.teethHospital.ui.login.LoginActivity
 import java.io.File
 
-class CoverViewModel(application: Application) : AndroidViewModel(application) {
+class CoverViewModel(context: Context) : BaseViewModel(context) {
 
     companion object{
         val PERMISSION_REQUEST_CODE = 100
     }
 
-    var coverRepository = CoverRepository(application)
+    var coverRepository = CoverRepository()
     var isDataGet: MutableLiveData<Boolean> =
         MutableLiveData<Boolean>().apply { value = false }
 
@@ -27,12 +29,11 @@ class CoverViewModel(application: Application) : AndroidViewModel(application) {
         coverRepository.fetchHospitalInfo()
         isDataGet.value = true
     }
-    fun creeateFolder() {
-        val dcimDir = File(TEETH_DIR)
+    fun creeateFolder(path: String) {
+        val dcimDir = File(path)
         if (!dcimDir.exists()) {
             dcimDir.mkdir()
         }
-
         //掃描全部資料夾檔案
         Model.allFileList = dcimDir.listFiles()
     }

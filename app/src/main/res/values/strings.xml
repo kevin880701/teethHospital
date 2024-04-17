@@ -30,7 +30,11 @@
     <string name="record_name">記錄名稱</string>
     <string name="ok">確定</string>
     <string name="cancel">取消</string>
-    <string name="choose_button">選擇圖片</string>
+    <!--  圖片檢測  -->
+    <string name="choose_image">選擇圖片</string>
+    <string name="image_detect">圖片檢測</string>
+    <string name="clean_Image">清除圖片</string>
+
     <string name="detect_result">檢測結果</string>
     <string name="before">塗上顯示劑前</string>
     <string name="after">塗上顯示劑後</string>
@@ -38,8 +42,6 @@
     <string name="detect_image">不乾淨的量</string>
     <string name="clean_before">清潔前</string>
     <string name="clean_after">清潔後</string>
-    <string name="save_record">儲存紀錄</string>
-    <string name="clean_Image">清除圖片</string>
     <string name="add_multiple_information">匯入資料</string>
     <string name="add_single_information">新增單筆資料</string>
 

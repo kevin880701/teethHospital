@@ -20,6 +20,7 @@ import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.TextureView
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -29,14 +30,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityTakePictureBinding
+import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.base.BaseActivity
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import java.io.File
 import java.util.concurrent.Semaphore
 
 
 class TakePictureActivity : BaseActivity(), TextureView.SurfaceTextureListener, View.OnClickListener {
 
-    lateinit var viewModel: TakePictureViewModel
+    override val viewModel: TakePictureViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
     lateinit var binding: ActivityTakePictureBinding
     lateinit var takePictureActivity: TakePictureActivity
     var cameraDevice: CameraDevice? = null
@@ -155,11 +158,6 @@ class TakePictureActivity : BaseActivity(), TextureView.SurfaceTextureListener, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_take_picture)
-        viewModel = ViewModelProvider(
-            this,
-            TakePictureViewModelFactory(this.application)
-        )[TakePictureViewModel::class.java]
-        binding.viewModel = viewModel
         takePictureActivity = this
         file = File(getExternalFilesDir(null), Model.RESULT_FILE_NAME)
 

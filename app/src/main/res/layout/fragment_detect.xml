@@ -4,15 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.lhr.teethHospital.ui.camera.detect.DetectViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
+
+
+                <ImageView
+                    android:id="@+id/imageRange"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_percent="0.36"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginBottom="1dp" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageRange"
+                    android:background="@color/borderGrey" />
+
+                <TextView
+                    android:id="@+id/textOriginal"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_percent="0.1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view1"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:id="@+id/imageLight"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_percent="0.1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageRange"
+                    android:visibility="invisible"
+                    android:src="@drawable/green_light" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textOriginal"
+                    android:background="@color/borderGrey" />
+
+                <ImageView
+                    android:id="@+id/imageDetect"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_percent="0.36"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/textPercent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_percent="0.1"
+                    app:layout_constraintWidth_percent="0.5"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageLight"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

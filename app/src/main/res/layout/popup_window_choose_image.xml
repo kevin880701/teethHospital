@@ -21,20 +21,16 @@
             android:id="@+id/buttonImportMore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primaryBlue"
             android:background="@drawable/bg_r16_top_white"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/take"
-            android:textSize="18sp" />
+            style="@style/TextStyle_16dp_black"
+            android:text="@string/take" />
 
         <Button
             android:id="@+id/buttonChoosePicture"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_r16_bottom_white"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/choose_button"
-            android:textSize="18sp"
-            android:textColor="@color/primaryBlue" />
+            style="@style/TextStyle_16dp_black"
+            android:text="@string/choose_image" />
     </LinearLayout>
 </RelativeLayout>

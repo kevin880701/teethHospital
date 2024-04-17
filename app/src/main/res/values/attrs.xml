@@ -18,5 +18,13 @@
             <enum name="visible" value="0" />
             <enum name="gone" value="8" />
         </attr>
+        <attr name="showSave" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="showDelete" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="gone" value="8" />
+        </attr>
     </declare-styleable>
 </resources>

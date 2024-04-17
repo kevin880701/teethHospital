@@ -1,6 +1,7 @@
 package com.lhr.teethHospital.ui.camera.takePicture
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,17 +13,17 @@ import android.media.Image
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
-import com.lhr.teethHospital.model.Model.Companion.isSetPicture
 import com.lhr.teethHospital.model.Model.Companion.CAMERA_INTENT_FILTER
 import com.lhr.teethHospital.model.Model.Companion.DETECT_PERCENT
 import com.lhr.teethHospital.model.Model.Companion.DETECT_PICTURE
 import com.lhr.teethHospital.model.Model.Companion.ORIGINAL_PICTURE
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class TakePictureViewModel(application: Application) : AndroidViewModel(application) {
+class TakePictureViewModel(context: Context) : BaseViewModel(context) {
 
     fun imageSaver(image: Image, //拍攝的照片
                    file: File, //儲存位址
@@ -169,7 +170,7 @@ class TakePictureViewModel(application: Application) : AndroidViewModel(applicat
 //                ContextCompat.getDrawable(
 //                    CameraActivity.cameraActivity, R.drawable.green_light))
         }
-        isSetPicture = true
+//        isSetPicture = true
         takePictureActivity.finish()
     }
 

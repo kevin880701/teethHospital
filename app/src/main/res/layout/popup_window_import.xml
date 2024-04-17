@@ -21,9 +21,8 @@
             android:id="@+id/buttonImportMore"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primaryBlue"
             android:background="@drawable/bg_r16_top_white"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/TextStyle_16dp_black"
             android:text="@string/add_multiple_information"
             android:textSize="18sp" />
 
@@ -32,9 +31,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_r16_bottom_white"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/TextStyle_16dp_black"
             android:text="@string/add_single_information"
-            android:textSize="18sp"
-            android:textColor="@color/primaryBlue" />
+            android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -9,8 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class CoverRepository(application: Application) {
-    var application = application
+class CoverRepository() {
 
     fun fetchHospitalInfo() {
         runBlocking {     // 阻塞主執行緒

@@ -25,16 +25,25 @@ class PersonalManagerRepository(context: Context) {
         MutableLiveData<ArrayList<HospitalEntity>>().apply { value = ArrayList() }
     var groupInfoList: MutableLiveData<ArrayList<GroupInfo>> =
         MutableLiveData<ArrayList<GroupInfo>>().apply { value = ArrayList() }
+    var memberRecordList: MutableLiveData<ArrayList<RecordEntity>> =
+        MutableLiveData<ArrayList<RecordEntity>>().apply { value = ArrayList() }
+
+    var baseUrl = "https://9fbd-163-17-136-120.ngrok-free.app/"
 
 
     fun getMemberRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
-        lateinit var patientRecordList: ArrayList<RecordEntity>
-        runBlocking {     // 阻塞主執行緒
-            launch(Dispatchers.IO) {
-                patientRecordList = SqlDatabase.getInstance().getRecordDao().getPatientRecord(hospitalName, number) as ArrayList<RecordEntity>
-            }
-        }
-        return patientRecordList
+//        lateinit var patientRecordList: ArrayList<RecordEntity>
+//        runBlocking {     // 阻塞主執行緒
+//            launch(Dispatchers.IO) {
+//                patientRecordList = SqlDatabase.getInstance().getRecordDao().getPatientRecord(hospitalName, number) as ArrayList<RecordEntity>
+//            }
+//        }
+//        return patientRecordList
+        return memberRecordList.value?.filter { it.hospitalName == hospitalName && it.number == number } as ArrayList<RecordEntity>
+    }
+
+    fun getAllMemberRecord(){
+        memberRecordList.postValue(SqlDatabase.getInstance().getRecordDao().getAllMemberRecord() as ArrayList<RecordEntity>)
     }
 
     fun getAllInfo() {

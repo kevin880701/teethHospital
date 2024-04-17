@@ -6,36 +6,36 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.ActivityLoginBinding
 import com.lhr.teethHospital.model.Model.Companion.PATIENT
 import com.lhr.teethHospital.model.Model.Companion.hospitalEntityList
 import com.lhr.teethHospital.model.Model.Companion.hospitalInfoList
-import com.lhr.teethHospital.net.NetManager
 import com.lhr.teethHospital.spinnerAdapter.HospitalNameSpinnerAdapter
+import com.lhr.teethHospital.ui.base.APP
+import com.lhr.teethHospital.ui.base.BaseActivity
 import com.lhr.teethHospital.ui.main.MainActivity
 import com.lhr.teethHospital.ui.memberInformation.MemberInformationActivity
+import com.lhr.teethHospital.util.SharedPreferencesManager
+import com.lhr.teethHospital.util.loadImageAsBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
-class LoginActivity : AppCompatActivity(),
+class LoginActivity : BaseActivity(),
     AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    lateinit var viewModel: LoginViewModel
+    override val viewModel: LoginViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
+
     lateinit var binding: ActivityLoginBinding
     var currentSpinnerText = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        viewModel = ViewModelProvider(
-            this,
-            LoginViewModelFactory(this.application)
-        )[LoginViewModel::class.java]
-        binding.viewModel = viewModel
 
         val adapter = HospitalNameSpinnerAdapter(this, hospitalInfoList)
         binding.spinnerHospitalName.adapter = adapter
@@ -63,8 +63,6 @@ class LoginActivity : AppCompatActivity(),
                 }else{
                     // 沒有對應的數據
                     Toast.makeText(this, "資料輸入錯誤", Toast.LENGTH_SHORT).show()
-
-                    NetManager().testGet(1)
                 }
             }
         }

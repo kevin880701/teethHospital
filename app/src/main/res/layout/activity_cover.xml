@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-    <variable
-        name="viewModel"
-        type="com.lhr.teethHospital.ui.cover.CoverViewModel" />
   </data>
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constrain"

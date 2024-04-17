@@ -10,15 +10,11 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import timber.log.Timber
 
 
-open class BaseFragment: Fragment() {
+abstract class BaseFragment: Fragment() {
 
     val viewModelFactory: AppViewModelFactory
         get() = (requireContext().applicationContext as APP).appContainer.viewModelFactory
 
-
-    protected val genericExceptionHandler = CoroutineExceptionHandler{ _, e ->
-        toast(e.localizedMessage)
-    }
 
     init {
         lifecycleScope.launchWhenStarted {

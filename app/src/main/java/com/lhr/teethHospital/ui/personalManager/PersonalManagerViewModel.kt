@@ -14,6 +14,7 @@ import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.FragmentPersonalManagerBinding
 import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.base.APP
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import com.lhr.teethHospital.ui.login.LoginActivity
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class PersonalManagerViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) :
-    AndroidViewModel(context.applicationContext as APP) {
+    BaseViewModel(context) {
     companion object {
         const val CLASS_LIST: Int = 100
         const val CLASS_INFO_LIST: Int = 101

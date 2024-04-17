@@ -1,5 +1,6 @@
 package com.lhr.teethHospital.util.popupWindow
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -17,13 +18,12 @@ import com.lhr.teethHospital.ui.camera.CameraActivity
 import com.lhr.teethHospital.ui.camera.CameraActivity.Companion.takePicture
 import com.lhr.teethHospital.ui.camera.takePicture.TakePictureActivity
 
-class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnClickListener {
-    val mActivity = activity
+class ChooseImagePopupWindow(var context: Context) : PopupWindow(), View.OnClickListener {
     var buttonTakePicture: Button
     var buttonChooseImage: Button
 
     init {
-        var view = LayoutInflater.from(mActivity).inflate(R.layout.popup_window_choose_image, null)
+        var view = LayoutInflater.from(context).inflate(R.layout.popup_window_choose_image, null)
         buttonTakePicture = view.findViewById(R.id.buttonImportMore)
         buttonChooseImage = view.findViewById(R.id.buttonChoosePicture)
         // 外部可點擊
@@ -56,24 +56,24 @@ class ChooseImagePopupWindow(activity: CameraActivity) : PopupWindow(), View.OnC
     }
 
     fun chooseImage() {
-        val pickIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Model.IMAGE_URI)
-        val chooserIntent = Intent.createChooser(pickIntent, "Choose")
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf<Parcelable>(takePhotoIntent))
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-//            activityForResult.launch(chooserIntent)
-            Log.v("PPPPPPPPPPPP","Build.VERSION_CODES.Q")
-            mActivity.startForResult.launch(chooserIntent)
-        } else {
-            //support for older than android 11
-            Log.v("PPPPPPPPPPPP","support for older than android 11")
-            startActivityForResult(mActivity, chooserIntent, Model.IMAGE_REQUEST_CODE, null)
-        }
-        dismiss()
+//        val pickIntent = Intent(
+//            Intent.ACTION_PICK,
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//        )
+//        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Model.IMAGE_URI)
+//        val chooserIntent = Intent.createChooser(pickIntent, "Choose")
+//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf<Parcelable>(takePhotoIntent))
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+////            activityForResult.launch(chooserIntent)
+//            Log.v("PPPPPPPPPPPP","Build.VERSION_CODES.Q")
+//            mActivity.startForResult.launch(chooserIntent)
+//        } else {
+//            //support for older than android 11
+//            Log.v("PPPPPPPPPPPP","support for older than android 11")
+////            startActivityForResult(mActivity, chooserIntent, Model.IMAGE_REQUEST_CODE, null)
+//        }
+//        dismiss()
     }
 
     fun takePictureClick() {

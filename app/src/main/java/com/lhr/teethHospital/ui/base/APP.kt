@@ -2,8 +2,8 @@ package com.lhr.teethHospital.ui.base
 
 import android.app.Application
 import android.widget.Toast
+import androidx.databinding.ktx.BuildConfig
 import androidx.lifecycle.MutableLiveData
-import com.lhr.teethHospital.BuildConfig
 import com.lhr.teethHospital.room.SqlDatabase
 import timber.log.Timber
 

@@ -9,7 +9,7 @@ import com.lhr.teethHospital.room.entity.RecordEntity
 @Dao
 interface RecordDao {
     @Query("SELECT * FROM $RECORD_TABLE_NAME")
-    fun getAll(): List<RecordEntity>
+    fun getAllMemberRecord(): List<RecordEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: RecordEntity)

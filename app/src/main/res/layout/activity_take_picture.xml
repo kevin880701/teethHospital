@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.lhr.teethHospital.ui.camera.takePicture.TakePictureViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

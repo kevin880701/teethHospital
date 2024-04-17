@@ -1,115 +1,162 @@
 package com.lhr.teethHospital.ui.camera
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.lhr.teethHospital.R
 import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.model.Model
-import com.lhr.teethHospital.model.Model.Companion.detectPictureFileName
-import com.lhr.teethHospital.model.Model.Companion.isSetPicture
-import com.lhr.teethHospital.model.Model.Companion.originalPictureFileName
 import com.lhr.teethHospital.model.Model.Companion.PERCENT_RECORD
-import com.lhr.teethHospital.model.Model.Companion.allFileList
+import com.lhr.teethHospital.model.Model.Companion.detectPictureFileName
+import com.lhr.teethHospital.model.Model.Companion.originalPictureFileName
+import com.lhr.teethHospital.model.Model.Companion.rangePictureFileName
+import com.lhr.teethHospital.net.NetManager
+import com.lhr.teethHospital.net.response.toUploadResponse
+import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.room.entity.HospitalEntity
 import com.lhr.teethHospital.room.entity.RecordEntity
-import com.lhr.teethHospital.room.SqlDatabase
 import com.lhr.teethHospital.ui.base.APP
+import com.lhr.teethHospital.ui.base.BaseViewModel
+import com.lhr.teethHospital.ui.base.LoadState
+import com.lhr.teethHospital.util.loadImageAsBitmap
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import okhttp3.RequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
+
 class CameraViewModel(context: Context, var personalManagerRepository: PersonalManagerRepository) :
-    AndroidViewModel(context.applicationContext as APP) {
+    BaseViewModel(context) {
 
-    fun cleanImage(cameraActivity: CameraActivity) {
-        cameraActivity.binding.imageOriginal.setImageDrawable(null)
-        cameraActivity.binding.imageDetect.setImageDrawable(null)
-        cameraActivity.binding.textPercent.text = ""
-        cameraActivity.percent = 0.0F
-        isSetPicture = false
+    var originalImage = MutableLiveData<Bitmap?>()
+    var rangeImage = MutableLiveData<Bitmap?>()
+    var detectImage = MutableLiveData<Bitmap?>()
+    var detectPercent = MutableLiveData<String>()
+    fun cleanImage() {
+
+        originalImage.postValue(null)
+        rangeImage.postValue(null)
+        detectImage.postValue(null)
+        detectPercent.postValue("")
     }
 
-    fun choosePhotoAlbum(cameraActivity: CameraActivity, imageUri: Uri) {
-        val originalParcelFileDescriptor = cameraActivity.contentResolver.openFileDescriptor(imageUri, "r")
-        val originalImage = BitmapFactory.decodeFileDescriptor(originalParcelFileDescriptor!!.fileDescriptor)
-        cameraActivity.binding.imageOriginal.setImageBitmap(originalImage)
-        val (afterImage, percent) = getDetectPicture(originalImage)
-        cameraActivity.binding.imageDetect.setImageBitmap(afterImage)
-        if (percent > 0.2) {
-//            cameraActivity.imageLight.visibility = View.VISIBLE
-//            cameraActivity.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.red_light))
-        } else {
-//            cameraActivity.imageLight.visibility = View.VISIBLE
-//            cameraActivity.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.green_light))
-        }
-        val df = DecimalFormat("00%")
-        cameraActivity.binding.textPercent.text = "殘留量：" + df.format(percent)
-        cameraActivity.percent = percent
-    }
-
-
-    fun setTakePicture(imageView: ImageView, bitmap: Bitmap) {
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.Main) {
-                imageView.setImageBitmap(bitmap)
-            }
-        }
-    }
-
-//    fun saveRecord(hospitalEntity: HospitalEntity, cameraActivity: CameraActivity, dataBase: SqlDatabase){
-//        val recordDate = SimpleDateFormat("-yyyy-MM-dd-hh-mm-ss")
-//        val time: String = recordDate.format(Date())
-//        var savePath = Model.TEETH_DIR + hospitalEntity.hospitalName + hospitalEntity.number + time + "/"
-//        val file = File(savePath)
-//        if (!file.exists()) {
-//            file.mkdir()
+//    fun choosePhotoAlbum(cameraActivity: CameraActivity, imageUri: Uri) {
+//        val originalParcelFileDescriptor = cameraActivity.contentResolver.openFileDescriptor(imageUri, "r")
+//        val originalImage = BitmapFactory.decodeFileDescriptor(originalParcelFileDescriptor!!.fileDescriptor)
+//        cameraActivity.binding.imageOriginal.setImageBitmap(originalImage)
+//        val (afterImage, percent) = getDetectPicture(originalImage)
+//        cameraActivity.binding.imageDetect.setImageBitmap(afterImage)
+//        if (percent > 0.2) {
+////            cameraActivity.imageLight.visibility = View.VISIBLE
+////            cameraActivity.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.red_light))
+//        } else {
+////            cameraActivity.imageLight.visibility = View.VISIBLE
+////            cameraActivity.binding.imageLight.setImageDrawable(ContextCompat.getDrawable(CameraActivity.cameraActivity, R.drawable.green_light))
 //        }
+//        val df = DecimalFormat("00%")
+//        cameraActivity.binding.textPercent.text = "殘留量：" + df.format(percent)
+//        cameraActivity.percent = percent
+//    }
 //
-//        // 如果有設置照片
-//        if(isSetPicture){
-//            convertViewToBitmap(cameraActivity.binding.imageOriginal,savePath,originalPictureFileName)
-//            convertViewToBitmap(cameraActivity.binding.imageDetect,savePath, detectPictureFileName)
-//        }
-//        // 將偵測出的牙菌斑占比寫入txt
-//        val fileName = savePath + PERCENT_RECORD
-//        val myfile = File(fileName)
-//        myfile.bufferedWriter().use { out ->
-//            out.write((cameraActivity.percent).toString() + "\n")
-//            out.write((cameraActivity.percent).toString())
-//        }
 //
-//        //更新歷史資訊資料
-//        val dcimDir = File(Model.TEETH_DIR)
-//        allFileList = dcimDir.listFiles()
-//
-//        runBlocking {     // 阻塞主執行緒
-//            launch(Dispatchers.IO) {
-//                var recordEntity = RecordEntity()
-//                recordEntity.hospitalName = hospitalEntity.hospitalName
-//                recordEntity.number = hospitalEntity.number
-//                recordEntity.gender = hospitalEntity.gender
-//                recordEntity.birthday = hospitalEntity.birthday
-//                recordEntity.fileName = hospitalEntity.hospitalName + hospitalEntity.number + time
-//                recordEntity.recordDate = recordDate.format(Date())
-//                recordEntity.detectPercent = cameraActivity.percent.toString()
-//                dataBase.getRecordDao().insert(recordEntity)
+//    fun setTakePicture(imageView: ImageView, bitmap: Bitmap) {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            withContext(Dispatchers.Main) {
+//                imageView.setImageBitmap(bitmap)
 //            }
 //        }
 //    }
 
-    fun saveRecord(hospitalEntity: HospitalEntity, cameraActivity: CameraActivity, folderName: String) {
+    @SuppressLint("CheckResult")
+    fun uploadImage(image: RequestBody) {
+        NetManager(context).apiService.uploadImage(image)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+
+                if (response.isSuccessful) {
+                    val responseData = response.body()
+                    if (responseData != null) {
+                        val message = responseData.message
+                        val data = responseData.data
+                        println("message：$message")
+                        println("data：${data}")
+                        var uploadResponse = data.toUploadResponse()
+
+                        GlobalScope.launch(Dispatchers.IO) {
+                            rangeImage.postValue(
+                                loadImageAsBitmap(
+                                    "${personalManagerRepository.baseUrl}getImage?image_path=${uploadResponse.teethRangePath}",
+                                    context
+                                )
+                            )
+                            detectImage.postValue(
+                                loadImageAsBitmap(
+                                    "${personalManagerRepository.baseUrl}getImage?image_path=${uploadResponse.teethRangeDetectPath}",
+                                    context
+                                )
+                            )
+                        }
+
+                        detectPercent.postValue(message)
+                        println("teethRangePath：${uploadResponse.teethRangePath}")
+                        println("teethRangePath：${uploadResponse.teethRangeDetectPath}")
+                        hideLoading()
+                        showToast(message)
+                    }
+                } else {
+                    showToast("錯誤")
+                    hideLoading()
+                    // 处理请求失败
+                }
+            }, { error ->
+                showToast("URL錯誤")
+                println("Error：${error}")
+                hideLoading()
+                // 处理网络请求错误
+            })
+    }
+
+    //
+//    fun getImage(imagePath: String, imageview:ImageView){
+//        NetManager.apiService.getImage(imagePath)
+//            .subscribeOn(Schedulers.io()) // 指定在 IO 线程执行网络请求
+//            .observeOn(AndroidSchedulers.mainThread()) // 指定在主线程处理响应结果
+//            .subscribe({ response ->
+//                // 处理成功响应
+//                if (response.isSuccessful) {
+//                    val data = response.body()
+//                    // 对返回的数据进行处理
+//                } else {
+//                    // 处理服务器返回的错误
+//                }
+//            }, { error ->
+//                // 处理发生的错误
+//            })
+//    }
+//
+    fun saveImage(hospitalEntity: HospitalEntity, folderName: String) {
         val recordDate = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss")
         var savePath = Model.TEETH_DIR + hospitalEntity.hospitalName + hospitalEntity.number + folderName + "/"
         val file = File(savePath)
@@ -118,84 +165,39 @@ class CameraViewModel(context: Context, var personalManagerRepository: PersonalM
         }
 
         // 如果有設置照片
-        if (isSetPicture) {
-            convertViewToBitmap(cameraActivity.binding.imageOriginal, savePath, originalPictureFileName)
-            convertViewToBitmap(cameraActivity.binding.imageDetect, savePath, detectPictureFileName)
-        }
+        convertViewToBitmap(originalImage.value, savePath, originalPictureFileName)
+        convertViewToBitmap(rangeImage.value, savePath, rangePictureFileName)
+        convertViewToBitmap(detectImage.value, savePath, detectPictureFileName)
         // 將偵測出的牙菌斑占比寫入txt
         val fileName = savePath + PERCENT_RECORD
         val myfile = File(fileName)
         myfile.bufferedWriter().use { out ->
-            out.write((cameraActivity.percent).toString() + "\n")
-            out.write((cameraActivity.percent).toString())
+            out.write(detectPercent.value.toString() + "\n")
+            out.write(detectPercent.value.toString())
         }
 
-        //更新歷史資訊資料
-        val dcimDir = File(Model.TEETH_DIR)
-        allFileList = dcimDir.listFiles()
-
-        runBlocking {     // 阻塞主執行緒
-            launch(Dispatchers.IO) {
-                var recordEntity = RecordEntity()
-                recordEntity.hospitalName = hospitalEntity.hospitalName
-                recordEntity.number = hospitalEntity.number
-                recordEntity.gender = hospitalEntity.gender
-                recordEntity.birthday = hospitalEntity.birthday
-                recordEntity.fileName = hospitalEntity.hospitalName + hospitalEntity.number + folderName
-                recordEntity.recordDate = recordDate.format(Date())
-                recordEntity.detectPercent = cameraActivity.percent.toString()
-                SqlDatabase.getInstance().getRecordDao().insert(recordEntity)
-            }
-        }
+        var recordEntity = RecordEntity()
+        recordEntity.hospitalName = hospitalEntity.hospitalName
+        recordEntity.number = hospitalEntity.number
+        recordEntity.gender = hospitalEntity.gender
+        recordEntity.birthday = hospitalEntity.birthday
+        recordEntity.fileName = hospitalEntity.hospitalName + hospitalEntity.number + folderName
+        recordEntity.recordDate = recordDate.format(Date())
+        recordEntity.detectPercent = detectPercent.value.toString()
+        SqlDatabase.getInstance().getRecordDao().insert(recordEntity)
+        personalManagerRepository.getAllMemberRecord()
     }
 
-    fun getDetectPicture(bitmap: Bitmap): Pair<Bitmap, Float> {
-        val width = bitmap.width
-        val height = bitmap.height
-        var count = 0.0F
-
-        // 保存所有的像素的數組，圖片寬×高
-        val pixels = IntArray(width * height)
-        val convPixels = IntArray(width * height)
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-        for (i in pixels.indices) {
-            val clr = pixels[i]
-            val R: Int = Color.red(clr)
-            val G: Int = Color.green(clr)
-            val B: Int = Color.blue(clr)
-            val color: Int = Color.rgb(R, G, B)
-
-            if (clr == Color.TRANSPARENT) {
-                convPixels[i] = Color.TRANSPARENT
-//                count--
-            } else if ((R in 94..227 && G in 32..141 && B in 47..191)) {
-                convPixels[i] = Color.rgb(232, 119, 175)
-                count++
-            } else {
-//                convPixels[i] = Color.WHITE
-                convPixels[i] = Color.rgb(255, 255, 255)
-            }
-            if ((R in 109..187 && G in 50..130 && B in 57..148)) {
-                convPixels[i] = Color.rgb(255, 255, 255)
-                count--
-            }
+    fun convertViewToBitmap(bitmap: Bitmap?, savePath: String, fileName: String) {
+//        val drawable = imageView.drawable as BitmapDrawable
+//        val bitmap = drawable.bitmap
+        if (bitmap != null) {
+            var outStream: FileOutputStream?
+            val outFile = File(savePath, fileName)
+            outStream = FileOutputStream(outFile)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream)
+            outStream.flush()
+            outStream.close()
         }
-
-        val convBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        convBitmap.setPixels(convPixels, 0, width, 0, 0, width, height)
-        var percent = (count) / (width * height)
-        return Pair(convBitmap, percent)
-    }
-
-    fun convertViewToBitmap(imageView: ImageView, savePath: String, fileName: String) {
-        val drawable = imageView.drawable as BitmapDrawable
-        val bitmap = drawable.bitmap
-
-        var outStream: FileOutputStream?
-        val outFile = File(savePath, fileName)
-        outStream = FileOutputStream(outFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream)
-        outStream.flush()
-        outStream.close()
     }
 }

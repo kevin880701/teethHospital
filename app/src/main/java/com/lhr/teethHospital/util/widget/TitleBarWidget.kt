@@ -29,6 +29,8 @@ class TitleBarWidget @JvmOverloads constructor(
             setAdd(attrs.getInt(R.styleable.TitleBarWidget_showAdd, 8))
             setCamera(attrs.getInt(R.styleable.TitleBarWidget_showCamera, 8))
             setEdit(attrs.getInt(R.styleable.TitleBarWidget_showEdit, 8))
+            setSave(attrs.getInt(R.styleable.TitleBarWidget_showSave, 8))
+            setDelete(attrs.getInt(R.styleable.TitleBarWidget_showDelete, 8))
 
             attrs.recycle()
         }
@@ -52,5 +54,13 @@ class TitleBarWidget @JvmOverloads constructor(
 
     fun setEdit(visibility: Int) {
         binding.imageEdit.visibility = visibility
+    }
+
+    fun setSave(visibility: Int) {
+        binding.imageSave.visibility = visibility
+    }
+
+    fun setDelete(visibility: Int) {
+        binding.imageDelete.visibility = visibility
     }
 }

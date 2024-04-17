@@ -31,5 +31,3 @@ interface ApiService {
     fun getImage(@Query("image_path") imagePath: String): Observable<Response<GetImageResponse>>
 
 }
-
-data class DataModel(val id: Int, val name: String)

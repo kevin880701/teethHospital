@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.lhr.teethHospital.ui.detectResult.DetectResultViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,107 +11,53 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <com.lhr.teethHospital.util.widget.TitleBarWidget
             android:id="@+id/titleBar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.08"
+            android:layout_height="?android:attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:titleText="@string/detect_result"
+            app:showBack="visible"
+            app:showDelete="visible" />
 
-            <ImageView
-                android:id="@+id/imageBack"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/OptionsTint"
-                android:src="@drawable/navigate_before" />
-
-            <TextView
-                android:id="@+id/textTitle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toRightOf="@+id/imageBack"
-                app:layout_constraintRight_toLeftOf="@+id/imageDelete"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@null"
-                android:gravity="center_vertical|left"
-                android:text="@string/detect_result"
-                android:textColor="@color/primaryBlue"
-                android:textStyle="bold"
-                android:textSize="25dp" />
-
-            <ImageView
-                android:id="@+id/imageDelete"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/delete"
-                app:tint="@color/design_default_color_error" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/imageOriginal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.36"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintHeight_percent="0.08"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleBar"
-            android:layout_marginBottom="1dp" />
+            app:tabSelectedTextColor="@color/light_blue"
+            app:tabTextColor="@color/primaryBlack"
+            app:tabIndicatorColor="@color/light_blue"
+            android:background="@color/white"
+            app:tabIndicatorHeight="2dp"
+            app:tabRippleColor="@null"
+            app:tabIconTint="@color/tab_selector"
+            app:tabIndicatorFullWidth="true">
 
-        <TextView
-            android:id="@+id/textOriginal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageOriginal"
-            android:gravity="center"
-            android:textColor="@color/primaryBlue"
-            android:textStyle="bold"
-            android:textSize="15dp" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextStyle_16dp_black"
+                android:text="原始圖片"/>
 
-        <ImageView
-            android:id="@+id/imageLight"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageOriginal"
-            android:visibility="invisible"
-            android:src="@drawable/green_light" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextStyle_16dp_black"
+                android:text="偵測圖片" />
+        </com.google.android.material.tabs.TabLayout>
 
-        <ImageView
-            android:id="@+id/imageDetect"
-            android:layout_width="0dp"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.36"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textOriginal"
-             />
-
-        <TextView
-            android:id="@+id/textPercent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.1"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageLight"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="20dp" />
+            android:background="@color/background"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -35,7 +35,7 @@ import timber.log.Timber
 
 class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapter.Listener, MemberAdapter.Listener {
 
-    private val viewModel: PersonalManagerViewModel by viewModels { viewModelFactory }
+     val viewModel: PersonalManagerViewModel by viewModels { viewModelFactory }
     lateinit var binding: FragmentPersonalManagerBinding
     lateinit var groupAdapter: GroupAdapter
     lateinit var memberAdapter: MemberAdapter
@@ -62,6 +62,7 @@ class PersonalManagerFragment : BaseFragment(), View.OnClickListener, GroupAdapt
         bindViewModel()
         initView()
         repository.getAllInfo()
+        repository.getAllMemberRecord()
 
         isShowCheckBox.observe(viewLifecycleOwner) { newIds ->
             showCheckBox()

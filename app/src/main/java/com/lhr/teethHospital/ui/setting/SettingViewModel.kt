@@ -19,6 +19,7 @@ import com.lhr.teethHospital.R
 import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.googleDrive.GoogleDriveServiceFunction
 import com.lhr.teethHospital.ui.base.APP
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import com.lhr.teethHospital.ui.main.MainViewModel
 import com.lhr.teethHospital.ui.main.MainViewModel.Companion.isProgressBar
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class SettingViewModel(context: Context) :
-    AndroidViewModel(context.applicationContext as APP) {
+    BaseViewModel(context) {
     private val REQUEST_SIGNIN_CODE = 400
 
     fun uploadBackup(settingFragment: SettingFragment) {

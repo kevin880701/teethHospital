@@ -12,6 +12,7 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -29,20 +30,25 @@ import com.lhr.teethHospital.permission.PermissionManager.Companion.CAMERA
 import com.lhr.teethHospital.permission.PermissionManager.Companion.READ_EXTERNAL_STORAGE
 import com.lhr.teethHospital.permission.PermissionManager.Companion.WRITE_EXTERNAL_STORAGE
 import com.lhr.teethHospital.R
+import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.databinding.ActivityCoverBinding
 import com.lhr.teethHospital.net.NetManager
 import com.lhr.teethHospital.room.SqlDatabase
+import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.base.BaseActivity
+import com.lhr.teethHospital.ui.base.BaseViewModel
 import com.lhr.teethHospital.ui.login.LoginActivity
 import com.lhr.teethHospital.ui.personalManager.PersonalManagerViewModel
+import com.lhr.teethHospital.util.SharedPreferencesManager
 import java.io.File
 
 
 class CoverActivity : BaseActivity() {
 
-    lateinit var viewModel: CoverViewModel
+    override val viewModel: CoverViewModel by viewModels { (applicationContext as APP).appContainer.viewModelFactory }
     lateinit var binding: ActivityCoverBinding
     lateinit var permissionManager: PermissionManager
+    lateinit var repository:PersonalManagerRepository
     var PERMISSION_REQUEST_CODE = 100
     var isSetting = false
 
@@ -50,17 +56,14 @@ class CoverActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
 
+        repository = PersonalManagerRepository.getInstance(this)
         permissionManager = PermissionManager(this)
         if (intent.flags and Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT != 0) {
             finish()
             return
         }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_cover)
-        viewModel = ViewModelProvider(
-            this,
-            CoverViewModelFactory(this.application)
-        )[CoverViewModel::class.java]
-        binding.viewModel = viewModel
+
 
         // 創建Model
         Model
@@ -68,7 +71,10 @@ class CoverActivity : BaseActivity() {
         DATABASES_PATH = this.getCacheDir().parent + "/databases"
         TEETH_DIR = getExternalFilesDir(null)!!.absolutePath.toString() + "/teeth/"
         // 在DCIM中創建存圖的資料夾
-        viewModel.creeateFolder()
+        viewModel.creeateFolder(TEETH_DIR)
+
+
+        repository.baseUrl = SharedPreferencesManager.getText(this,"URL").toString()
 
         //取資料成功觸發
         viewModel.isDataGet.observe(this) { newId ->

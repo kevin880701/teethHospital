@@ -115,7 +115,7 @@ class SqlToCsv {
                 runBlocking {     // 阻塞主執行緒
                     launch(Dispatchers.IO) {
                         var recordList =
-                            SqlDatabase.getInstance().getRecordDao().getAll() as ArrayList<RecordEntity>
+                            SqlDatabase.getInstance().getRecordDao().getAllMemberRecord() as ArrayList<RecordEntity>
                         // CSV 文件的標題行
                         out.println("$hospitalName,$patientNumber,$gender,$birthday,$fileName,$recordDate,$beforePercent,$afterPercent")
 
