@@ -32,7 +32,7 @@ class EnterUrlDialog(
     }
 
     private fun initView() {
-        binding.editUrl.text = Editable.Factory.getInstance().newEditable(repository.baseUrl)
+//        binding.editUrl.text = Editable.Factory.getInstance().newEditable(repository.baseUrl)
 
         binding.buttonOk.setOnClickListener(this)
         binding.buttonCancel.setOnClickListener(this)
@@ -43,7 +43,7 @@ class EnterUrlDialog(
         when (v?.id) {
             R.id.buttonOk -> {
                 saveText(this.requireContext(),"URL", binding.editUrl.text.toString())
-                repository.baseUrl = binding.editUrl.text.toString()
+//                repository.baseUrl = binding.editUrl.text.toString()
                 this.dismiss()
             }
 

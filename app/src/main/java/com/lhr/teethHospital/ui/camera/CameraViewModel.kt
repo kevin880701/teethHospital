@@ -2,19 +2,8 @@ package com.lhr.teethHospital.ui.camera
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.lhr.teethHospital.R
 import com.lhr.teethHospital.data.PersonalManagerRepository
 import com.lhr.teethHospital.model.Model
 import com.lhr.teethHospital.model.Model.Companion.PERCENT_RECORD
@@ -53,6 +42,7 @@ class CameraViewModel(context: Context, var personalManagerRepository: PersonalM
     var rangeImage = MutableLiveData<Bitmap?>()
     var detectImage = MutableLiveData<Bitmap?>()
     var detectPercent = MutableLiveData<String>()
+    var netManager = NetManager(context)
     fun cleanImage() {
 
         originalImage.postValue(null)
@@ -90,7 +80,7 @@ class CameraViewModel(context: Context, var personalManagerRepository: PersonalM
 
     @SuppressLint("CheckResult")
     fun uploadImage(image: RequestBody) {
-        NetManager(context).apiService.uploadImage(image)
+        netManager.apiService.uploadImage(image)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
@@ -107,13 +97,13 @@ class CameraViewModel(context: Context, var personalManagerRepository: PersonalM
                         GlobalScope.launch(Dispatchers.IO) {
                             rangeImage.postValue(
                                 loadImageAsBitmap(
-                                    "${personalManagerRepository.baseUrl}getImage?image_path=${uploadResponse.teethRangePath}",
+                                    "${NetManager(context).baseUrl}getImage?image_path=${uploadResponse.teethRangePath}",
                                     context
                                 )
                             )
                             detectImage.postValue(
                                 loadImageAsBitmap(
-                                    "${personalManagerRepository.baseUrl}getImage?image_path=${uploadResponse.teethRangeDetectPath}",
+                                    "${NetManager(context).baseUrl}getImage?image_path=${uploadResponse.teethRangeDetectPath}",
                                     context
                                 )
                             )

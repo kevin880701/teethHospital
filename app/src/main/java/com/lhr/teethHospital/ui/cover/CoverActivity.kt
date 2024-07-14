@@ -74,7 +74,7 @@ class CoverActivity : BaseActivity() {
         viewModel.creeateFolder(TEETH_DIR)
 
 
-        repository.baseUrl = SharedPreferencesManager.getText(this,"URL").toString()
+//        repository.baseUrl = SharedPreferencesManager.getText(this,"URL").toString()
 
         //取資料成功觸發
         viewModel.isDataGet.observe(this) { newId ->

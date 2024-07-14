@@ -13,6 +13,7 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 class NetManager(context: Context) {
@@ -27,17 +28,21 @@ class NetManager(context: Context) {
         }
     }
     var repository = PersonalManagerRepository.getInstance(context)
+    var baseUrl = "http://34.31.102.24:7878/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY // 设置日志级别为 BODY，可以打印请求和响应的详细信息
     }
     private val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS) // 連接超時
+        .readTimeout(30, TimeUnit.SECONDS)    // 讀取超時
+        .writeTimeout(30, TimeUnit.SECONDS)   // 寫入超時
         .addInterceptor(loggingInterceptor) // 添加日志拦截器
         .build()
 
     // 創建 Retrofit 實例
     val retrofit = Retrofit.Builder()
-        .baseUrl(repository.baseUrl)
+        .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())

@@ -28,7 +28,6 @@ class PersonalManagerRepository(context: Context) {
     var memberRecordList: MutableLiveData<ArrayList<RecordEntity>> =
         MutableLiveData<ArrayList<RecordEntity>>().apply { value = ArrayList() }
 
-    var baseUrl = "https://9fbd-163-17-136-120.ngrok-free.app/"
 
 
     fun getMemberRecord(hospitalName: String, number: String): ArrayList<RecordEntity>{
