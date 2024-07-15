@@ -15,7 +15,7 @@
             android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:titleText="@string/camera"
+            app:titleText="@string/image_detect"
             app:showBack="visible"
             app:showSave="visible" />
 

@@ -120,8 +120,12 @@ class CameraActivity : BaseActivity(), View.OnClickListener {
             }
 
             R.id.buttonImageDetect -> {
-                viewModel.showLoading()
-                viewModel.originalImage.value?.toRequestBody()?.let { viewModel.uploadImage(it) }
+                if(viewModel.originalImage.value != null){
+                    viewModel.showLoading()
+                    viewModel.originalImage.value?.toRequestBody()?.let { viewModel.uploadImage(it) }
+                }else{
+                    Toast.makeText(this, "圖片未選擇", Toast.LENGTH_SHORT).show()
+                }
             }
             // 圖片儲存
             R.id.imageSave -> {
