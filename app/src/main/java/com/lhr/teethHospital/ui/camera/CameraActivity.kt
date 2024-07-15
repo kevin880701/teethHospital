@@ -56,14 +56,11 @@ class CameraActivity : BaseActivity(), View.OnClickListener {
         hospitalEntity = intent.getSerializableExtra(ROOT) as HospitalEntity
 
         takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { result ->
-//            viewModel.showLoading()
             if (result != null) {
                 val imageFile = createImageFile(this) // 创建一个临时文件用于保存图片
                 val outputStream = FileOutputStream(imageFile)
                 result.compress(Bitmap.CompressFormat.JPEG, 100, outputStream) // 将 Bitmap 保存到文件
                 outputStream.close()
-//                val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull()) // 将文件转换为 RequestBody
-//                val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
 
                 val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
                 val params = HashMap<String, RequestBody>()
@@ -120,15 +117,6 @@ class CameraActivity : BaseActivity(), View.OnClickListener {
                 val intent = Intent(UPDATE_PATIENT_RECORD)
                 sendBroadcast(intent)
                 finish()
-            }
-
-            R.id.buttonChoosePicture -> {
-                val choose = ChooseImagePopupWindow(this)
-                val view: View = LayoutInflater.from(this).inflate(
-                    R.layout.popup_window_choose_image,
-                    null
-                )
-                choose.showAtLocation(view, Gravity.CENTER, 0, 0)
             }
 
             R.id.buttonImageDetect -> {

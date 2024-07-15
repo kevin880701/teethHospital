@@ -25,7 +25,7 @@ class ImportPopupWindow(mContext: Context, personalManagerFragment: PersonalMana
     init {
         view = LayoutInflater.from(mContext).inflate(R.layout.popup_window_import, null)
         buttonImportMore = view.findViewById(R.id.buttonImportMore)
-        buttonImportSingle = view.findViewById(R.id.buttonChoosePicture)
+        buttonImportSingle = view.findViewById(R.id.buttonSelectFromAlbum)
         // 外部可點擊
         this.isOutsideTouchable = true
         // mMenuView添加OnTouchListener監聽判斷獲取觸屏位置如果在選擇框外面則銷毀彈出框
@@ -81,7 +81,7 @@ class ImportPopupWindow(mContext: Context, personalManagerFragment: PersonalMana
         when (v?.id) {
             R.id.buttonImportMore -> {
                 importMore()
-            }R.id.buttonChoosePicture -> {
+            }R.id.buttonSelectFromAlbum -> {
                 importSingle()
             }
         }

@@ -1,27 +1,31 @@
 package com.lhr.teethHospital.ui.camera
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.lhr.teethHospital.R
 import com.lhr.teethHospital.databinding.FragmentOriginalImageBinding
-import com.lhr.teethHospital.ui.base.APP
 import com.lhr.teethHospital.ui.base.BaseFragment
-import com.lhr.teethHospital.ui.base.LoadState
+import com.lhr.teethHospital.util.createImageFile
 import com.lhr.teethHospital.util.popupWindow.ChooseImagePopupWindow
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.FileOutputStream
+import java.io.InputStream
 
 class OriginalImageFragment(private val originalBitmap: Bitmap? = null) : BaseFragment(), View.OnClickListener {
 
@@ -54,7 +58,6 @@ class OriginalImageFragment(private val originalBitmap: Bitmap? = null) : BaseFr
         if(originalBitmap == null){
             binding.buttonChoosePicture.visibility = View.VISIBLE
         }
-
         binding.imageOriginal.setImageBitmap(originalBitmap)
         binding.buttonChoosePicture.setOnClickListener(this)
     }
@@ -73,7 +76,7 @@ class OriginalImageFragment(private val originalBitmap: Bitmap? = null) : BaseFr
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.buttonChoosePicture -> {
-                val choose = ChooseImagePopupWindow(this.requireActivity())
+                val choose = ChooseImagePopupWindow(this.requireActivity(), this)
                 val view: View = LayoutInflater.from(this.requireContext()).inflate(
                     R.layout.popup_window_choose_image,
                     null
@@ -84,15 +87,24 @@ class OriginalImageFragment(private val originalBitmap: Bitmap? = null) : BaseFr
     }
 
 
-    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+    val selectFromAlbumResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
     { result: ActivityResult ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val myData: Intent? = result.data
-            if (myData != null) {
-                // 選擇圖片後變更圖片
-//                viewModel.choosePhotoAlbum(this, myData.data!!)
-//                isSetPicture = true
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val selectedImageUri: Uri? = data?.data
+
+            if (selectedImageUri != null) {
+                // 从相册选择的图片
+                val inputStream: InputStream? = requireContext().contentResolver.openInputStream(selectedImageUri)
+                viewModel.originalImage.postValue(BitmapFactory.decodeStream(inputStream))
+//                b = BitmapFactory.decodeStream(inputStream)
             }
+//            else if (photoURI != null) {
+//                // 拍照得到的图片
+//                b = BitmapFactory.decodeFile(photoURI?.path)
+//            }
+
         }
     }
+
 }

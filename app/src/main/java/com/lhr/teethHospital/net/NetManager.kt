@@ -34,9 +34,9 @@ class NetManager(context: Context) {
         level = HttpLoggingInterceptor.Level.BODY // 设置日志级别为 BODY，可以打印请求和响应的详细信息
     }
     private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS) // 連接超時
-        .readTimeout(30, TimeUnit.SECONDS)    // 讀取超時
-        .writeTimeout(30, TimeUnit.SECONDS)   // 寫入超時
+        .connectTimeout(120, TimeUnit.SECONDS) // 連接超時
+        .readTimeout(120, TimeUnit.SECONDS)    // 讀取超時
+        .writeTimeout(120, TimeUnit.SECONDS)   // 寫入超時
         .addInterceptor(loggingInterceptor) // 添加日志拦截器
         .build()
 

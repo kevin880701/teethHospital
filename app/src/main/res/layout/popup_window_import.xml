@@ -27,7 +27,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/buttonChoosePicture"
+            android:id="@+id/buttonSelectFromAlbum"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_r16_bottom_white"
