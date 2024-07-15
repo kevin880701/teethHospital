@@ -28,7 +28,7 @@ class NetManager(context: Context) {
         }
     }
     var repository = PersonalManagerRepository.getInstance(context)
-    var baseUrl = "http://34.31.102.24:7878/"
+    var baseUrl = "http://35.209.158.133:7878/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY // 设置日志级别为 BODY，可以打印请求和响应的详细信息
