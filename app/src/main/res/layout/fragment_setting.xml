@@ -61,19 +61,5 @@
             style="@style/TextStyle_16dp_black"
             android:background="@drawable/bg_white_under_line"
             android:text="登入測試" />
-
-        <TextView
-            android:id="@+id/textUrl"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textTestLogin"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"
-            style="@style/TextStyle_16dp_black"
-            android:background="@color/white"
-            android:text="修改URL" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

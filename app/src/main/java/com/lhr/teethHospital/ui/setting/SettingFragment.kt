@@ -68,7 +68,6 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
         binding.textUploadBackup.setOnClickListener(this)
         binding.textDownloadBackup.setOnClickListener(this)
         binding.textTestLogin.setOnClickListener(this)
-        binding.textUrl.setOnClickListener(this)
 
         // 先確認登入GOOGLE帳戶
 //        requestSignIn()
@@ -164,11 +163,6 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
                 val googleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(this.requireContext(), gso)
                 val signInIntent = googleSignInClient.signInIntent
                 googleSignInLauncher.launch(signInIntent)
-                Timber.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            }
-            R.id.textUrl -> {
-                val addStorageDataDialog = EnterUrlDialog()
-                addStorageDataDialog.show(requireActivity().supportFragmentManager, "EnterUrlDialog")
             }
         }
     }
