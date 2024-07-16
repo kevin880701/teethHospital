@@ -32,13 +32,13 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.08"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tabSelectedTextColor="@color/light_blue"
-            app:tabIndicatorColor="@color/light_blue"
+            app:tabSelectedTextColor="@color/white"
+            app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="2dp"
             app:tabRippleColor="@null"
             app:tabIconTint="@color/tab_selector"
             app:tabIndicatorFullWidth="false"
-            android:background="@color/white">
+            android:background="@color/primaryBlue">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
