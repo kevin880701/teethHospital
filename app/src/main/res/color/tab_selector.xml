@@ -3,5 +3,5 @@
     <!-- 選中狀態 -->
     <item android:color="@color/primaryBlue" android:state_selected="true"/>
     <!-- 未選中狀態 -->
-    <item android:color="@color/primaryBlack"/>
+    <item android:color="@color/disable_gray"/>
 </selector>
