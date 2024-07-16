@@ -59,6 +59,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 R.drawable.person_manager_icon_selector,
                 R.drawable.setting_icon_selector
             )
+            var tabTextList = arrayListOf(
+                R.string.personal,
+                R.string.setting
+            )
             personalManagerFragment = PersonalManagerFragment()
             settingFragment = SettingFragment()
             var fragments = arrayListOf(
@@ -69,6 +73,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             binding.viewPager.adapter = pageAdapter
             TabLayoutMediator(this, binding.viewPager) { tab, position ->
                 tab.icon = ContextCompat.getDrawable(this.context, tabIconList[position])
+                tab.text = getString(tabTextList[position])
             }.attach()
             binding.viewPager.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
         }

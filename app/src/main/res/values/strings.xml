@@ -1,4 +1,8 @@
 <resources>
+    <!--  Main  -->
+    <string name="personal">個人</string>
+    <string name="setting">設定</string>
+
     <string name="app_name">口腔衛教</string>
     <string name="login">登入</string>
     <string name="enter_number">輸入學號</string>
@@ -21,7 +25,6 @@
     <string name="gender">性別</string>
     <string name="birthday">生日</string>
     <string name="save_information">儲存資料</string>
-    <string name="setting">設定</string>
     <string name="clean_record">潔牙紀錄</string>
     <string name="ranking">集點排名</string>
     <string name="take">拍攝</string>

@@ -17,13 +17,14 @@
 
         <ImageView
             android:id="@+id/imageBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/arrow_left"
+            android:padding="6dp"
             android:scaleType="fitCenter"
             app:tint="@color/white" />
 
@@ -34,16 +35,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/imageBack"
-            android:layout_marginLeft="12dp"
             android:text="標題列"
             style="@style/TextStyle_titleBar" />
 
         <ImageView
             android:id="@+id/imageAdd"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:adjustViewBounds="true"
             android:layout_marginLeft="12dp"
+            android:padding="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -54,12 +55,13 @@
 
         <ImageView
             android:id="@+id/imageAddPhoto"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:padding="6dp"
             android:scaleType="fitCenter"
             android:src="@drawable/add_photo"
             app:tint="@color/white"
@@ -67,12 +69,13 @@
 
         <ImageView
             android:id="@+id/imageEdit"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/imageCamera"
+            app:layout_constraintRight_toLeftOf="@+id/imageAddPhoto"
             app:layout_constraintTop_toTopOf="parent"
+            android:padding="6dp"
             android:src="@drawable/edit"
             android:scaleType="fitCenter"
             app:tint="@color/white"
@@ -80,12 +83,13 @@
 
         <ImageView
             android:id="@+id/imageSave"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:padding="6dp"
             android:scaleType="fitCenter"
             android:src="@drawable/save"
             app:tint="@color/white"
@@ -93,9 +97,10 @@
 
         <ImageView
             android:id="@+id/imageDelete"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:adjustViewBounds="true"
+            android:padding="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
