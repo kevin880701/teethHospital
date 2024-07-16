@@ -3,7 +3,6 @@ package com.lhr.teethHospital.util.widget
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.lhr.teethHospital.R
@@ -27,7 +26,7 @@ class TitleBarWidget @JvmOverloads constructor(
             setTitleText(attrs.getString(R.styleable.TitleBarWidget_titleText))
             setBack(attrs.getInt(R.styleable.TitleBarWidget_showBack, 8))
             setAdd(attrs.getInt(R.styleable.TitleBarWidget_showAdd, 8))
-            setCamera(attrs.getInt(R.styleable.TitleBarWidget_showCamera, 8))
+            setAddPhoto(attrs.getInt(R.styleable.TitleBarWidget_showCamera, 8))
             setEdit(attrs.getInt(R.styleable.TitleBarWidget_showEdit, 8))
             setSave(attrs.getInt(R.styleable.TitleBarWidget_showSave, 8))
             setDelete(attrs.getInt(R.styleable.TitleBarWidget_showDelete, 8))
@@ -48,8 +47,8 @@ class TitleBarWidget @JvmOverloads constructor(
         binding.imageAdd.visibility = visibility
     }
 
-    fun setCamera(visibility: Int) {
-        binding.imageCamera.visibility = visibility
+    fun setAddPhoto(visibility: Int) {
+        binding.imageAddPhoto.visibility = visibility
     }
 
     fun setEdit(visibility: Int) {

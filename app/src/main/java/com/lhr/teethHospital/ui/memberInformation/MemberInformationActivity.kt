@@ -54,7 +54,7 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener, MemberRe
             patientRecordList = viewModel.getMemberRecord(hospitalEntity.hospitalName, hospitalEntity.number)
             binding.titleBar.binding.textTitle.text = hospitalEntity.hospitalName
             binding.textPatientNumber.text = hospitalEntity.number
-            binding.titleBar.binding.imageCamera.visibility = View.INVISIBLE
+            binding.titleBar.binding.imageAddPhoto.visibility = View.INVISIBLE
         }
 
         initView()
@@ -80,7 +80,7 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener, MemberRe
         initRecyclerView()
 
         binding.titleBar.binding.imageBack.setOnClickListener(this)
-        binding.titleBar.binding.imageCamera.setOnClickListener(this)
+        binding.titleBar.binding.imageAddPhoto.setOnClickListener(this)
         binding.titleBar.binding.imageEdit.setOnClickListener(this)
     }
 
@@ -117,7 +117,7 @@ class MemberInformationActivity : BaseActivity(), View.OnClickListener, MemberRe
             R.id.imageBack -> {
                 viewModel.back(this)
             }
-            R.id.imageCamera -> {
+            R.id.imageAddPhoto -> {
                 val intent = Intent(this, CameraActivity::class.java)
                 intent.putExtra(ROOT, hospitalEntity)
                 startActivity(intent)
